@@ -1,0 +1,59 @@
+{
+  "name": "air-pwa",
+  "version": "1.0.0",
+  "description": "Air progressive web app. A native and offline-first experience on both mobile and desktop.",
+  "main": "src/app.js",
+  "scripts": {
+    "patch": "npm version bump",
+    "watch": "webpack-dev-server --config build/webpack.config.js",
+    "build": "rm -rf ./dist && npm run build:client && workbox-cli generate:sw",
+    "build:client": "NODE_ENV=production webpack --config build/webpack.config.js -p --progress",
+    "webpack-defaults": "webpack-defaults"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ephec-AIR/pwa"
+  },
+  "keywords": [
+    "air",
+    "vue",
+    "pwa"
+  ],
+  "author": "Mathieu-R && Nathan D.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ephec-AIR/pwa/issues"
+  },
+  "homepage": "https://github.com/Ephec-AIR/pwa#readme",
+  "dependencies": {
+    "vue": "^2.5.2",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-minify-webpack-plugin": "^0.2.0",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-minify": "^0.2.0",
+    "bundle-buddy-webpack-plugin": "^0.3.0",
+    "copy-webpack-plugin": "^4.1.1",
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.1",
+    "friendly-errors-webpack-plugin": "^1.6.1",
+    "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.5.3",
+    "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "sass-loader": "^6.0.6",
+    "source-map-loader": "^0.2.2",
+    "style-loader": "^0.18.2",
+    "vue-loader": "^13.3.0",
+    "vue-template-compiler": "^2.5.2",
+    "webpack": "^3.8.0",
+    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-dev-server": "^2.9.2",
+    "workbox-cli": "^2.1.0"
+  }
+}
