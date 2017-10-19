@@ -6,6 +6,8 @@ Vue.use(VueRouter);
 
 // code-splitting component
 const Welcome = () => import('components/Welcome');
+const Home = () => import('components/Home');
+const Parameter = () => import('components/Parameter');
 
 export default new VueRouter({
   mode: 'history',
