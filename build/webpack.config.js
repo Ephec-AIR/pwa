@@ -102,8 +102,7 @@ if (production) {
 const common = {
   devtool: config.devtool,
   entry: {
-    app: config.entry.front,
-    vendor: config.vendor
+    app: config.entry.front
   },
   output: {
     path: path.resolve(__dirname, '../dist'),

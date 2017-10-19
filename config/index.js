@@ -9,7 +9,6 @@ module.exports = {
     front: [path.resolve(__dirname, '../src/app.js')], // entrypoint for front js file
     back: false // entrypoint for server js file
   },
-  vendor: ['vue', 'vue-router', 'vuex'], // you can add vue-router, vuex if you use it
   devtool: production ? false : 'eval-cheap-module-source-map',
   componentsPath: path.resolve(__dirname, '../src/components'), // path for components (aliases)
   staticPath: path.resolve(__dirname, '../src'), // path for static files (aliases)
