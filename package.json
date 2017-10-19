@@ -26,6 +26,8 @@
   },
   "homepage": "https://github.com/Ephec-AIR/pwa#readme",
   "dependencies": {
+    "idb-keyval": "^2.3.0",
+    "jwt-decode": "^2.2.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.0"

@@ -10,7 +10,7 @@
   import AirLogin from './air-login';
 
   export default {
-    comments: {
+    components: {
       AirLogin
     },
     data () {
