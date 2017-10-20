@@ -19,16 +19,27 @@ export default new VueRouter({
     },
     {
       path: '/home',
-      component: Home
+      component: Home,
+      beforeEnter: protectRoute
     },
     {
       path: '/parameters',
-      component: Parameter
+      component: Parameter,
+      beforeEnter: protectRoute
     }
   ]
 });
 
-export function isLoggedIn() {
+function protectRoute(to, from, next) {
+  isLoggedIn().then(isLogged => {
+    if (!isLogged) {
+      return;
+    }
+    next();
+  }).catch(_ => {});
+}
+
+function isLoggedIn() {
   return idbKeyVal.get('token').then(token => {
     return !!token && !isTokenExpired(token);
   });

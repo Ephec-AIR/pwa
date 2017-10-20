@@ -11,7 +11,7 @@ export default new Vuex.Store({
     // toast message
     toast: {
       message: '',
-      duration: ''
+      duration: 0
     },
     user: {
       userId: '',

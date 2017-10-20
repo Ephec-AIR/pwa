@@ -1,16 +1,18 @@
 <template>
   <div class="main">
-    Je suis welcome
+    <air-show></air-show>
     <air-login></air-login>
   </div>
 </template>
 
 <script>
   import Vue from 'vue';
+  import AirShow from './air-show';
   import AirLogin from './air-login';
 
   export default {
     components: {
+      AirShow,
       AirLogin
     },
     data () {

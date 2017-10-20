@@ -2,11 +2,11 @@
   <form @submit.prevent="login">
     <div class="air-login-form-username" :class="{'has-error': errors.has('username')}">
       <input type="text" class="air-login-form-username--input" name="username" v-model="username" v-validate:username="'required'">
-      <p class="air-login-form-username--error is-danger">{{errors.first('username')}}</p>
+      <p class="air-login-form-username--error error-message">{{errors.first('username')}}</p>
     </div>
     <div class="air-login-form-password" :class="{'has-error': errors.has('username')}">
       <input type="password" class="air-login-form-password--input" name="password" v-model="password" v-validate="'required'">
-      <p class="air-login-form-password--error is-danger">{{errors.first('password')}}</p>
+      <p class="air-login-form-password--error error-message">{{errors.first('password')}}</p>
     </div>
     <div class="air-login-form--button">
       <button type="submit" class="air-login-form--button-login">Se connecter</button>
@@ -39,7 +39,12 @@ export default {
 </script>
 
 <style lang="scss">
-
+  .error-message {
+    font-size: 12px;
+    color: #f33636;
+    margin: 5px 0;
+    font-style: italic;
+  }
 </style>
 
 

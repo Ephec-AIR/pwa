@@ -18,10 +18,6 @@
       AirNav,
       AirToast
     },
-    data () {
-      return {
-      }
-    },
     computed: {
       toast () {
         return this.$store.state.toast;
