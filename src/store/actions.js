@@ -1,40 +1,51 @@
+import Vue from 'vue';
 import router from 'src/router';
 import Constant from 'src/constants';
 import idbKeyVal from 'idb-keyval'; // indexDB
 import decode from 'jwt-decode';
 
 export default {
-  LOGIN ({commit, state}, token) {
+  LOGIN ({commit, state}, {username, password}) {
     fetch(`${Constant.API_URL}/login`, {
       method: 'post',
       headers: {
         'content-type': 'application/json'
       },
       body: JSON.stringify({
-        username: state.username,
-        password: state.password
+        username: username,
+        password: password
       })
     })
     .then(response => response.json())
     .then(response => {
+      // check errors
+      if (response.error) {
+
+      }
+
+      idbKeyVal.set('token', response.token).then(_ => {
+        console.log('token succefully saved to idb.');
+      });
+
       const user = decode(response.token);
-      commit('SAVE_JWT', user);
+      commit('SAVE_USER', user);
 
       // if user is not linked with serial
       if (!user.serial) {
         router.go('/parameters');
-        // TOAST ??
+        commit('TOAST_MESSAGE', {
+          message: `Vous n'êtes pas encore synchronisés avec un appareil.
+            Veuillez indiquer le serial ainsi que le user_secret dans les champs adéquats.`,
+          duration: 3000
+        });
         return;
       }
       // if user has no postal code ?
 
       // everything's good, go to home page
       router.go('/home');
-      return idbKeyVal.set('token', response.token);
+      return
     })
-    .then(_ => {
-      console.log('token succefully saved to idb.');
-    })
-    .catch(err => console.error(err.message));
+    .catch(err => console.error(err));
   }
 }

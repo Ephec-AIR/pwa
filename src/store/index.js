@@ -8,10 +8,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    // toast message
+    toast: {
+      message: '',
+      duration: ''
+    },
     user: {
       userId: '',
       username: '',
-      token: '',
+      serial: ''
     },
     consumption: []
   },

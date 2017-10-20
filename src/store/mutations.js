@@ -1,9 +1,8 @@
 export default {
-  SAVE_JWT (state, {userId, username, token}) {
-    state.user = {
-      userId,
-      username,
-      token
-    };
+  SAVE_USER (state, user) {
+    state.user = user;
+  },
+  TOAST_MESSAGE (state, options) {
+    state.toast = options;
   }
 }
