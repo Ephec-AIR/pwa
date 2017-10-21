@@ -113,7 +113,8 @@ const common = {
     extensions: ['.js', '.vue'],
     alias: {
       components: config.componentsPath,
-      src: config.staticPath
+      src: config.staticPath,
+      views: config.viewsPath
     }
   },
   module: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="parameters">
     Je suis Parameter
   </div>
 </template>

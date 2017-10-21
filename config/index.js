@@ -11,6 +11,7 @@ module.exports = {
   },
   devtool: production ? false : 'eval-cheap-module-source-map',
   componentsPath: path.resolve(__dirname, '../src/components'), // path for components (aliases)
+  viewsPath: path.resolve(__dirname, '../src/views'), // path for views (aliases)
   staticPath: path.resolve(__dirname, '../src'), // path for static files (aliases)
   template: path.resolve(__dirname, '../src/index.html') // path of template
 }

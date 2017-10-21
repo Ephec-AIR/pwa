@@ -6,9 +6,9 @@ import decode from 'jwt-decode';
 Vue.use(VueRouter);
 
 // code-splitting component
-const Welcome = () => import('components/Welcome');
-const Home = () => import('components/Home');
-const Parameter = () => import('components/Parameter');
+const Welcome = () => import('views/Welcome');
+const Home = () => import('views/Home');
+const Parameter = () => import('views/Parameter');
 
 export default new VueRouter({
   mode: 'history',
