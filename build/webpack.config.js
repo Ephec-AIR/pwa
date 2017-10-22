@@ -75,12 +75,12 @@ if (production) {
     }),
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, '../src/assets'),
-        to: path.resolve(__dirname, '../dist/assets'),
+        from: path.resolve(__dirname, '../public'),
+        to: path.resolve(__dirname, '../dist/public'),
         ignore: ['.*']
       },
       {
-       from: path.resolve(__dirname, '../src/manifest.json'),
+       from: path.resolve(__dirname, '../manifest.json'),
        to: path.resolve(__dirname, '../dist/manifest.json')
       }
     ])

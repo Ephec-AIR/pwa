@@ -33,13 +33,13 @@ export default new VueRouter({
 function protectRoute(to, from, next) {
   isLoggedIn().then(isLogged => {
     if (!isLogged) {
-      return;
+      next('/');
     }
     next();
   }).catch(_ => {});
 }
 
-function isLoggedIn() {
+export function isLoggedIn() {
   return idbKeyVal.get('token').then(token => {
     return !!token && !isTokenExpired(token);
   });

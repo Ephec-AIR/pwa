@@ -18,6 +18,9 @@
           <li>
             <router-link to="/parameters" class="air-nav__inner__nav-link" aria-label="parameter">Parameter</router-link>
           </li>
+          <li>
+            <a href="#" class="air-nav__inner__nav-link" aria-label="logout" @click.prevent="logout">Deconnection</a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -25,8 +28,15 @@
 </template>
 
 <script>
-export default {
+import {isLoggedIn} from 'src/router';
 
+export default {
+  methods: {
+    isLoggedIn,
+    logout () {
+      this.$store.dispatch('LOGOUT');
+    }
+  }
 }
 </script>
 
@@ -45,7 +55,7 @@ export default {
       &--logo {
         display: flex;
         align-items: center;
-        background: url(/assets/icons/icon@128.png) left center no-repeat;
+        background: url(/public/icons/icon@128.png) left center no-repeat;
         background-size: 48px 48px;
         height: 48px;
         padding-left: 56px;
@@ -60,7 +70,7 @@ export default {
     }
 
     .toggle_nav--label {
-      background: url(/assets/images/hamburger.svg) center no-repeat no-repeat;
+      background: url(/public/images/hamburger.svg) center no-repeat no-repeat;
       height: 24px;
       width: 24px;
       display: none;

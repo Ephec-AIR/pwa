@@ -18,13 +18,24 @@ export default {
     })
     .then(response => response.json())
     .then(response => {
-      // check errors
+      // if field no provided
       if (response.error) {
-
+        commit('TOAST_MESSAGE', {
+          message: response.error.join(' ')
+        });
+        return;
       }
 
-      idbKeyVal.set('token', response.token).then(_ => {
-        console.log('token succefully saved to idb.');
+      // user not found
+      if (response.message) {
+        commit('TOAST_MESSAGE', {
+          message: response.message
+        });
+        return;
+      }
+
+      idbKeyVal.set('token', response.token).then(() => {
+        console.log('[IDB] token saved to indexDB.');
       });
 
       const user = decode(response.token);
@@ -32,20 +43,28 @@ export default {
 
       // if user is not linked with serial
       if (!user.serial) {
-        router.go('/parameters');
         commit('TOAST_MESSAGE', {
           message: `Vous n'êtes pas encore synchronisés avec un appareil.
             Veuillez indiquer le serial ainsi que le user_secret dans les champs adéquats.`,
-          duration: 3000
+            duration: 8000
         });
+        router.push('/parameters');
         return;
       }
       // if user has no postal code ?
 
       // everything's good, go to home page
-      router.go('/home');
+      router.push('/home');
       return
     })
     .catch(err => console.error(err));
+  },
+
+  LOGOUT ({commit, state}) {
+    idbKeyVal.delete('token').then(() => {
+      console.log('[IDB] token deletet from indexDB');
+      commit('REMOVE_USER');
+      router.push('/');
+    });
   }
 }

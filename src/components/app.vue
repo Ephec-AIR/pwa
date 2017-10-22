@@ -1,10 +1,10 @@
 <template>
   <div class="main">
     <air-nav></air-nav>
-    <router-view>
-      <!-- router views -->
-    </router-view>
-    <air-toast :message="toast.message" :duration="toast.duration" v-show="message"></air-toast>
+    <transition name="router-fade-in" mode="out-in">
+      <router-view><!-- router views --></router-view>
+    </transition>
+    <air-toast></air-toast>
   </div>
 </template>
 
@@ -17,11 +17,6 @@
     components: {
       AirNav,
       AirToast
-    },
-    computed: {
-      toast () {
-        return this.$store.state.toast;
-      }
     }
   }
 </script>
@@ -30,6 +25,14 @@
   .main {
     height: 100%;
     width: 100%;
+  }
+
+  .router-fade-in-enter-active {
+    transition: opacity 0.2s cubic-bezier(0, 0, 0.3, 1);
+  }
+
+  .router-fade-in-enter, .router-fade-in-leave-active {
+    opacity: 0;
   }
 </style>
 
