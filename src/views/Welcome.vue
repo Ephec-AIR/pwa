@@ -6,7 +6,6 @@
 </template>
 
 <script>
-  import Vue from 'vue';
   import AirShow from 'components/air-show';
   import AirLogin from 'components/air-login';
 

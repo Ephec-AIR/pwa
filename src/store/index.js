@@ -8,9 +8,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    // toast message
+    // toast messages
     toast: {
-      messages: []
+      messages: [],
+      show: false
     },
     user: {
       userId: '',

@@ -17,7 +17,10 @@ export default {
   },
   TOAST_MESSAGE (state, options) {
     const duration = options.duration || 3000;
-    state.toast.messages = options.messages;
-    setTimeout(() => state.toast.messages = [], duration);
+    state.toast = {
+      messages: options.messages,
+      show: true
+    };
+    setTimeout(() => state.toast.show = false, duration);
   }
 }

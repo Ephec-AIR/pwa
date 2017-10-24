@@ -9,7 +9,6 @@
 </template>
 
 <script>
-  import Vue from 'vue';
   import AirNav from './air-nav';
   import AirToast from './air-toast';
 

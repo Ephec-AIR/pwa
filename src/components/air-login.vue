@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import Constant from 'src/constants';
 import {mapActions} from 'vuex';
 
