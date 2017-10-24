@@ -12,3 +12,10 @@ new Vue({
   store: Store,
   render: h => h(App)
 });
+
+// Register SW
+if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+  navigator.serviceWorker.register('/sw.js', {scope: '/'}).catch(err => {
+    console.error(err);
+  });
+}
