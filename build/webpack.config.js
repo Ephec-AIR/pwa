@@ -83,8 +83,11 @@ if (production) {
        from: path.resolve(__dirname, '../manifest.json'),
        to: path.resolve(__dirname, '../dist/manifest.json')
       }
-    ])
-    //new BundleAnalyzerPlugin(), // analyse the bundles and their contents
+    ]),
+    new BundleAnalyzerPlugin({ // analyse the bundles and their contents
+      generateStatsFile: true,
+      statsFilename: 'stats.json',
+    }),
   );
 } else {
   plugins.push(

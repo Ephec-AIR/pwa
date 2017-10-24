@@ -1,6 +1,6 @@
 <template>
   <div class="air-toast-container">
-    <transition name="toast-fade-in">
+    <transition name="toast-animate">
       <div class="air-toast" v-show="toast.show">
         <p class="air-toast--content" v-for="(message, index) in toast.messages" :key="index">{{message}}</p>
       </div>
@@ -44,12 +44,12 @@ export default {
     }
   }
 
-  .toast-fade-in-enter-active, .toast-fade-in-leave-active {
+  .toast-animate-enter-active, .toast-animate-leave-active {
     transition: opacity .3s cubic-bezier(0, 0, 0.3, 1),
       transform .5s cubic-bezier(0, 0, 0.3, 1);
   }
 
-  .toast-fade-in-enter, .toast-fade-in-leave-to {
+  .toast-animate-enter, .toast-animate-leave-to {
     transform: translateY(100px);
     opacity: 0;
   }

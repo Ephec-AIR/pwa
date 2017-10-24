@@ -11,3 +11,8 @@ npm run watch
 ```
 npm run build
 ```
+
+> production + analyze bundle size
+```
+npm run build --report
+```
