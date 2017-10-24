@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import router from 'src/router';
 import Constant from 'src/constants';
-import idbKeyVal from 'idb-keyval'; // indexDB
+import idbKeyVal from 'idb-keyval'; // indexedDB
 import decode from 'jwt-decode';
+import Token from 'src/libs/token';
 
 export default {
   LOGIN ({commit, state}, {username, password}) {
@@ -21,7 +22,7 @@ export default {
       // if field no provided
       if (response.error) {
         commit('TOAST_MESSAGE', {
-          message: response.error.join(' ')
+          message: response.error
         });
         return;
       }
@@ -29,7 +30,7 @@ export default {
       // user not found
       if (response.message) {
         commit('TOAST_MESSAGE', {
-          message: response.message
+          message: [response.message]
         });
         return;
       }
@@ -44,8 +45,8 @@ export default {
       // if user is not linked with serial
       if (!user.serial) {
         commit('TOAST_MESSAGE', {
-          message: `Vous n'êtes pas encore synchronisés avec un appareil.
-            Veuillez indiquer le serial ainsi que le user_secret dans les champs adéquats.`,
+          messages: ["Vous n'êtes pas encore synchronisés avec un appareil.",
+            "Veuillez indiquer le serial ainsi que le user_secret dans les champs adéquats."],
             duration: 8000
         });
         router.push('/parameters');
@@ -62,9 +63,21 @@ export default {
 
   LOGOUT ({commit, state}) {
     idbKeyVal.delete('token').then(() => {
-      console.log('[IDB] token deletet from indexDB');
+      console.log('[IDB] token deleted from indexDB');
       commit('REMOVE_USER');
       router.push('/');
-    });
+    }).catch(err => console.error(err));
+  },
+
+  SET_USER_IF_EXIST ({commit, state}) {
+    idbKeyVal.get('token').then(token => {
+      if (!token) return;
+      if (Token.isExpired(token)) {
+        return idbKeyVal.delete('token');
+      }
+
+      const user = decode(token);
+      commit('SAVE_USER', user);
+    }).catch(err => console.error(err));
   }
 }

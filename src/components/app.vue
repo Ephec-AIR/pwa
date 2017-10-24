@@ -17,6 +17,9 @@
     components: {
       AirNav,
       AirToast
+    },
+    created () {
+      this.$store.dispatch('SET_USER_IF_EXIST');
     }
   }
 </script>

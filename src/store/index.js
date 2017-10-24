@@ -10,7 +10,7 @@ export default new Vuex.Store({
   state: {
     // toast message
     toast: {
-      message: ''
+      messages: []
     },
     user: {
       userId: '',

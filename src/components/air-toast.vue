@@ -1,8 +1,8 @@
 <template>
   <div class="air-toast-container">
     <transition name="toast-fade-in">
-      <div class="air-toast" v-show="toast.message">
-        <p class="air-toast--content">{{toast.message}}</p>
+      <div class="air-toast" v-show="toast.messages.length > 0">
+        <p class="air-toast--content" v-for="(message, index) in toast.messages" :key="index">{{message}}</p>
       </div>
     </transition>
   </div>
@@ -21,28 +21,33 @@ export default {
 <style lang="scss">
   .air-toast {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    word-wrap: break-word;
     position: fixed;
-    padding: 0 10px;
+    padding: 0 5px;
     color: #fff;
     bottom: 15px;
-    right: 15px;
-    padding: 0 10px;
-    background: #444;
+    left: 15px;
+    padding: 10px;
+    background: #333;
     border-radius: 3px;
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
-    transition: opacity 0.3s cubic-bezier(0, 0, 0.3, 1);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
     will-change: opacity;
     opacity: 1;
     z-index: 1;
+
+    &--content {
+      margin: 0;
+    }
   }
 
-  .toast-fade-in-enter-active {
+  .toast-fade-in-enter-active, .toast-fade-in-leave-active {
     transition: opacity .3s cubic-bezier(0, 0, 0.3, 1);
   }
 
-  .toast-fade-in-enter, .toast-fade-in-leave-active {
+  .toast-fade-in-enter, .toast-fade-in-leave-to {
     opacity: 0;
   }
 </style>

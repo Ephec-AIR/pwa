@@ -6,7 +6,7 @@
   "scripts": {
     "patch": "npm version bump",
     "watch": "webpack-dev-server --config build/webpack.config.js",
-    "build": "rm -rf ./dist && npm run build:client && workbox-cli generate:sw",
+    "build": "rm -rf ./dist && npm run build:client && workbox generate:sw",
     "build:client": "NODE_ENV=production webpack --config build/webpack.config.js -p --progress",
     "webpack-defaults": "webpack-defaults"
   },
@@ -41,6 +41,7 @@
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-minify": "^0.2.0",
+    "babel-preset-stage-3": "^6.24.1",
     "bundle-buddy-webpack-plugin": "^0.3.0",
     "copy-webpack-plugin": "^4.1.1",
     "css-loader": "^0.28.7",

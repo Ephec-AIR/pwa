@@ -10,16 +10,19 @@
       <nav class="air-nav--inner__nav-container" role="navigation">
         <ul class="air-nav--inner__nav-content">
           <li>
-            <router-link to="/home" class="air-nav__inner__nav-link" aria-label="home">Home</router-link>
+            <router-link to="home" class="air-nav__inner__nav-link" aria-label="home">Home</router-link>
           </li>
           <li>
             <a href="https://air-forum.ephec-ti.org" class="air-nav__inner__nav-link" aria-label="forum">Forum</a>
           </li>
           <li>
-            <router-link to="/parameters" class="air-nav__inner__nav-link" aria-label="parameter">Parameter</router-link>
+            <router-link to="parameters" class="air-nav__inner__nav-link" aria-label="parameter">Parameter</router-link>
           </li>
-          <li>
+          <li v-if="isLoggedIn" >
             <a href="#" class="air-nav__inner__nav-link" aria-label="logout" @click.prevent="logout">Deconnection</a>
+          </li>
+          <li v-if="isLoggedIn">
+            <span class="air-nav__inner__nav-username" aria-label="username">{{username}}</span>
           </li>
         </ul>
       </nav>
@@ -28,13 +31,20 @@
 </template>
 
 <script>
-import {isLoggedIn} from 'src/router';
+import {mapGetters} from 'vuex';
 
 export default {
   methods: {
-    isLoggedIn,
     logout () {
       this.$store.dispatch('LOGOUT');
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'isLoggedIn'
+    ]),
+    username () {
+      return this.$store.state.user.username;
     }
   }
 }
@@ -71,15 +81,14 @@ export default {
 
     .toggle_nav--label {
       background: url(/public/images/hamburger.svg) center no-repeat no-repeat;
-      height: 24px;
       width: 24px;
       display: none;
     }
 
     #toggle_nav {
       position: absolute;
-      top: 27px;
-      left: 15px;
+      top: 50px;
+      left: 23px;
       opacity: 0;
     }
 
@@ -99,9 +108,7 @@ export default {
       width: 100%;
 
       .air-nav--inner__nav-content {
-        margin: 0 0 15px 0;
         padding: 0;
-        max-height: 80px;
         display: flex;
         list-style: none;
 
@@ -119,6 +126,11 @@ export default {
           color: #fb0042;
           text-decoration: none;
         }
+
+        .air-nav__inner__nav-username {
+          font-size: 22px;
+          color: #444;
+        }
       }
     }
   }
@@ -126,7 +138,7 @@ export default {
   @media (max-width: 530px) {
     .air-nav {
       &__logo-container {
-        margin: 30px;
+        margin: 10px;
       }
 
       .toggle_nav--label {
@@ -134,7 +146,7 @@ export default {
         z-index: 2;
       }
 
-      #toggle_nav:checked~.air-nav {
+      #toggle_nav:checked~.air-nav--inner__nav-container {
         transform: none;
       }
     }
@@ -143,6 +155,9 @@ export default {
       position: fixed;
       display: flex;
       justify-content: flex-start;
+      align-items: unset;
+      padding: 120px 0;
+      background: #FFF;
       top: 0;
       left: 0;
       width: 500px;
@@ -160,6 +175,10 @@ export default {
         width: 100%;
         max-height: inherit;
         margin-top: 160px;
+
+        li {
+          margin: 7px 10px;
+        }
 
         .air-nav__inner__nav-link {
           font-weight: bold;

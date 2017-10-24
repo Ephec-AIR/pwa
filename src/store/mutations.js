@@ -1,6 +1,12 @@
+import Vue from 'vue';
+
 export default {
   SAVE_USER (state, user) {
-    state.user = user;
+    state.user = {
+      userId: user.userId,
+      username: user.username,
+      serial: user.serial
+    };
   },
   REMOVE_USER (state) {
     state.user = {
@@ -11,7 +17,7 @@ export default {
   },
   TOAST_MESSAGE (state, options) {
     const duration = options.duration || 3000;
-    state.toast.message = options.message;
-    setTimeout(() => state.toast.message = '', duration);
+    state.toast.messages = options.messages;
+    setTimeout(() => state.toast.messages = [], duration);
   }
 }
