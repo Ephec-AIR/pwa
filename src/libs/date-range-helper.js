@@ -5,16 +5,14 @@
 class DateRangeHelper {
   static get dayRange() {
     const end = new Date();
-    const start = new Date().setHours(0, 0, 0, 0);
+    const start = new Date(new Date().setHours(0, 0, 0, 0));
     return {start, end}
   }
 
   static get weekRange () {
     const end = new Date();
-    const day = end.getDay();
-    // adjust when day is sunday
-    const diff = end.getDate() - day + (day == 0 ? -6 : 1);
-    const start = new Date(end.setDate(diff));
+    const start = new Date(new Date().setHours(0, 0, 0, 0));
+    start.setDate(start.getDate() - start.getDay());
     return {start, end}
   }
 

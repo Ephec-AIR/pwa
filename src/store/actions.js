@@ -112,6 +112,7 @@ export default {
  */
 const fetchData = async ({start, end}, commit) => {
   // 1. Get data from IDB
+  let idbData = [];
   const db = await idb.open('air', 1, db => {
     const consumptionStore = db.createObjectStore('consumption', {
       keyPath: 'date'
@@ -119,32 +120,32 @@ const fetchData = async ({start, end}, commit) => {
     consumptionStore.createIndex('date', 'date');
   });
 
-  const transaction = db.transaction('consumption');
-  const store = transaction.objectStore('consumption');
+  let transaction = db.transaction('consumption');
+  let store = transaction.objectStore('consumption');
   const index = store.index('date');
 
   const range = IDBKeyRange.bound(start, end);
-  const idbData = await store.openCursor(range).then(cursor => {
-    const data = [];
+  index.iterateCursor(range, cursor => {
     if (!cursor) {
-      return data;
+      return;
     }
-    console.log(cursor.value);
-    data.push(cursor.value);
-    return cursor.continue();
+    console.log(cursor);
+    idbData.push(cursor.value);
+    cursor.continue();
   });
-  console.log(idbData)
   const lastDate = idbData.length > 0 ? idbData[idbData.length - 1].date : start;
+  console.log(idbData);
 
   if (lastDate >= end) {
     // store data
-    storeConsumption(idbData);
+    storeConsumption(commit, idbData);
     return;
   }
 
   // 2. Get missing data from API
   //start = lastDate ? lastDate : start; // move start date
-  const response = await fetch(`${Constant.API_URL}/consumption?start=${start}&end=${end}`, {
+  const response = await fetch(`${Constant.API_URL}/consumption?start=${start.toISOString()}&end=${end.toISOString()}`, {
+    method: 'GET',
     headers: {
       authorization: `Bearer ${await idbKeyVal.get('token')}`
     }
@@ -155,19 +156,23 @@ const fetchData = async ({start, end}, commit) => {
       messages: ["Sérial non trouvé.", "Vous n'êtes pas synchronisé avec un appareil."],
       duration: 5000
     });
+    return;
   }
 
   const fetchData = await response.json();
 
   // 3. Put data in IDB
-  fetchData.forEach(data => store.put(data, data.date));
+  transaction = db.transaction('consumption', 'readwrite');
+  store = transaction.objectStore('consumption');
+  fetchData.forEach(data => store.put(data));
   transaction.complete;
 
   // 4. store data
-  storeConsumption(idbData, fetchData, commit);
+  storeConsumption(commit, idbData, fetchData);
+  idbData = [];
 }
 
-const storeConsumption = (idbData = [], fetchData = [], commit) => {
+const storeConsumption = (commit, idbData = [], fetchData = []) => {
   commit('SAVE_CONSUMPTION', {
     consumption: [...idbData, ...fetchData]
   });
