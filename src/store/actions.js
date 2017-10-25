@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import router from 'src/router';
 import Constant from 'src/constants';
-import idbKeyVal from 'idb-keyval'; // indexedDB
+import idbKeyVal from 'idb-keyval'; // idb keyval
+import idb from 'idb'; // idb
 import decode from 'jwt-decode';
 import Token from 'src/libs/token';
-import DateHelper from 'src/libs/date-helper';
+import DateRangeHelper from 'src/libs/date-range-helper';
 
 export default {
   LOGIN ({commit, state}, {username, password}) {
@@ -48,12 +49,11 @@ export default {
         commit('TOAST_MESSAGE', {
           messages: ["Vous n'êtes pas encore synchronisés avec un appareil.",
             "Veuillez indiquer le serial ainsi que le user_secret dans les champs adéquats."],
-            duration: 8000
+          duration: 8000
         });
         router.push('/parameters');
         return;
       }
-      // if user has no postal code ?
 
       // everything's good, go to home page
       router.push('/home');
@@ -82,7 +82,92 @@ export default {
     }).catch(err => console.error(err));
   },
 
-  GET_CONSUMPTION ({commit, state}, type) {
+  GET_CONSUMPTION_DAY ({commit, state}) {
+    fetchData(DateRangeHelper.dayRange, commit)
+      .catch(err => console.error(err));
+  },
 
+  GET_CONSUMPTION_WEEK ({commit, state}) {
+    fetchData(DateRangeHelper.weekRange, commit)
+      .catch(err => console.error(err));
+  },
+
+  GET_CONSUMPTION_MONTH ({commit, state}) {
+    fetchData(DateRangeHelper.monthRange, commit)
+      .catch(err => console.error(err));
+  },
+
+  GET_CONSUMPTION_YEAR ({commit, state}) {
+    fetchData(DateRangeHelper.yearRange, commit)
+      .catch(err => console.error(err));
   }
+}
+
+/**
+ * The goal here is to provide an offline strategy that allow the user
+ * to see his consumption even when he's offline or has a poor network.
+ * In that case, he can see the old consumption that's stored in the cache (idb)
+ * @param {Date} {start, end}, range of the desired consumption
+ * @param {*} commit, vuex
+ */
+const fetchData = async ({start, end}, commit) => {
+  // 1. Get data from IDB
+  const db = await idb.open('air', 1, db => {
+    const consumptionStore = db.createObjectStore('consumption', {
+      keyPath: 'date'
+    });
+    consumptionStore.createIndex('date', 'date');
+  });
+
+  const transaction = db.transaction('consumption');
+  const store = transaction.objectStore('consumption');
+  const index = store.index('date');
+
+  const range = IDBKeyRange.bound(start, end);
+  const idbData = await store.openCursor(range).then(cursor => {
+    const data = [];
+    if (!cursor) {
+      return data;
+    }
+    console.log(cursor.value);
+    data.push(cursor.value);
+    return cursor.continue();
+  });
+  const lastDate = idbData[idbData.length - 1].date;
+
+  if (lastDate >= end) {
+    // store data
+    storeConsumption(idbData);
+    return;
+  }
+
+  // 2. Get missing data from API
+  start = lastDate ? lastDate : start; // move start date
+  const response = await fetch(`${Constant.API_URL}/consumption?start=${start}&end=${end}`, {
+    headers: {
+      authorization: `Bearer ${await idbKeyVal.get('token')}`
+    }
+  });
+
+  if (response.status === 412) {
+    commit('TOAST_MESSAGE', {
+      messages: ["Sérial non trouvé.", "Vous n'êtes pas synchronisé avec un appareil."],
+      duration: 5000
+    });
+  }
+
+  const fetchData = await response.json();
+
+  // 3. Put data in IDB
+  store.put(...fetchData);
+  transaction.complete;
+
+  // 4. store data
+  storeConsumption(idbData, fetchData);
+}
+
+const storeConsumption = (idbData = [], fetchData = [], commit) => {
+  commit('SAVE_CONSUMPTION', {
+    consumption: [...idbData, ...fetchData]
+  });
 }

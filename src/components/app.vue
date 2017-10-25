@@ -9,6 +9,8 @@
 </template>
 
 <script>
+  import 'regenerator-runtime/runtime';
+  import idb from 'idb';
   import AirNav from './air-nav';
   import AirToast from './air-toast';
 

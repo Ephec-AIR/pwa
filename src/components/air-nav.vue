@@ -117,10 +117,6 @@ export default {
           padding: 5px;
         }
 
-        .router-view-active {
-          color: green;
-        }
-
         .air-nav__inner__nav-link {
           font-size: 20px;
           color: #fb0042;
@@ -133,6 +129,10 @@ export default {
         }
       }
     }
+  }
+
+  .router-link-active {
+    color: green;
   }
 
   @media (max-width: 530px) {

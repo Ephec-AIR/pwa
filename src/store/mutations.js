@@ -15,6 +15,10 @@ export default {
       serial: ''
     }
   },
+  SAVE_CONSUMPTION (state, {consumption}) {
+    // merge arrays
+    state.consumption = [...state.consumption, ...consumption];
+  },
   TOAST_MESSAGE (state, options) {
     const duration = options.duration || 3000;
     state.toast = {

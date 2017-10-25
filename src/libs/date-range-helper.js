@@ -2,7 +2,7 @@
  * Give a date range between start of day, week, month, year and now
  */
 
-class DateHelper {
+class DateRangeHelper {
   static get dayRange() {
     const end = new Date();
     const start = new Date().setHours(0, 0, 0, 0);
@@ -11,9 +11,9 @@ class DateHelper {
 
   static get weekRange () {
     const end = new Date();
-    const day = d.getDay();
+    const day = end.getDay();
     // adjust when day is sunday
-    const diff = d.getDate() - day + (day == 0 ? -6 : 1);
+    const diff = end.getDate() - day + (day == 0 ? -6 : 1);
     const start = new Date(d.setDate(diff));
     return {start, end}
   }
@@ -31,4 +31,4 @@ class DateHelper {
   }
 }
 
-export default DateHelper;
+export default DateRangeHelper;
