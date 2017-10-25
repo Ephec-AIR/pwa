@@ -1,11 +1,22 @@
 <template>
   <div class="home">
-    Je suis home
+    <air-tips></air-tips>
+    <air-graph></air-graph>
+    <air-graph-controls></air-graph-controls>
   </div>
 </template>
 
 <script>
+  import AirTips from 'components/air-tips';
+  import AirGraph from 'components/air-graph';
+  import AirGraphControls from 'components/air-graph-controls';
+
   export default {
+    components: {
+      AirTips,
+      AirGraph,
+      AirGraphControls
+    },
     data () {
       return {
       }
@@ -14,8 +25,16 @@
 </script>
 
 <style lang="scss">
-  .main {
-    height: 100%;
+  .home {
+    height: calc(100% - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+
+  .air-tips, .air-graph, .air-graph-controls {
+    margin: 10px;
+  }
+
 </style>
 

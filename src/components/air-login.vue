@@ -10,7 +10,7 @@
         <p class="air-login-form-password--error error-message">{{errors.first('password')}}</p>
       </div>
       <div class="air-login-form--button">
-        <button type="submit" class="air-login-form--button-login">Se connecter</button>
+        <button type="submit" class="air-login-form--button-login simple-button">Se connecter</button>
         <a href="https://air-forum.ephec-ti.org/register" class="air-login-form--button-register">s'enregistrer</a>
       </div>
     </form>

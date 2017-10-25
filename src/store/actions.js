@@ -4,6 +4,7 @@ import Constant from 'src/constants';
 import idbKeyVal from 'idb-keyval'; // indexedDB
 import decode from 'jwt-decode';
 import Token from 'src/libs/token';
+import DateHelper from 'src/libs/date-helper';
 
 export default {
   LOGIN ({commit, state}, {username, password}) {
@@ -22,7 +23,7 @@ export default {
       // if field no provided
       if (response.error) {
         commit('TOAST_MESSAGE', {
-          message: response.error
+          messages: response.error
         });
         return;
       }
@@ -30,7 +31,7 @@ export default {
       // user not found
       if (response.message) {
         commit('TOAST_MESSAGE', {
-          message: [response.message]
+          messages: [response.message]
         });
         return;
       }
@@ -79,5 +80,9 @@ export default {
       const user = decode(token);
       commit('SAVE_USER', user);
     }).catch(err => console.error(err));
+  },
+
+  GET_CONSUMPTION ({commit, state}, type) {
+
   }
 }

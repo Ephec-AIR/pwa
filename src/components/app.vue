@@ -29,6 +29,16 @@
     width: 100%;
   }
 
+  .simple-button {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    color: #FFF;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
   .router-fade-in-enter-active {
     transition: opacity 0.2s cubic-bezier(0, 0, 0.3, 1);
   }
