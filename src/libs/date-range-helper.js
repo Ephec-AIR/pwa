@@ -14,7 +14,7 @@ class DateRangeHelper {
     const day = end.getDay();
     // adjust when day is sunday
     const diff = end.getDate() - day + (day == 0 ? -6 : 1);
-    const start = new Date(d.setDate(diff));
+    const start = new Date(end.setDate(diff));
     return {start, end}
   }
 

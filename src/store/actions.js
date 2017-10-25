@@ -107,7 +107,7 @@ export default {
  * The goal here is to provide an offline strategy that allow the user
  * to see his consumption even when he's offline or has a poor network.
  * In that case, he can see the old consumption that's stored in the cache (idb)
- * @param {Date} {start, end}, range of the desired consumption
+ * @param {Object} {start, end}, range of the desired consumption
  * @param {*} commit, vuex
  */
 const fetchData = async ({start, end}, commit) => {
@@ -133,7 +133,8 @@ const fetchData = async ({start, end}, commit) => {
     data.push(cursor.value);
     return cursor.continue();
   });
-  const lastDate = idbData[idbData.length - 1].date;
+  console.log(idbData)
+  const lastDate = idbData.length > 0 ? idbData[idbData.length - 1].date : start;
 
   if (lastDate >= end) {
     // store data
@@ -142,7 +143,7 @@ const fetchData = async ({start, end}, commit) => {
   }
 
   // 2. Get missing data from API
-  start = lastDate ? lastDate : start; // move start date
+  //start = lastDate ? lastDate : start; // move start date
   const response = await fetch(`${Constant.API_URL}/consumption?start=${start}&end=${end}`, {
     headers: {
       authorization: `Bearer ${await idbKeyVal.get('token')}`
@@ -159,11 +160,11 @@ const fetchData = async ({start, end}, commit) => {
   const fetchData = await response.json();
 
   // 3. Put data in IDB
-  store.put(...fetchData);
+  fetchData.forEach(data => store.put(data, data.date));
   transaction.complete;
 
   // 4. store data
-  storeConsumption(idbData, fetchData);
+  storeConsumption(idbData, fetchData, commit);
 }
 
 const storeConsumption = (idbData = [], fetchData = [], commit) => {
