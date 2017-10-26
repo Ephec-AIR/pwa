@@ -107,12 +107,11 @@ export default {
  * The goal here is to provide an offline strategy that allow the user
  * to see his consumption even when he's offline or has a poor network.
  * In that case, he can see the old consumption that's stored in the cache (idb)
- * @param {Object} {start, end}, range of the desired consumption
+ * @param {Object} range, range of the desired consumption
  * @param {*} commit, vuex
  */
 const fetchData = async ({start, end}, commit) => {
   // 1. Get data from IDB
-  let idbData = [];
   const db = await idb.open('air', 1, db => {
     const consumptionStore = db.createObjectStore('consumption', {
       keyPath: 'date'
@@ -124,27 +123,25 @@ const fetchData = async ({start, end}, commit) => {
   let store = transaction.objectStore('consumption');
   const index = store.index('date');
 
-  const range = IDBKeyRange.bound(start, end);
-  index.iterateCursor(range, cursor => {
-    if (!cursor) {
-      return;
-    }
-    console.log(cursor);
-    idbData.push(cursor.value);
-    cursor.continue();
-  });
-  const lastDate = idbData.length > 0 ? idbData[idbData.length - 1].date : start;
-  console.log(idbData);
+  const range = IDBKeyRange.bound(DateRangeHelper.adjustISOHours(start), DateRangeHelper.adjustISOHours(end));
+  const idbData = await getIDBByRange(index, range);
 
-  if (lastDate >= end) {
+  const lastDate = idbData.length > 0 ? idbData[idbData.length - 1].date : start;
+  const firstDate = idbData.length > 0 ? idbData[0].date : end;
+  if (DateRangeHelper.removeMinutesAndSeconds(firstDate) <= DateRangeHelper.removeMinutesAndSeconds(start)
+    && DateRangeHelper.removeMinutesAndSeconds(lastDate) >= DateRangeHelper.removeMinutesAndSeconds(end)) {
+    console.log('not fetching...')
     // store data
     storeConsumption(commit, idbData);
     return;
   }
 
+  // NOTE: Fetching everything or only the missing ranges [start - firstDate], [lastDate - end] ?
+  // NOTE: 2 requests or only 1 with multiple range (if needed) ?
+
   // 2. Get missing data from API
   //start = lastDate ? lastDate : start; // move start date
-  const response = await fetch(`${Constant.API_URL}/consumption?start=${start.toISOString()}&end=${end.toISOString()}`, {
+  const response = await fetch(`${Constant.API_URL}/consumption?start=${start}&end=${end}`, {
     method: 'GET',
     headers: {
       authorization: `Bearer ${await idbKeyVal.get('token')}`
@@ -169,7 +166,20 @@ const fetchData = async ({start, end}, commit) => {
 
   // 4. store data
   storeConsumption(commit, idbData, fetchData);
-  idbData = [];
+}
+
+const getIDBByRange = (index, range) => {
+  return new Promise((resolve, reject) => {
+    const idbData = [];
+    index.iterateCursor(range, cursor => {
+      if (!cursor) {
+        resolve(idbData);
+        return;
+      }
+      idbData.push(cursor.value);
+      cursor.continue();
+    });
+  });
 }
 
 const storeConsumption = (commit, idbData = [], fetchData = []) => {

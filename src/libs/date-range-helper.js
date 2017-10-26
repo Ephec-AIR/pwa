@@ -27,6 +27,16 @@ class DateRangeHelper {
     const start = new Date(end.getFullYear(), 0, 1);
     return {start, end}
   }
+
+  static adjustISOHours (d) {
+    const adjustedDateTime = new Date(d);
+    return new Date(adjustedDateTime.setHours(adjustedDateTime.getHours() + 2)).toISOString();
+  }
+
+  static removeMinutesAndSeconds (d) {
+    const cleanedDate = new Date(d);
+    return new Date(cleanedDate.setMinutes(0, 0, 0));
+  }
 }
 
 export default DateRangeHelper;
