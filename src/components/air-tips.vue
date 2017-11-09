@@ -1,46 +1,77 @@
 <template>
   <div class="air-tips">
-    <h2 class="air-tips--title">Conseil du jour</h2>
-    <p class="air-tips--content">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Praesent in nulla scelerisque neque varius rutrum vitae vel leo.
-      Phasellus eget lorem quam. Fusce ultrices pretium ex eu rutrum.
-      Praesent leo erat, condimentum at consequat eget, malesuada ac arcu.
-      Sed vehicula tortor dui, eu viverra enim feugiat eu.
-      Donec vitae magna a ipsum condimentum ultricies.
-      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-      Vivamus aliquet turpis justo, vel maximus mi mollis id.
-      Aenean semper pulvinar neque vitae tempor.
-      Vestibulum id tempus lectus, sed lacinia nisi.
-      Duis bibendum vehicula nisl, in lacinia turpis pulvinar nec.
-      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-    </p>
+    <div class="air-tips--logo" @click="toggleTips"></div>
+    <div class="air-tips-box">
+      <h2 class="air-tips-box--title">Conseil du jour</h2>
+      <p class="air-tips-box--content">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Praesent in nulla scelerisque neque varius rutrum vitae vel leo.
+        Phasellus eget lorem quam. Fusce ultrices pretium ex eu rutrum.
+        Praesent leo erat, condimentum at consequat eget, malesuada ac arcu.
+        Sed vehicula tortor dui, eu viverra enim feugiat eu.
+        Donec vitae magna a ipsum condimentum ultricies.
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
-
+    data () {
+      return {
+        showTips: false
+      }
+    },
+    methods: {
+      toggleTips () {
+        document.querySelector('.air-tips-box').classList.toggle('air-tips-box--hide');
+      }
+    }
   }
 </script>
 
 <style lang="scss">
   .air-tips {
-    max-width: 350px;
-    padding: 5px 15px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    position: relative;
 
-    &--title {
-      text-align: center;
-      margin: 7px 0;
-      font-size: 18px;
-      color: #777;
+    &--logo {
+      position: absolute;
+      top: 2px;
+      left: 5px;
+      background: url(/public/images/bulb.png) left top no-repeat;
+      background-size: contain;
+      height: 5vw;
+      width: 100%;
     }
 
-    &--content {
-      margin: 0;
-      font-size: 15px;
+    &-box {
+      opacity: 1;
+      max-width: 350px;
+      padding: 5px 15px;
+      border-radius: 5px;
+      margin-left: 35px;
+      background: #FFF;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      transform:  translateX(0);
+      transition: opacity .3s cubic-bezier(0, 0, 0.3, 1),
+        transform .5s cubic-bezier(0, 0, 0.3, 1);
+
+      &--hide {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+
+      &--title {
+        text-align: center;
+        margin: 7px 0;
+        font-size: 18px;
+        color: #777;
+      }
+
+      &--content {
+        margin: 0;
+        font-size: 15px;
+      }
     }
   }
 </style>

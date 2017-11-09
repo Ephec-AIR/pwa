@@ -26,10 +26,11 @@
 
 <style lang="scss">
   .home {
-    height: calc(100% - 120px);
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #FFD400;
+    max-height: 100%;
   }
 
   .air-tips, .air-graph, .air-graph-controls {

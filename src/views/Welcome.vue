@@ -21,8 +21,8 @@
   .welcome {
     display: flex;
     flex-direction: row;
-    height: 100%;
     background: #FFD400;
+    min-height: 100%;
   }
 
   @media (max-width: 530px) {
@@ -30,11 +30,4 @@
       flex-direction: column;
     }
   }
-
-  @media (min-width: 531px) {
-    .welcome {
-      height: 100%;
-    }
-  }
 </style>
-

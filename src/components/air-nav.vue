@@ -49,7 +49,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
   .air-nav {
     height: 80px;
@@ -68,7 +67,6 @@ export default {
         background-size: 48px 48px;
         height: 48px;
         padding-left: 56px;
-        margin-left: 20px;
         color: #01a875;
         font-size: 32px;
         font-weight: bold;
@@ -91,10 +89,6 @@ export default {
       top: 30px;
       right: 15px;
       opacity: 0;
-    }
-
-    #toggle_nav:checked~.menu-underlay {
-      opacity: 0.7;
     }
 
     .air-nav--inner {
@@ -143,7 +137,7 @@ export default {
   @media (max-width: 530px) {
     .air-nav {
       &--inner {
-        justify-content: flex-end;
+        justify-content: space-between;
       }
 
       &__logo-container {
@@ -154,6 +148,10 @@ export default {
         margin: 10px;
         display: block;
         z-index: 2;
+      }
+
+      #toggle_nav:checked~.menu-underlay {
+        opacity: 0.7;
       }
 
       #toggle_nav:checked~.air-nav--inner__nav-container {
