@@ -1,12 +1,20 @@
 <template>
   <div class="air-graph-controls">
     <section class="air-graph-controls--choices">
-      <div class="air-graph-controls--choices__arrow-left"></div>
-      <div class="air-graph-controls--choices__arrow-right"></div>
-      <button class="controls-button air-graph-controls--choices__day" @click="getConsumptionDay">JOUR</button>
-      <button class="controls-button air-graph-controls--choices__week" @click="getConsumptionWeek">SEMAINE</button>
-      <button class="controls-button air-graph-controls--choices__month" @click="getConsumptionMonth">MOIS</button>
-      <button class="controls-button air-graph-controls--choices__year" @click="getConsumptionYear">ANNEE</button>
+      <div class="air-graph-controls--choices__container">
+        <div class="air-graph-controls--choices__left-arrow"></div>
+        <button class="controls-button air-graph-controls--choices__day" @click="getConsumptionDay">JOUR</button>
+        <div class="air-graph-controls--choices__right-arrow"></div>
+      </div>
+      <div class="air-graph-controls--choices__container">
+        <button class="controls-button air-graph-controls--choices__week" @click="getConsumptionWeek">SEMAINE</button>
+      </div>
+      <div class="air-graph-controls--choices__container">
+        <button class="controls-button air-graph-controls--choices__month" @click="getConsumptionMonth">MOIS</button>
+      </div>
+      <div class="air-graph-controls--choices__container">
+        <button class="controls-button air-graph-controls--choices__year" @click="getConsumptionYear">ANNEE</button>
+      </div>
     </section>
     <section class="air-graph-controls--compare" hidden>
       <button class="simple-button">COMPARER</button>
@@ -18,6 +26,11 @@
   import {mapActions} from 'vuex';
 
   export default {
+    data () {
+      return {
+        index: 0
+      }
+    },
     methods: {
       ...mapActions({
         getConsumptionDay: 'GET_CONSUMPTION_DAY',
@@ -27,15 +40,36 @@
       })
     },
     mounted () {
+      document.querySelector('.air-graph-controls--choices__day').focus();
       document.addEventListener('keydown', evt => {
-        const buttons = document.querySelectorAll('.controls-button');
+        const DELTAY = 41;
+        const FULL_DELTAY = 3 * 41;
+        const buttons = Array.from(document.querySelectorAll('.controls-button'));
+        const selectedButton = document.querySelector('.controls-button:focus');
+        const leftArrow = document.querySelector('.air-graph-controls--choices__left-arrow');
+        const rightArrow = document.querySelector('.air-graph-controls--choices__right-arrow');
+        let index = buttons.indexOf(selectedButton);
 
         switch(evt.keyCode) {
-          case '38': // UP
+          case 38: // UP
+            index = index - 1;
             break;
-          case '40': // DOWN
+          case 40: // DOWN
+            index = index + 1;
+            break;
+          default:
             break;
         }
+
+        if (index < 0) {
+          index = buttons.length - 1;
+        } else if (index >= buttons.length) {
+          index = 0;
+        }
+
+        leftArrow.style.transform = `translateY(${index * DELTAY}px)`;
+        rightArrow.style.transform = `translateY(${index * DELTAY}px)`;
+        buttons[index].focus();
       });
     }
   }
@@ -48,35 +82,39 @@
       flex-direction: column;
       margin: 10px 5px;
 
-      .controls-button {
+      &__container {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: center;
+      }
+
+      .controls-button {
         color: #FFF;
         font-size: 25px;
         background: none;
         border: none;
         outline: none;
-        width: 170px;
+        width: 150px;
 
-        &::before, &::after {
-          content: '';
-          background-size: 15px 15px;
-          height: 15px;
-          width: 15px;
-        }
-
-        &::before {
-          background: url(/public/images/arrow-left.svg) left center no-repeat;
-        }
-
-        &::after {
-          background: url(/public/images/arrow-right.svg) right center no-repeat;
+        &:focus {
+           color: #01a875;
         }
       }
 
-      .controls-button:focus {
-        color: #01a875;
+      &__left-arrow, &__right-arrow{
+        background-size: 15px 15px;
+        height: 15px;
+        width: 15px;
+        transition: transform .3s cubic-bezier(0, 0, 0.3, 1);
+        will-change: transform;
+      }
+
+      &__left-arrow {
+        background: url(/public/images/arrow-left.svg) left center no-repeat;
+      }
+
+      &__right-arrow {
+        background: url(/public/images/arrow-right.svg) right center no-repeat;
       }
 
       &__day, &__week, &__month, &__year {
