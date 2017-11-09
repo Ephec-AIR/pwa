@@ -2,7 +2,7 @@
   <header class="air-nav">
     <div class="air-nav--inner">
       <div class="air-nav__logo-container">
-        <a class="air-nav__logo_container--logo" href="/">
+        <a class="air-nav__logo-container--logo" href="/">
         </a>
       </div>
       <label for="toggle_nav" class="toggle_nav--label" aria-label="toggle_nav"></label>
@@ -53,7 +53,7 @@ export default {
 
 <style lang="scss">
   .air-nav {
-    height: 120px;
+    height: 80px;
     background: #FFF;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 
@@ -65,13 +65,15 @@ export default {
       &--logo {
         display: flex;
         align-items: center;
-        background: url(/public/icons/icon@128.png) left center no-repeat;
+        background: url(/public/icons/air@128x128.png) left center no-repeat;
         background-size: 48px 48px;
         height: 48px;
         padding-left: 56px;
         margin-left: 20px;
-        color: #e1255f;
+        color: #01a875;
+        font-size: 32px;
         font-weight: bold;
+        text-decoration: none;
 
         &::after {
           content: 'Air';
@@ -80,16 +82,20 @@ export default {
     }
 
     .toggle_nav--label {
-      background: url(/public/images/hamburger.svg) center no-repeat no-repeat;
+      background: url(/public/images/hamburger-bold.svg) center no-repeat no-repeat;
       width: 24px;
       display: none;
     }
 
     #toggle_nav {
       position: absolute;
-      top: 50px;
-      left: 23px;
+      top: 30px;
+      right: 15px;
       opacity: 0;
+    }
+
+    #toggle_nav:checked~.menu-underlay {
+      opacity: 0.7;
     }
 
     .air-nav--inner {
@@ -119,7 +125,7 @@ export default {
 
         .air-nav__inner__nav-link {
           font-size: 20px;
-          color: #fb0042;
+          color: #01a875;
           text-decoration: none;
         }
 
@@ -137,11 +143,16 @@ export default {
 
   @media (max-width: 530px) {
     .air-nav {
+      &--inner {
+        justify-content: flex-end;
+      }
+
       &__logo-container {
         margin: 10px;
       }
 
       .toggle_nav--label {
+        margin: 10px;
         display: block;
         z-index: 2;
       }
@@ -159,13 +170,13 @@ export default {
       padding: 120px 0;
       background: #FFF;
       top: 0;
-      left: 0;
+      right: 0;
       width: 500px;
-      max-width: 90%;
+      max-width: 70%;
       height: 100%;
-      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
+      box-shadow: -4px 0 4px rgba(0, 0, 0, 0.3);
       will-change: transform;
-      transform: translateX(-102%);
+      transform: translateX(102%);
       transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
       z-index: 1;
 

@@ -13,19 +13,28 @@
     components: {
       AirShow,
       AirLogin
-    },
-    data () {
-      return {
-      }
     }
   }
 </script>
 
 <style lang="scss">
   .welcome {
-    height: 100%;
     display: flex;
     flex-direction: row;
+    height: 100%;
+    background: #FFD400;
+  }
+
+  @media (max-width: 530px) {
+    .welcome {
+      flex-direction: column;
+    }
+  }
+
+  @media (min-width: 531px) {
+    .welcome {
+      height: 100%;
+    }
   }
 </style>
 
