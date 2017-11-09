@@ -2,8 +2,7 @@
   <header class="air-nav">
     <div class="air-nav--inner">
       <div class="air-nav__logo-container">
-        <a class="air-nav__logo-container--logo" href="/">
-        </a>
+        <router-link to="home" class="air-nav__logo-container--logo" href="/" aria-label="home"></router-link>
       </div>
       <label for="toggle_nav" class="toggle_nav--label" aria-label="toggle_nav"></label>
       <input type="checkbox" id="toggle_nav" role="button" aria-label="toggle_navigation_bar">
