@@ -1,0 +1,78 @@
+<template>
+  <div class="consumption-type">
+    <div class="consumption-now">
+      <input type="checkbox" id="consumption-now" class="consumption-checkbox consumption-now--checkbox">
+      <label for="consumption-now" class="consumption-label consumption-now--label">
+        Ma consommation
+      </label>
+    </div>
+    <div class="consumption-before">
+      <input type="checkbox" id="consumption-before" class="consumption-checkbox consumption-before--checkbox">
+      <label for="consumption-before" class="consumption-label consumption-before--label">
+        Ma consommation d'avant
+      </label>
+    </div>
+    <div class="consumption-users">
+      <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox">
+      <label for="consumption-users" class="consumption-label consumption-users--label">
+        La moyenne des utilisateurs
+      </label>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+
+  }
+</script>
+
+<style lang="scss">
+  .consumption-type {
+    display: flex;
+    flex-direction: column;
+    max-width: 350px;
+
+    .consumption-now, .consumption-before, .consumption-users {
+      margin: 5px 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .consumption-checkbox {
+      opacity: 0;
+    }
+
+    .consumption-checkbox:checked~.consumption-label::before {
+      background: #FFF;
+    }
+
+    .consumption-label {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: #FFF;
+
+      &::before {
+        content: '';
+        display: block;
+        height: 20px;
+        width: 20px;
+        margin: 0 5px;
+        border: 3px solid #FFF;
+        border-radius: 2px;
+        background: none;
+      }
+    }
+  }
+
+  @media (max-width: 530px) {
+    .consumption-type {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+  }
+</style>
+
+

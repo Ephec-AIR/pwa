@@ -3,17 +3,17 @@
     <section class="air-graph-controls--choices">
       <div class="air-graph-controls--choices__container">
         <div class="air-graph-controls--choices__left-arrow"></div>
-        <button class="controls-button air-graph-controls--choices__day" @click="getConsumptionDay">JOUR</button>
+        <button class="controls-button air-graph-controls--choices__day" @focus="getConsumptionDay">JOUR</button>
         <div class="air-graph-controls--choices__right-arrow"></div>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__week" @click="getConsumptionWeek">SEMAINE</button>
+        <button class="controls-button air-graph-controls--choices__week" @focus="getConsumptionWeek">SEMAINE</button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__month" @click="getConsumptionMonth">MOIS</button>
+        <button class="controls-button air-graph-controls--choices__month" @focus="getConsumptionMonth">MOIS</button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__year" @click="getConsumptionYear">ANNEE</button>
+        <button class="controls-button air-graph-controls--choices__year" @focus="getConsumptionYear">ANNEE</button>
       </div>
     </section>
     <section class="air-graph-controls--compare" hidden>
@@ -43,7 +43,6 @@
       document.querySelector('.air-graph-controls--choices__day').focus();
       document.addEventListener('keydown', evt => {
         const DELTAY = 41;
-        const FULL_DELTAY = 3 * 41;
         const buttons = Array.from(document.querySelectorAll('.controls-button'));
         const selectedButton = document.querySelector('.controls-button:focus');
         const leftArrow = document.querySelector('.air-graph-controls--choices__left-arrow');

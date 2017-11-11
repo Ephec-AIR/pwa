@@ -2,7 +2,10 @@
   <div class="home">
     <air-tips></air-tips>
     <air-graph></air-graph>
-    <air-graph-controls></air-graph-controls>
+    <section class="air-graph-controls">
+      <air-graph-consumption></air-graph-consumption>
+      <air-graph-controls></air-graph-controls>
+    </section>
   </div>
 </template>
 
@@ -10,12 +13,14 @@
   import AirTips from 'components/air-tips';
   import AirGraph from 'components/air-graph';
   import AirGraphControls from 'components/air-graph-controls';
+  import AirGraphConsumption from 'components/air-graph-consumption';
 
   export default {
     components: {
       AirTips,
       AirGraph,
-      AirGraphControls
+      AirGraphControls,
+      AirGraphConsumption
     },
     data () {
       return {
@@ -26,6 +31,7 @@
 
 <style lang="scss">
   .home {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -37,5 +43,10 @@
     margin: 10px;
   }
 
+  @media (max-width: 530px) {
+    .home {
+      position: relative;
+    }
+  }
 </style>
 

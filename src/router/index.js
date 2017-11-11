@@ -21,7 +21,7 @@ export default new VueRouter({
     {
       path: '/home',
       component: Home,
-      //beforeEnter: protectRoute
+      beforeEnter: protectRoute
     },
     {
       path: '/parameters',

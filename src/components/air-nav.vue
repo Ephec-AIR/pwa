@@ -12,10 +12,10 @@
             <router-link to="home" class="air-nav__inner__nav-link" aria-label="home">Home</router-link>
           </li>
           <li>
-            <a href="https://air-forum.ephec-ti.org" class="air-nav__inner__nav-link" aria-label="forum">Forum</a>
+            <a href="https://air.ephec-ti.org/forum/" class="air-nav__inner__nav-link" aria-label="forum">Forum</a>
           </li>
           <li>
-            <router-link to="parameters" class="air-nav__inner__nav-link" aria-label="parameter">Parameter</router-link>
+            <router-link to="parameters" class="air-nav__inner__nav-link" aria-label="parameter">Parametres</router-link>
           </li>
           <li v-if="isLoggedIn" >
             <a href="#" class="air-nav__inner__nav-link" aria-label="logout" @click.prevent="logout">Deconnection</a>
