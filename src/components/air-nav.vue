@@ -2,8 +2,7 @@
   <header class="air-nav">
     <div class="air-nav--inner">
       <div class="air-nav__logo-container">
-        <a class="air-nav__logo_container--logo" href="/">
-        </a>
+        <router-link to="home" class="air-nav__logo-container--logo" href="/" aria-label="home"></router-link>
       </div>
       <label for="toggle_nav" class="toggle_nav--label" aria-label="toggle_nav"></label>
       <input type="checkbox" id="toggle_nav" role="button" aria-label="toggle_navigation_bar">
@@ -13,10 +12,10 @@
             <router-link to="home" class="air-nav__inner__nav-link" aria-label="home">Home</router-link>
           </li>
           <li>
-            <a href="https://air-forum.ephec-ti.org" class="air-nav__inner__nav-link" aria-label="forum">Forum</a>
+            <a href="https://air.ephec-ti.org/forum/" class="air-nav__inner__nav-link" aria-label="forum">Forum</a>
           </li>
           <li>
-            <router-link to="parameters" class="air-nav__inner__nav-link" aria-label="parameter">Parameter</router-link>
+            <router-link to="parameters" class="air-nav__inner__nav-link" aria-label="parameter">Parametres</router-link>
           </li>
           <li v-if="isLoggedIn" >
             <a href="#" class="air-nav__inner__nav-link" aria-label="logout" @click.prevent="logout">Deconnection</a>
@@ -50,10 +49,9 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
   .air-nav {
-    height: 120px;
+    height: 80px;
     background: #FFF;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 
@@ -65,13 +63,14 @@ export default {
       &--logo {
         display: flex;
         align-items: center;
-        background: url(/public/icons/icon@128.png) left center no-repeat;
+        background: url(/public/icons/air@128x128.png) left center no-repeat;
         background-size: 48px 48px;
         height: 48px;
         padding-left: 56px;
-        margin-left: 20px;
-        color: #e1255f;
+        color: #01a875;
+        font-size: 32px;
         font-weight: bold;
+        text-decoration: none;
 
         &::after {
           content: 'Air';
@@ -80,15 +79,15 @@ export default {
     }
 
     .toggle_nav--label {
-      background: url(/public/images/hamburger.svg) center no-repeat no-repeat;
+      background: url(/public/images/hamburger-bold.svg) center no-repeat no-repeat;
       width: 24px;
       display: none;
     }
 
     #toggle_nav {
       position: absolute;
-      top: 50px;
-      left: 23px;
+      top: 30px;
+      right: 15px;
       opacity: 0;
     }
 
@@ -117,13 +116,9 @@ export default {
           padding: 5px;
         }
 
-        .router-view-active {
-          color: green;
-        }
-
         .air-nav__inner__nav-link {
           font-size: 20px;
-          color: #fb0042;
+          color: #01a875;
           text-decoration: none;
         }
 
@@ -135,15 +130,28 @@ export default {
     }
   }
 
+  .router-link-active {
+    color: green;
+  }
+
   @media (max-width: 530px) {
     .air-nav {
+      &--inner {
+        justify-content: space-between;
+      }
+
       &__logo-container {
         margin: 10px;
       }
 
       .toggle_nav--label {
+        margin: 10px;
         display: block;
         z-index: 2;
+      }
+
+      #toggle_nav:checked~.menu-underlay {
+        opacity: 0.7;
       }
 
       #toggle_nav:checked~.air-nav--inner__nav-container {
@@ -159,13 +167,13 @@ export default {
       padding: 120px 0;
       background: #FFF;
       top: 0;
-      left: 0;
+      right: 0;
       width: 500px;
-      max-width: 90%;
+      max-width: 70%;
       height: 100%;
-      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
+      box-shadow: -4px 0 4px rgba(0, 0, 0, 0.3);
       will-change: transform;
-      transform: translateX(-102%);
+      transform: translateX(102%);
       transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
       z-index: 1;
 

@@ -27,6 +27,7 @@ export default {
     word-wrap: break-word;
     position: fixed;
     padding: 0 5px;
+    margin-right: 10px;
     color: #fff;
     bottom: 15px;
     left: 15px;

@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <div class="menu-underlay"></div>
     <air-nav></air-nav>
     <transition name="router-fade-in" mode="out-in">
       <router-view><!-- router views --></router-view>
@@ -9,6 +10,8 @@
 </template>
 
 <script>
+  import 'regenerator-runtime/runtime';
+  import idb from 'idb';
   import AirNav from './air-nav';
   import AirToast from './air-toast';
 
@@ -27,6 +30,19 @@
   .main {
     height: 100%;
     width: 100%;
+
+    .menu-underlay {
+      height: 100%;
+      width: 100%;
+      background: #000;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: opacity cubic-bezier(0, 0, 0.3, 1);
+      will-change: opacity;
+      pointer-events: none;
+    }
   }
 
   .simple-button {
