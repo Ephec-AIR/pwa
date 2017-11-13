@@ -11,11 +11,11 @@
       </div>
       <div class="air-login-form--button">
         <button type="submit" class="air-login-form--button-login simple-button">S'identifier</button>
-        <button class="air-login-form--button-register simple-button">
-          <a href="https://air.ephec-ti.org/forum/register">S'enregistrer</a>
-        </button>
       </div>
     </form>
+    <button class="air-login-form--button-register simple-button">
+      <a href="https://air.ephec-ti.org/forum/register">S'enregistrer</a>
+    </button>
   </div>
 </template>
 

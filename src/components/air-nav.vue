@@ -44,6 +44,15 @@ export default {
     ]),
     username () {
       return this.$store.state.user.username;
+    },
+    onTouchStart (evt) {
+
+    },
+    onTouchMove (evt) {
+
+    },
+    onTouchEnd (evt) {
+
     }
   }
 }
