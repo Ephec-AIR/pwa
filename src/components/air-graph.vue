@@ -5,10 +5,11 @@
 </template>
 
 <script>
-  import anychart from 'anychart';
+  //import anychart from 'anychart';
 
   export default {
     mounted () {
+      return;
       const chart = anychart.pie([
           ["Chocolate", 5],
           ["Rhubarb compote", 2],

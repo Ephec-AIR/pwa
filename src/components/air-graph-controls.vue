@@ -2,9 +2,9 @@
   <div class="air-graph-controls">
     <section class="air-graph-controls--choices">
       <div class="air-graph-controls--choices__container">
-        <div class="air-graph-controls--choices__left-arrow"></div>
+        <div class="air-graph-controls--choices__left-arrow" @click="selectChoice(-1)"></div>
         <button class="controls-button air-graph-controls--choices__day" @focus="getConsumptionDay">JOUR</button>
-        <div class="air-graph-controls--choices__right-arrow"></div>
+        <div class="air-graph-controls--choices__right-arrow" @click="selectChoice(1)"></div>
       </div>
       <div class="air-graph-controls--choices__container">
         <button class="controls-button air-graph-controls--choices__week" @focus="getConsumptionWeek">SEMAINE</button>
@@ -28,48 +28,84 @@
   export default {
     data () {
       return {
-        index: 0
+        DELTAY: 41,
+        viewportWidth: 0,
+        lastIndex: 0,
+        index: 0,
+        buttons: null,
+        leftArrow: null,
+        rightArrow: null,
+        selectedButton: null
       }
     },
     methods: {
+      onResize () {
+        this.viewportWidth = window.innerWidth;
+      },
       ...mapActions({
         getConsumptionDay: 'GET_CONSUMPTION_DAY',
         getConsumptionWeek: 'GET_CONSUMPTION_WEEK',
         getConsumptionMonth: 'GET_CONSUMPTION_MONTH',
         getConsumptionYear: 'GET_CONSUMPTION_YEAR',
-      })
-    },
-    mounted () {
-      document.querySelector('.air-graph-controls--choices__day').focus();
-      document.addEventListener('keydown', evt => {
-        const DELTAY = 41;
-        const buttons = Array.from(document.querySelectorAll('.controls-button'));
-        const selectedButton = document.querySelector('.controls-button:focus');
-        const leftArrow = document.querySelector('.air-graph-controls--choices__left-arrow');
-        const rightArrow = document.querySelector('.air-graph-controls--choices__right-arrow');
-        let index = buttons.indexOf(selectedButton);
+      }),
+      moveIndex (increment) {
+        this.lastIndex = this.index;
+        this.index += increment;
+
+        if (this.index < 0) {
+          this.index = this.buttons.length - 1;
+        } else if (this.index >= this.buttons.length) {
+          this.index = 0;
+        }
+
+        this.buttons[this.index].focus();
+      },
+      selectChoice (increment) {
+        if (this.viewportWidth > 530) return;
+        this.moveIndex(increment);
+        this.moveChoicesWhenResponsive();
+      },
+      moveChoicesWhenResponsive () {
+        this.buttons[this.lastIndex].style.opacity = 0;
+        this.buttons[this.index].style.opacity = 1;
+      },
+      moveArrows () {
+        this.leftArrow.style.transform = `translateY(${this.index * this.DELTAY}px)`;
+        this.rightArrow.style.transform = `translateY(${this.index * this.DELTAY}px)`;
+      },
+      onKeyDown (evt) {
+        this.selectedButton = document.querySelector('.controls-button:focus');
+        this.index = this.buttons.indexOf(this.selectedButton);
+        this.lastIndex = this.index;
 
         switch(evt.keyCode) {
           case 38: // UP
-            index = index - 1;
+            this.moveIndex(-1)
             break;
           case 40: // DOWN
-            index = index + 1;
+            this.moveIndex(1);
             break;
           default:
             break;
         }
 
-        if (index < 0) {
-          index = buttons.length - 1;
-        } else if (index >= buttons.length) {
-          index = 0;
+        if (this.viewportWidth > 530) {
+          this.moveArrows();
+        } else {
+          this.moveChoicesWhenResponsive();
         }
+      }
+    },
+    mounted () {
+      this.buttons = Array.from(document.querySelectorAll('.controls-button'));
+      this.leftArrow = document.querySelector('.air-graph-controls--choices__left-arrow');
+      this.rightArrow = document.querySelector('.air-graph-controls--choices__right-arrow');
 
-        leftArrow.style.transform = `translateY(${index * DELTAY}px)`;
-        rightArrow.style.transform = `translateY(${index * DELTAY}px)`;
-        buttons[index].focus();
-      });
+      window.addEventListener('resize', _ => this.onResize());
+      document.querySelector('.air-graph-controls--choices__day').focus();
+      document.querySelector('.air-graph-controls--choices__day').style.opacity = 1;
+      document.addEventListener('keydown', this.onKeyDown)
+      this.onResize();
     }
   }
 </script>
@@ -77,8 +113,11 @@
 <style lang="scss">
   .air-graph-controls {
     &--choices {
+      position: relative;
       display: flex;
       flex-direction: column;
+      width: 100%;
+      height: 100%;
       margin: 10px 5px;
 
       &__container {
@@ -127,6 +166,39 @@
         background: #FF3D00;
 
       }
+    }
+  }
+
+  @media (max-width: 530px) {
+    .air-graph-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 300px;
+      height: 50px;
+
+      &__choices {
+
+      }
+    }
+
+    .air-graph-controls--choices__container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .controls-button {
+      opacity: 0;
+    }
+
+    .air-graph-controls--choices__left-arrow {
+      transform: translate(0);
+    }
+
+    .air-graph-controls--choices__right-arrow {
+      transform: translate(0);
     }
   }
 </style>

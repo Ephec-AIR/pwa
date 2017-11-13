@@ -56,8 +56,8 @@
       &::before {
         content: '';
         display: block;
-        height: 20px;
-        width: 20px;
+        height: 14px;
+        width: 14px;
         margin: 0 5px;
         border: 3px solid #FFF;
         border-radius: 2px;

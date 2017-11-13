@@ -34,7 +34,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     background: #FFD400;
     max-height: 100%;
   }
@@ -43,9 +43,16 @@
     margin: 10px;
   }
 
+  .air-graph-controls {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+
   @media (max-width: 530px) {
     .home {
       position: relative;
+      flex-direction: column;
     }
   }
 </style>
