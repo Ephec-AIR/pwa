@@ -12,6 +12,7 @@
       GoogleCharts.load(drawChart);
 
       function drawChart() {
+        const container = document.querySelector('.air-graph');
         var data = google.visualization.arrayToDataTable([
           ['Year', 'Sales', 'Expenses'],
           ['2013',  1000,      400],
@@ -26,7 +27,7 @@
           vAxis: {minValue: 0}
         };
 
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        var chart = new google.visualization.AreaChart(container);
         chart.draw(data, options);
       }
     }
