@@ -5,23 +5,30 @@
 </template>
 
 <script>
-  //import anychart from 'anychart';
+  import {GoogleCharts} from 'google-charts';
 
   export default {
     mounted () {
-      return;
-      const chart = anychart.pie([
-          ["Chocolate", 5],
-          ["Rhubarb compote", 2],
-          ["Crêpe Suzette", 2],
-          ["American blueberry", 2],
-          ["Buttermilk", 1]
-      ]);
-      chart.title("Top 5 pancake fillings");
-      // set the container where chart will be drawn
-      chart.container("graph-container");
-      //  draw the chart on the page
-      chart.draw();
+      GoogleCharts.load(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Sales', 'Expenses'],
+          ['2013',  1000,      400],
+          ['2014',  1170,      460],
+          ['2015',  660,       1120],
+          ['2016',  1030,      540]
+        ]);
+
+        var options = {
+          title: 'Company Performance',
+          hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
+          vAxis: {minValue: 0}
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
     }
   }
 </script>

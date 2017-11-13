@@ -62,6 +62,7 @@
     left: 10px;
     margin: 0 10px 10px 0;
     z-index: 2;
+    pointer-events: none;
 
     &--logo__container {
       margin-bottom: 5px;
@@ -71,6 +72,7 @@
       box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
       height: 40px;
       width: 40px;
+      pointer-events: auto;
     }
 
     &--logo {

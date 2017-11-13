@@ -48,6 +48,19 @@
         getConsumptionMonth: 'GET_CONSUMPTION_MONTH',
         getConsumptionYear: 'GET_CONSUMPTION_YEAR',
       }),
+      onTouchStart (evt) {
+        if (!(evt.target.classList.contains('air-graph-controls'))) {
+          return;
+        }
+
+        this.startX = evt.touches[0].pageX;
+      },
+      onTouchMove (evt) {
+
+      },
+      onTouchEnd (evt) {
+
+      },
       moveIndex (increment) {
         this.lastIndex = this.index;
         this.index += increment;
