@@ -27,8 +27,7 @@
   },
   "homepage": "https://github.com/Ephec-AIR/pwa#readme",
   "dependencies": {
-    "anychart": "^8.0.1",
-    "google-charts": "^1.0.0",
+    "chartist": "^0.11.0",
     "idb": "^2.0.4",
     "idb-keyval": "^2.3.0",
     "jwt-decode": "^2.2.0",

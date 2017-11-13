@@ -5,30 +5,40 @@
 </template>
 
 <script>
-  import {GoogleCharts} from 'google-charts';
+  import Chartist from 'chartist';
 
   export default {
     mounted () {
-      GoogleCharts.load(drawChart);
+      /* Add a basic data series with six labels and values */
+      const data = {
+        labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+        series: [
+          {
+            data: [5, 2, 4, 2, 0, 3]
+          }
+        ]
+      };
 
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Year', 'Sales', 'Expenses'],
-          ['2013',  1000,      400],
-          ['2014',  1170,      460],
-          ['2015',  660,       1120],
-          ['2016',  1030,      540]
-        ]);
+      /* Set some base options (settings will override the default settings in Chartist.js *see default settings*). We are adding a basic label interpolation function for the xAxis labels. */
+      const options = {
+        axisX: {
+        }
+      };
 
-        var options = {
-          title: 'Company Performance',
-          hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
-          vAxis: {minValue: 0}
-        };
+      /* Now we can specify multiple responsive settings that will override the base settings based on order and if the media queries match. In this example we are changing the visibility of dots and lines as well as use different label interpolations for space reasons. */
+      const responsiveOptions = [
+        ['screen and (max-width: 530px)', {
+          showLine: false,
+          axisX: {
+            labelInterpolationFnc (value) {
+              return value[0];
+            }
+          }
+        }]
+      ];
 
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
+      /* Initialize the chart with the above settings */
+      new Chartist.Line('.air-graph', data, options, responsiveOptions);
     }
   }
 </script>
