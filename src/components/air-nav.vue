@@ -1,30 +1,30 @@
 <template>
   <header class="air-nav">
-    <div class="air-nav--inner">
+    <div class="air-nav-inner">
       <div class="air-nav__logo-container">
-        <router-link to="home" class="air-nav__logo-container--logo" href="/" aria-label="home"></router-link>
+        <router-link to="home" class="air-nav__logo-container-logo" href="/" aria-label="home"></router-link>
       </div>
-      <label for="toggle_nav" class="toggle_nav--label" aria-label="toggle_nav"></label>
-      <input type="checkbox" id="toggle_nav" role="button" aria-label="toggle_navigation_bar" ref="toggleNav">
-      <nav class="air-nav--inner__nav-container" role="navigation" @click="blockClicks" ref="nav">
-        <ul class="air-nav--inner__nav-content">
+      <nav class="air-nav__nav-container" role="navigation" @click="blockClicks" ref="nav">
+        <button class="air-nav__close" ref="hideNav"></button>
+        <ul class="air-nav__nav-content">
           <li>
-            <router-link to="home" class="air-nav__inner__nav-link" aria-label="home">Home</router-link>
+            <router-link to="home" class="air-nav__nav-link" aria-label="home">Home</router-link>
           </li>
           <li>
-            <a href="https://air.ephec-ti.org/forum/" class="air-nav__inner__nav-link" aria-label="forum">Forum</a>
+            <a href="https://air.ephec-ti.org/forum/" class="air-nav__nav-link" aria-label="forum">Forum</a>
           </li>
           <li>
-            <router-link to="parameters" class="air-nav__inner__nav-link" aria-label="parameter">Parametres</router-link>
+            <router-link to="parameters" class="air-nav__nav-link" aria-label="parameter">Parametres</router-link>
           </li>
           <li v-if="isLoggedIn" >
-            <a href="#" class="air-nav__inner__nav-link" aria-label="logout" @click.prevent="logout">Deconnection</a>
+            <a href="#" class="air-nav__nav-link" aria-label="logout" @click.prevent="logout">Deconnection</a>
           </li>
           <li v-if="isLoggedIn">
-            <span class="air-nav__inner__nav-username" aria-label="username">{{username}}</span>
+            <span class="air-nav__nav-username" aria-label="username">{{username}}</span>
           </li>
         </ul>
       </nav>
+      <button class="air-nav__show" ref="showNav"></button>
     </div>
   </header>
 </template>
@@ -52,15 +52,6 @@ export default {
       this.width = this.$refs.nav.getBoundingClientRect().width;
       this.treshold = this.width * 0.25;
     },
-    toggleNav (evt) {
-      this.$refs.nav.style.transform = `translateX(100%)`;
-    },
-    hideNav (evt) {
-      //this.$refs.toggleNav.checked = false;
-    },
-    blockClicks (evt) {
-      evt.stopPropagation();
-    },
     findCandidate (evt) {
       if (evt.touches && evt.touches.length) {
         return evt.touches[0];
@@ -73,44 +64,55 @@ export default {
       return evt;
     },
     onTouchStart (evt) {
+      if (!(this.$refs.nav.classList.contains('air-nav--visible'))) {
+        return;
+      }
+
       this.dragging = true;
       this.startX = this.findCandidate(evt).pageX;
+      this.currentX = this.startX;
+      requestAnimationFrame(this.updatePosition);
     },
     onTouchMove (evt) {
       if (!this.dragging) {
         return;
       }
 
-      evt.preventDefault();
       this.currentX = this.findCandidate(evt).pageX;
       this.deltaX = this.currentX - this.startX;
-      this.updateNavPosition(evt);
     },
     onTouchEnd (evt) {
       if (!this.dragging) {
         return;
       }
 
-      if (Math.abs(this.deltaX) > this.treshold) {
-        this.$refs.toggleNav.checked = (this.deltaX > 0);
-      } else {
-        this.updateNavPosition(evt);
-      }
-
       this.dragging = false;
+      const screenX = Math.min(0, this.currentX - this.startX);
+      this.$refs.nav.style.transform = '';
+
+      if (screenX < 0) {
+        this.hide();
+      }
     },
-    updateNavPosition (evt) {
-      if (this.viewportWidth > Constants.RESPONSIVE_WIDTH) {
+    updatePosition () {
+      if (!this.dragging) {
         return;
       }
 
-      if (this.deltaX < 0) return;
+      requestAnimationFrame(this.updatePosition);
 
-      if (!this.dragging) {
-        this.deltaX = this.targetX;
-      }
-
-      this.$refs.nav.style.transform = `translateX(${this.deltaX}px)`;
+      const screenX = Math.min(0, this.currentX - this.startX);
+      this.$refs.nav.style.transform = `translateX(${screenX}px)`;
+    },
+    show (evt) {
+      this.$refs.nav.classList.add('air-nav--underlay');
+      this.$refs.nav.classList.add('air-nav--visible');
+    },
+    hide (evt) {
+      this.$refs.nav.classList.remove('air-nav--visible');
+    },
+    blockClicks (evt) {
+      evt.stopPropagation();
     },
     logout () {
       this.$store.dispatch('LOGOUT');
@@ -146,6 +148,26 @@ export default {
     background: #FFF;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 
+    &--show {
+      border: none;
+      width: 24px;
+      background: url(/public/images/hamburger-bold.svg) left center no-repeat;
+      color: #FFF;
+      display: none;
+    }
+
+    &--inner--close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: none;
+      width: 24px;
+      height: 24px;
+      background: url(/public/images/close.svg) center center no-repeat;
+      color: #FFF;
+      display: none;
+    }
+
     .air-nav__logo-container {
       display: flex;
       align-items: center;
@@ -167,19 +189,6 @@ export default {
           content: 'Air';
         }
       }
-    }
-
-    .toggle_nav--label {
-      background: url(/public/images/hamburger-bold.svg) center no-repeat no-repeat;
-      width: 24px;
-      display: none;
-    }
-
-    #toggle_nav {
-      position: absolute;
-      top: 30px;
-      right: 15px;
-      opacity: 0;
     }
 
     .air-nav--inner {
@@ -288,7 +297,7 @@ export default {
         opacity: 0.7;
       }
 
-      #toggle_nav:checked~.air-nav--inner__nav-container {
+      .air-nav--visible {
         transform: none;
       }
     }
