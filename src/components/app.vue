@@ -42,6 +42,7 @@
       transition: opacity cubic-bezier(0, 0, 0.3, 1);
       will-change: opacity;
       pointer-events: none;
+      z-index: 3;
     }
   }
 

@@ -5,8 +5,8 @@
         <router-link to="home" class="air-nav__logo-container--logo" href="/" aria-label="home"></router-link>
       </div>
       <label for="toggle_nav" class="toggle_nav--label" aria-label="toggle_nav"></label>
-      <input type="checkbox" id="toggle_nav" role="button" aria-label="toggle_navigation_bar">
-      <nav class="air-nav--inner__nav-container" role="navigation">
+      <input type="checkbox" id="toggle_nav" role="button" aria-label="toggle_navigation_bar" ref="toggleNav">
+      <nav class="air-nav--inner__nav-container" role="navigation" @click="blockClicks" ref="nav">
         <ul class="air-nav--inner__nav-content">
           <li>
             <router-link to="home" class="air-nav__inner__nav-link" aria-label="home">Home</router-link>
@@ -31,9 +31,87 @@
 
 <script>
 import {mapGetters} from 'vuex';
+import Constants from 'src/constants';
 
 export default {
+  data () {
+    return {
+      viewportWidth: 0,
+      width: 0,
+      treshold: 0,
+      dragging: false,
+      open: false,
+      startX: 0,
+      currentX: 0,
+      deltaX: 0
+    }
+  },
   methods: {
+    onResize () {
+      this.viewportWidth = window.innerWidth;
+      this.width = this.$refs.nav.getBoundingClientRect().width;
+      this.treshold = this.width * 0.25;
+    },
+    toggleNav (evt) {
+      this.$refs.nav.style.transform = `translateX(100%)`;
+    },
+    hideNav (evt) {
+      //this.$refs.toggleNav.checked = false;
+    },
+    blockClicks (evt) {
+      evt.stopPropagation();
+    },
+    findCandidate (evt) {
+      if (evt.touches && evt.touches.length) {
+        return evt.touches[0];
+      }
+
+      if (evt.changedTouches && evt.changedTouches.length) {
+        return evt.changedTouches[0];
+      }
+
+      return evt;
+    },
+    onTouchStart (evt) {
+      this.dragging = true;
+      this.startX = this.findCandidate(evt).pageX;
+    },
+    onTouchMove (evt) {
+      if (!this.dragging) {
+        return;
+      }
+
+      evt.preventDefault();
+      this.currentX = this.findCandidate(evt).pageX;
+      this.deltaX = this.currentX - this.startX;
+      this.updateNavPosition(evt);
+    },
+    onTouchEnd (evt) {
+      if (!this.dragging) {
+        return;
+      }
+
+      if (Math.abs(this.deltaX) > this.treshold) {
+        this.$refs.toggleNav.checked = (this.deltaX > 0);
+      } else {
+        this.updateNavPosition(evt);
+      }
+
+      this.dragging = false;
+    },
+    updateNavPosition (evt) {
+      if (this.viewportWidth > Constants.RESPONSIVE_WIDTH) {
+        return;
+      }
+
+      if (this.deltaX < 0) return;
+
+      if (!this.dragging) {
+        this.deltaX = this.targetX;
+      }
+
+      this.$refs.nav.style.transform = `translateX(${this.deltaX}px)`;
+    },
     logout () {
       this.$store.dispatch('LOGOUT');
     }
@@ -44,16 +122,20 @@ export default {
     ]),
     username () {
       return this.$store.state.user.username;
-    },
-    onTouchStart (evt) {
-
-    },
-    onTouchMove (evt) {
-
-    },
-    onTouchEnd (evt) {
-
     }
+  },
+  mounted () {
+    window.addEventListener('resize', _ => this.onResize());
+    document.querySelector('.main').addEventListener('click', this.hideNav);
+    //this.$refs.nav.addEventListener('click', this.blockClicks);
+    this.$refs.nav.addEventListener('touchstart', this.onTouchStart);
+    this.$refs.nav.addEventListener('touchmove', this.onTouchMove, {passive: false});
+    this.$refs.nav.addEventListener('touchend', this.onTouchEnd);
+    this.onResize();
+  },
+  destroyed () {
+    window.removeEventListener('resize', _ => this.onResize());
+    document.querySelector('.main').removeEventListener('click', this.hideNav);
   }
 }
 </script>
@@ -116,6 +198,7 @@ export default {
       width: 100%;
 
       .air-nav--inner__nav-content {
+        margin: 0;
         padding: 0;
         display: flex;
         list-style: none;
@@ -123,6 +206,14 @@ export default {
         li {
           margin: 5px 20px;
           padding: 5px;
+        }
+
+        .air-nav__inner__nav-link, .air-nav__inner__nav-username {
+          display: flex;
+          width: 100%;
+          height: 100%;
+          padding: 0 8px;
+          line-height: 40px;
         }
 
         .air-nav__inner__nav-link {
@@ -145,6 +236,40 @@ export default {
 
   @media (max-width: 530px) {
     .air-nav {
+      .air-nav--inner__nav-container {
+        position: fixed;
+        display: flex;
+        justify-content: flex-start;
+        align-items: unset;
+        padding: 82px 0;
+        background: #FFF;
+        top: 0;
+        right: 0;
+        width: 500px;
+        max-width: 70%;
+        height: 100%;
+        box-shadow: -4px 0 4px rgba(0, 0, 0, 0.3);
+        will-change: transform;
+        transform: translateX(102%);
+        transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
+        z-index: 1;
+
+        .air-nav--inner__nav-content {
+          flex-direction: column;
+          height: 100%;
+          width: 100%;
+          max-height: inherit;
+
+          li {
+            margin: 0;
+          }
+
+          .air-nav__inner__nav-link {
+            font-weight: bold;
+          }
+        }
+      }
+
       &--inner {
         justify-content: space-between;
       }
@@ -168,39 +293,6 @@ export default {
       }
     }
 
-    .air-nav--inner__nav-container {
-      position: fixed;
-      display: flex;
-      justify-content: flex-start;
-      align-items: unset;
-      padding: 120px 0;
-      background: #FFF;
-      top: 0;
-      right: 0;
-      width: 500px;
-      max-width: 70%;
-      height: 100%;
-      box-shadow: -4px 0 4px rgba(0, 0, 0, 0.3);
-      will-change: transform;
-      transform: translateX(102%);
-      transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
-      z-index: 1;
 
-      .air-nav--inner__nav-content {
-        flex-direction: column;
-        height: 100%;
-        width: 100%;
-        max-height: inherit;
-        margin-top: 160px;
-
-        li {
-          margin: 7px 10px;
-        }
-
-        .air-nav__inner__nav-link {
-          font-weight: bold;
-        }
-      }
-    }
   }
 </style>

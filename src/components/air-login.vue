@@ -44,6 +44,7 @@ export default {
 <style lang="scss">
   .air-login {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 30%;
@@ -69,6 +70,7 @@ export default {
       flex-direction: column;
 
       &-login, &-register {
+        width: 100%;
         margin: 5px 0;
         background: #01a875;
       }
