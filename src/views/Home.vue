@@ -6,6 +6,7 @@
       type="Line"
       :data="chartData"
       :options="chartOptions"
+      :responsive-options="responsiveOptions"
       :event-handlers="eventHandlers"
     >
     </chartist>
@@ -29,10 +30,6 @@
     },
     data () {
       return {
-        chartData: {
-          labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
-          series: []
-        },
         chartOptions: {
           onlyInteger: true,
           fullWidth: true,
@@ -43,6 +40,14 @@
           showPoint: true,
           showArea: true
         },
+        responsiveOptions: [
+          ['screen and (max-width: 530px)', {
+            showPoint: false,
+            axisX: {
+              labelInterpolationFnc: value => value[0]
+            }
+          }]
+        ],
         eventHandlers: [{
           event: 'draw',
           fn: (data) => {
@@ -51,8 +56,27 @@
         }]
       }
     },
+    computed: {
+      chartData () {
+        const labels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+        const consumption = this.$store.state.consumption;
+        const stackedConsumption = consumption.reduce((prev, current) => {
+          const weekDay = new Date(current.date).getDay();
+          if (prev[weekDay]) {
+            prev[weekDay] += current.value;
+          } else {
+            prev[weekDay] = current.value;
+          }
+          return prev;
+        }, {});
+        const series = [Object.keys(stackedConsumption).map(weekDay => stackedConsumption[weekDay])];
+
+        return {labels, series}
+      }
+    },
     mounted () {
-      const consumptions = [
+      return;
+      const consumption = [
         {
           date: new Date(2017, 9, 23, 12),
           value: 300,
@@ -168,7 +192,7 @@
         }
       ];
 
-      const stackedConsumption = consumptions.reduce((prev, current) => {
+      const stackedConsumption = consumption.reduce((prev, current) => {
         const weekDay = current.date.getDay();
         if (prev[weekDay]) {
           prev[weekDay] += current.value;
@@ -184,13 +208,17 @@
 </script>
 
 <style lang="scss">
+  $background-first-color: #FFE803;
+  $background-second-color: #C0ED70;
+  $background-third-color: #D4E157;
+
   .home {
     position: relative;
     display: flex;
     align-items: center;
+    flex-grow: 1;
     justify-content: space-between;
-    background: #FFD400;
-    height: 100%;
+    background: linear-gradient(135deg, $background-first-color, $background-second-color 20%, $background-third-color 90%);
   }
 
   .air-tips, .air-graph, .air-graph-controls {
@@ -205,8 +233,8 @@
 
   .air-graph {
     flex: 1;
-    margin-top: 70px;
-    height: 100%;
+    margin-left: 50px;
+    height: 95%;
   }
 
   .ct-grid {
@@ -253,6 +281,10 @@
     .home {
       position: relative;
       flex-direction: column;
+    }
+
+    .air-graph {
+      margin-top: 140px;
     }
   }
 </style>
