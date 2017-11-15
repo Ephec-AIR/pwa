@@ -251,7 +251,7 @@ export default {
     &__banner-title {
       margin: 0;
       padding: 0;
-      color: #000;
+      color: #FFF;
     }
 
     &__nav-container {
