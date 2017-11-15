@@ -11,11 +11,11 @@
       </div>
       <div class="air-login-form--button">
         <button type="submit" class="air-login-form--button-login simple-button">S'identifier</button>
-        <button class="air-login-form--button-register simple-button">
-          <a href="https://air.ephec-ti.org/forum/register">S'enregistrer</a>
-        </button>
       </div>
     </form>
+    <button class="air-login-form--button-register simple-button">
+      <a href="https://air.ephec-ti.org/forum/register">S'enregistrer</a>
+    </button>
   </div>
 </template>
 
@@ -44,6 +44,7 @@ export default {
 <style lang="scss">
   .air-login {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 30%;
@@ -69,6 +70,7 @@ export default {
       flex-direction: column;
 
       &-login, &-register {
+        width: 100%;
         margin: 5px 0;
         background: #01a875;
       }
