@@ -15,18 +15,20 @@
             </label>
             <label for="mailProfile">
                 Mail: <input type="text" name="mailProfile" placeholder="Mail"> 
-            </label>             
-        </form>
-      </transition>
-      <transition name='fade'>
+            </label>
+            <p id="log" class="log">{{log}}</p> 
+            <button class="saveProfilButton" type="submit" @click.prevent ="confirmSubmit">Sauvegarder</button>
+         </form>
+      
          <form action="#" method="post" name="profile" class="air-param-form--OCR" v-if='display === 2'>          
             <label for="lastnameProfile">
               N° série : <input type="text" name="serialOCR" placeholder="numéro de série">
             </label>
-                       
+             <p id="log" class="log">{{log}}</p> 
+              <button class="saveOCRButton" type="submit" @click.prevent ="confirmSubmit">Sauvegarder</button>          
         </form>
       </transition>  
-        
+      
     </div>
   </div>
 </template>
@@ -37,7 +39,8 @@
 
       return {
 
-        display: 1  
+        display: 1 ,
+        log :'' 
 
       }
 
@@ -50,6 +53,13 @@
             }else{
               this.display = 2
             }
+
+            this.log ='';
+        },
+        confirmSubmit(evt){
+          if(evt.target.innerText === 'Sauvegarder'){
+            this.log = "Sauvegarde confirmer";
+          }
         }
       }  
     }
@@ -67,7 +77,7 @@
             border-radius: 5px;
             left:35%;
             top:30%;
-            height:50%;
+            height:60%;
             width: 50%;
             margin: auto;
             border: 1px solid black;
@@ -132,6 +142,45 @@
           transform: translateY(50px);
           z-index: 1;
           
+        }
+
+        .saveProfilButton{
+          border: none;
+          background-color: #01a875;
+          margin : auto;
+          border-radius : 5px;
+          position: absolute;
+          top : 65%;
+          left : 45%;
+          transition: transform 0.2s ease-in,background-color 0.2s ease-in;
+          transform : scale(1.5);
+          &:hover{
+            transform : scale(2);
+            z-index: 1;
+            background-color: red;
+          }
+        }
+
+        .saveOCRButton{
+          border: none;
+          background-color: #01a875;
+          margin : auto;
+          border-radius : 5px;
+          position: absolute;
+        
+          top : 65%;
+          left : 45%;
+          transition: transform 0.2s ease-in,background-color 0.2s ease-in;
+          transform : scale(1.5);
+          &:hover{
+            transform : scale(2);
+            z-index: 1;
+            background-color: red;
+          }
+        }
+
+        .log{
+          z-index: 2;
         }
 
         }
