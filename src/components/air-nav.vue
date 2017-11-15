@@ -15,13 +15,13 @@
         <button class="air-nav__close" ref="hideNav" @click="hide"></button>
         <ul class="air-nav__nav-content">
           <li>
-            <router-link to="home" class="air-nav__nav-link" aria-label="home">Home</router-link>
+            <router-link to="home" class="air-nav__nav-link" aria-label="home" @click="hide">Home</router-link>
           </li>
           <li>
-            <a href="https://air.ephec-ti.org/forum/" class="air-nav__nav-link" aria-label="forum">Forum</a>
+            <a href="https://air.ephec-ti.org/forum/" class="air-nav__nav-link" aria-label="forum" @click="hide">Forum</a>
           </li>
           <li>
-            <router-link to="parameters" class="air-nav__nav-link" aria-label="parameter">Parametres</router-link>
+            <router-link to="parameters" class="air-nav__nav-link" aria-label="parameter" @click="hide">Parametres</router-link>
           </li>
           <li v-if="isLoggedIn" >
             <a href="#" class="air-nav__nav-link" aria-label="logout" @click.prevent="logout">Deconnection</a>
@@ -115,9 +115,11 @@ export default {
       this.$refs.navWrapper.classList.remove('air-nav--visible');
     },
     blockClicks (evt) {
+      console.log(evt);
       evt.stopPropagation();
     },
     logout () {
+      this.hide();
       this.$store.dispatch('LOGOUT');
     }
   },
@@ -266,6 +268,10 @@ export default {
       transform: translateX(-102%);
       transition: transform .3s cubic-bezier(0, 0, 0.3, 1);
       will-change: transform;
+    }
+
+    &--visible {
+      pointer-events: auto;
     }
 
     &--visible &__nav-container {
