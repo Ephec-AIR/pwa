@@ -4,4 +4,8 @@ export default class Constant {
   static get API_URL () {
     return (production ? 'https://air.ephec-ti.org/api/v1' : 'http://localhost:3000');
   }
+
+  static get RESPONSIVE_WIDTH () {
+    return 530;
+  }
 }
