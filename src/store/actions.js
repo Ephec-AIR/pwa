@@ -187,3 +187,5 @@ const storeConsumption = (commit, idbData = [], fetchData = []) => {
     consumption: [...idbData, ...fetchData]
   });
 }
+
+

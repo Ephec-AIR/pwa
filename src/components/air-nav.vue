@@ -1,18 +1,18 @@
 <template>
   <div class="air-nav">
     <header class="air-nav__header">
-      <button class="air-nav__show" ref="showNav" @click="show"></button>
+      <button class="air-nav__show" aria-label="show side-nav" ref="showNav" @click="show"></button>
       <div class="air-nav__logo-container">
         <router-link to="home" class="air-nav__logo-container-logo" href="/" aria-label="home"></router-link>
       </div>
       <div class="air-nav__username" v-if="isLoggedIn">{{username}}</div>
     </header>
-    <div class="air-nav__nav-wrapper" ref="navWrapper">
+    <div class="air-nav__nav-wrapper" ref="navWrapper" @click="hide">
       <nav class="air-nav__nav-container" role="navigation" @click="blockClicks" ref="nav">
         <section class="air-nav__banner">
           <h2 class="air-nav__banner-title">Air</h2>
         </section>
-        <button class="air-nav__close" ref="hideNav" @click="hide"></button>
+        <button class="air-nav__close" aria-label="close side-nav" ref="hideNav" @click="hide"></button>
         <ul class="air-nav__nav-content">
           <li>
             <router-link to="home" class="air-nav__nav-link" aria-label="home" @click="hide">Home</router-link>
@@ -111,11 +111,9 @@ export default {
       this.$refs.navWrapper.classList.add('air-nav--visible');
     },
     hide (evt) {
-      console.log(evt);
       this.$refs.navWrapper.classList.remove('air-nav--visible');
     },
     blockClicks (evt) {
-      console.log(evt);
       evt.stopPropagation();
     },
     logout () {
@@ -134,7 +132,6 @@ export default {
   mounted () {
     window.addEventListener('resize', _ => this.onResize());
     document.querySelector('.main').addEventListener('click', this.hideNav);
-    //this.$refs.nav.addEventListener('click', this.blockClicks);
     this.$refs.nav.addEventListener('touchstart', this.onTouchStart);
     this.$refs.nav.addEventListener('touchmove', this.onTouchMove, {passive: false});
     this.$refs.nav.addEventListener('touchend', this.onTouchEnd);
@@ -148,6 +145,15 @@ export default {
 </script>
 
 <style lang="scss">
+  $background-first-color: #FFE803;
+  $background-second-color: #C0ED70;
+  $background-third-color: #D4E157;
+  $banner-color: #83a93f;
+  $text-color: rgba(0, 0, 0, 0.54);
+  $nav-text-color: #464A3F;
+  $button-color: rgb(255, 23, 68);
+  $placeholder-color: rgba(255, 23, 68, 0.27);
+
   .air-nav {
     height: 60px;
 
@@ -193,7 +199,7 @@ export default {
         background-size: 48px 48px;
         height: 48px;
         padding-left: 56px;
-        color: #01a875;
+        color: $nav-text-color;
         font-size: 32px;
         font-weight: bold;
         text-decoration: none;
@@ -247,7 +253,7 @@ export default {
       align-items: flex-end;
       height: 180px;
       padding: 16px;
-      background: linear-gradient(45deg, #8BC34A, #558B2F);
+      background: $banner-color;
     }
 
     &__banner-title {
@@ -311,7 +317,7 @@ export default {
 
     &__nav-link {
       font-size: 20px;
-      color: #01a875;
+      color: $nav-text-color;
       text-decoration: none;
     }
 
