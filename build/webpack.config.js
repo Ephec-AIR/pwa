@@ -8,6 +8,9 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const MinifyPlugin = require("babel-minify-webpack-plugin");
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+const PreloadWebpackPlugin = require('preload-webpack-plugin');
+const ResourceHintWebpackPlugin = require('resource-hints-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractSass = new ExtractTextPlugin({
@@ -83,7 +86,34 @@ if (production) {
        from: path.resolve(__dirname, '../manifest.json'),
        to: path.resolve(__dirname, '../dist/manifest.json')
       }
-    ])
+    ]),
+    new PreloadWebpackPlugin(),
+    new WorkboxPlugin({
+      "globDirectory": "dist/",
+      "globPatterns": [
+        "**/*.{js,css,html,json,jpg,png,svg}"
+      ],
+      "swDest": "dist/sw.js",
+      clientsClaim: true,
+      skipWaiting: true,
+      "runtimeCaching": [
+        {
+          urlPattern: '/',
+          handler: 'networkFirst'
+        },
+        {
+          urlPattern: '/home',
+          handler: 'networkFirst'
+        },
+        {
+          urlPattern: '/parameters',
+          handler: 'networkFirst'
+        },
+      ],
+      "globIgnores": [
+        "../workbox-cli-config.js"
+      ]
+    })
   );
 } else {
   plugins.push(

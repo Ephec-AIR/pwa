@@ -18,6 +18,7 @@
 </template>
 
 <script>
+  //import Chartist from 'chartist';
   import AirTips from 'components/air-tips';
   import AirGraphControls from 'components/air-graph-controls';
   import AirGraphConsumption from 'components/air-graph-consumption';
@@ -38,7 +39,16 @@
           },
           low: 0,
           showPoint: true,
-          showArea: true
+          showArea: true,
+          axisY: {
+            offset: 60,
+            labelInterpolationFnc: value => `${value} kwh`
+          },
+          plugins: [
+            //Chartist.plugins.ctThreshold({
+            //  threshold: 50
+            //})
+          ]
         },
         responsiveOptions: [
           ['screen and (max-width: 530px)', {
@@ -61,6 +71,7 @@
         const labels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
         const consumption = this.$store.state.consumption;
         const series = [Object.keys(consumption).map(range => consumption[range].end - consumption[range].start)];
+        console.table(series);
         return {labels, series}
       }
     },
@@ -264,8 +275,28 @@
 
   .ct-series-a .ct-point {
     stroke: #d70206;
-    stroke-width: 5px;
+    stroke-width: 10px;
     stroke-linecap: round;
+  }
+
+  .ct-chart-bar .ct-label, .ct-chart-line .ct-label {
+    display: flex;
+  }
+
+  .ct-label.ct-vertical.ct-start {
+    align-items: flex-end;
+    justify-content: flex-end;
+    fill: rgba(0,0,0,.4);
+    color: rgba(0,0,0,.4);
+    font-size: .75rem;
+    line-height: 1;
+  }
+
+  .ct-label.ct-horizontal.ct-end {
+    fill: rgba(0,0,0,.4);
+    color: rgba(0,0,0,.4);
+    font-size: .85rem;
+    line-height: 1;
   }
 
   .ct-line.ct-threshold-above, .ct-point.ct-threshold-above, .ct-bar.ct-threshold-above {
