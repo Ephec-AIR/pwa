@@ -16,8 +16,9 @@ export default {
     }
   },
   SAVE_CONSUMPTION (state, {consumption}) {
+    console.log(consumption);
     // merge arrays
-    state.consumption = [/*...state.consumption,*/ ...consumption];
+    state.consumption = {/*...state.consumption,*/ ...consumption};
   },
   TOAST_MESSAGE (state, options) {
     const duration = options.duration || 3000;

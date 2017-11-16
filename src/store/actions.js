@@ -158,12 +158,13 @@ const fetchData = async ({start, end}, type, commit) => {
   }
 
   const fetchData = await response.json();
+  const idbData = [];
 
   // 3. Put data in IDB
-  transaction = db.transaction('consumption', 'readwrite');
-  store = transaction.objectStore('consumption');
-  fetchData.forEach(data => store.put(data));
-  transaction.complete;
+  // transaction = db.transaction('consumption', 'readwrite');
+  // store = transaction.objectStore('consumption');
+  // fetchData.forEach(data => store.put(data));
+  // transaction.complete;
 
   // 4. store data
   storeConsumption(commit, idbData, fetchData);
@@ -185,7 +186,7 @@ const getIDBByRange = (index, range) => {
 
 const storeConsumption = (commit, idbData = [], fetchData = []) => {
   commit('SAVE_CONSUMPTION', {
-    consumption: [...idbData, ...fetchData]
+    consumption: {...idbData, ...fetchData}
   });
 }
 
