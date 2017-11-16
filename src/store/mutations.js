@@ -15,6 +15,9 @@ export default {
       serial: ''
     }
   },
+  CONSUMPTION_LABEL_TYPE (state, type) {
+    state.consumptionLabelType = type;
+  },
   SAVE_CONSUMPTION (state, {consumption}) {
     // merge arrays
     state.consumption = {/*...state.consumption,*/ ...consumption};

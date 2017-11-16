@@ -167,6 +167,7 @@ const fetchData = async ({start, end}, type, commit) => {
   // transaction.complete;
 
   // 4. store data
+  commit('CONSUMPTION_LABEL_TYPE', type);
   storeConsumption(commit, idbData, fetchData);
 }
 
