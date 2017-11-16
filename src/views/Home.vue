@@ -60,23 +60,13 @@
       chartData () {
         const labels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
         const consumption = this.$store.state.consumption;
-        const stackedConsumption = consumption.reduce((prev, current) => {
-          const weekDay = new Date(current.date).getDay();
-          if (prev[weekDay]) {
-            prev[weekDay] += current.value;
-          } else {
-            prev[weekDay] = current.value;
-          }
-          return prev;
-        }, {});
-        const series = [Object.keys(stackedConsumption).map(weekDay => stackedConsumption[weekDay])];
-
+        const series = [Object.keys(consumption).map(range => consumption[range].end - consumption[range].start)];
         return {labels, series}
       }
     },
     mounted () {
       return;
-      const consumption = [
+      const consumptions = [
         {
           date: new Date(2017, 9, 23, 12),
           value: 300,
@@ -95,116 +85,133 @@
           serial: 0
         },{
           date: new Date(2017, 9, 24, 12),
-          value: 250,
+          value: 510,
           serial: 0
         },{
           date: new Date(2017, 9, 24, 13),
-          value: 350,
+          value: 520,
           serial: 0
         },{
           date: new Date(2017, 9, 24, 14),
-          value: 450,
+          value: 560,
           serial: 0
         },{
           date: new Date(2017, 9, 24, 15),
-          value: 550,
+          value: 610,
           serial: 0
         },{
           date: new Date(2017, 9, 25, 12),
-          value: 300,
+          value: 630,
           serial: 0
         },{
           date: new Date(2017, 9, 25, 13),
-          value: 200,
+          value: 670,
           serial: 0
         },{
           date: new Date(2017, 9, 25, 14),
-          value: 500,
+          value: 700,
           serial: 0
         },{
           date: new Date(2017, 9, 25, 15),
-          value: 450,
+          value: 705,
           serial: 0
         },{
           date: new Date(2017, 9, 26, 12),
-          value: 300,
+          value: 710,
           serial: 0
         },{
           date: new Date(2017, 9, 26, 13),
-          value: 400,
+          value: 717,
           serial: 0
         },{
           date: new Date(2017, 9, 26, 14),
-          value: 400,
+          value: 800,
           serial: 0
         },{
           date: new Date(2017, 9, 26, 15),
-          value: 450,
+          value: 820,
           serial: 0
         },{
           date: new Date(2017, 9, 27, 12),
-          value: 300,
+          value: 850,
           serial: 0
         },{
           date: new Date(2017, 9, 27, 13),
-          value: 300,
+          value: 920,
           serial: 0
         },{
           date: new Date(2017, 9, 27, 14),
-          value: 400,
+          value: 970,
           serial: 0
         },{
           date: new Date(2017, 9, 27, 15),
-          value: 400,
+          value: 1000,
           serial: 0
         },{
           date: new Date(2017, 9, 28, 12),
-          value: 400,
+          value: 1100,
           serial: 0
         },{
           date: new Date(2017, 9, 28, 13),
-          value: 410,
+          value: 1300,
           serial: 0
         },{
           date: new Date(2017, 9, 28, 14),
-          value: 420,
+          value: 1350,
           serial: 0
         },{
           date: new Date(2017, 9, 28, 15),
-          value: 430,
+          value: 1410,
           serial: 0
         },{
           date: new Date(2017, 9, 29, 12),
-          value: 440,
+          value: 1435,
           serial: 0
         },{
           date: new Date(2017, 9, 29, 13),
-          value: 350,
+          value: 1450,
           serial: 0
         },{
           date: new Date(2017, 9, 29, 14),
-          value: 400,
+          value: 1480,
           serial: 0
         },{
           date: new Date(2017, 9, 29, 15),
-          value: 450,
+          value: 1520,
           serial: 0
         }
       ];
 
-      const stackedConsumption = consumption.reduce((prev, current) => {
-        const weekDay = current.date.getDay();
-        if (prev[weekDay]) {
-          prev[weekDay] += current.value;
-        } else {
-          prev[weekDay] = current.value;
-        }
-        return prev;
-      }, {});
-
-      this.chartData.series = [Object.keys(stackedConsumption).map(weekDay => stackedConsumption[weekDay])];
+      const consumptionRange = getConsumptionAccordingToType(consumptions, 'year');
+      this.chartData.series = [Object.keys(consumptionRange).map(range => consumption[range].end - consumption[range].start)];
     }
   }
+
+  function getConsumptionAccordingToType (consumption, type) {
+    console.log(consumption);
+
+    return consumption.reduce((prev, current) => {
+      const index = getRangeIndex(type, current.date);
+      console.log(index);
+      if (prev[index] && prev[index].start) {
+        prev[index].end = current.value;
+      } else {
+        prev[index] = {};
+        prev[index].start = current.value;
+      }
+      return prev;
+    }, {});
+  }
+
+  function getRangeIndex (type, date) {
+    const types = {
+      'year': date => new Date(date).getMonth(),
+      'month': date => new Date(date).getDate(),
+      'week': date => new Date(date).getDay(),
+      'day': date => new Date(date).getHours()
+    }
+    return types[type];
+  };
 </script>
 
 <style lang="scss">

@@ -18,7 +18,7 @@ export default new Vuex.Store({
       username: '',
       serial: ''
     },
-    consumption: []
+    consumption: {}
   },
   actions,
   mutations,
