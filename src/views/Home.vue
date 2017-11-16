@@ -61,6 +61,7 @@
         const labels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
         const consumption = this.$store.state.consumption;
         const series = [Object.keys(consumption).map(range => consumption[range].end - consumption[range].start)];
+        console.table(series);
         return {labels, series}
       }
     },

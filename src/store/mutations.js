@@ -16,7 +16,6 @@ export default {
     }
   },
   SAVE_CONSUMPTION (state, {consumption}) {
-    console.log(consumption);
     // merge arrays
     state.consumption = {/*...state.consumption,*/ ...consumption};
   },
