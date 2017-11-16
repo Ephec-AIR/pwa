@@ -187,7 +187,7 @@ const getIDBByRange = (index, range) => {
 
 const storeConsumption = (commit, idbData = [], fetchData = []) => {
   commit('SAVE_CONSUMPTION', {
-    consumption: {...idbData, ...fetchData}
+    consumption: [...idbData, ...fetchData]
   });
 }
 
