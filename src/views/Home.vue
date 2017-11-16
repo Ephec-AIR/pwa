@@ -60,17 +60,7 @@
       chartData () {
         const labels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
         const consumption = this.$store.state.consumption;
-        const stackedConsumption = consumption.reduce((prev, current) => {
-          const weekDay = new Date(current.date).getDay();
-          if (prev[weekDay]) {
-            prev[weekDay] += current.value;
-          } else {
-            prev[weekDay] = current.value;
-          }
-          return prev;
-        }, {});
-        const series = [Object.keys(stackedConsumption).map(weekDay => stackedConsumption[weekDay])];
-
+        const series = [Object.keys(consumption).map(range => consumption[range].end - consumption[range].start)];
         return {labels, series}
       }
     },
