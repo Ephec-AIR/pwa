@@ -119,6 +119,12 @@ const common = {
   module: {
     rules: [
       {
+        test: /\.scss$/,
+        loader: 'sass-resources-loader',
+        options: {
+          resources: path.resolve(__dirname, '../src/scss/_variables.scss')
+        }
+      },{
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {

@@ -28,6 +28,8 @@
 </script>
 
 <style lang="scss">
+  $text-color: rgba(0, 0, 0, 0.74);
+
   .consumption-type {
     display: flex;
     flex-direction: column;
@@ -51,7 +53,7 @@
       display: flex;
       align-items: center;
       font-size: 14px;
-      color: #FFF;
+      color: $text-color;
 
       &::before {
         content: '';
