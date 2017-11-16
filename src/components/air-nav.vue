@@ -133,7 +133,7 @@ export default {
     window.addEventListener('resize', _ => this.onResize());
     document.querySelector('.main').addEventListener('click', this.hideNav);
     this.$refs.nav.addEventListener('touchstart', this.onTouchStart);
-    this.$refs.nav.addEventListener('touchmove', this.onTouchMove, {passive: false});
+    this.$refs.nav.addEventListener('touchmove', this.onTouchMove);
     this.$refs.nav.addEventListener('touchend', this.onTouchEnd);
     this.onResize();
   },

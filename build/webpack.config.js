@@ -87,7 +87,6 @@ if (production) {
        to: path.resolve(__dirname, '../dist/manifest.json')
       }
     ]),
-    new ResourceHintWebpackPlugin(),
     new PreloadWebpackPlugin(),
     new WorkboxPlugin({
       "globDirectory": "dist/",
