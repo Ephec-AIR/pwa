@@ -21,15 +21,31 @@ const extractSass = new ExtractTextPlugin({
 });
 
 const plugins = [
+  // extract common js code
   new webpack.optimize.CommonsChunkPlugin({
     name: 'common',
-    children: true,
-    async: true,
-    minChunks: 3
+    minChunks: function (module) {
+      // any required modules inside node_modules are extracted to vendor
+      return (
+        module.resource &&
+        /\.js$/.test(module.resource) &&
+        module.resource.indexOf(
+          path.join(__dirname, '../node_modules')
+        ) === 0
+      )
+    }
   }),
+  // extract webpack bootstrap
   new webpack.optimize.CommonsChunkPlugin({
     name: 'manifest',
     minChunks: Infinity
+  }),
+  // extract shared code from splitted chunks
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'async',
+    async: 'vendor-async',
+    children: true,
+    minChunks: 3
   })
 ];
 
@@ -80,11 +96,11 @@ if (production) {
       minify: {
         removeComments: true
       },
+      preload: ['manifest.bundle.*.js', 'async.bundle.*.js', 'common.bundle.*.js', 'app.bundle.*.js'],
       // make it work consistently with multiple chunks (CommonChunksPlugin)
       chunksSortMode: 'dependency'
     }),
     new ScriptExtHtmlWebpackPlugin({
-      preload: ['manifest.bundle.*.js', 'common.bundle.*.js', 'app.bundle.*.js'],
       prefetch: {
         test: /\.js$/,
         chunks: 'async'
@@ -93,7 +109,7 @@ if (production) {
     // new PreloadWebpackPlugin({
     //   rel: 'prefetch',
     // }),
-    // new ResourceHintWebpackPlugin(),
+    new ResourceHintWebpackPlugin(),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../public/icons/'),
