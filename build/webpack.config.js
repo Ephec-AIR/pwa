@@ -8,10 +8,13 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const MinifyPlugin = require("babel-minify-webpack-plugin");
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const ResourceHintWebpackPlugin = require('resource-hints-webpack-plugin');
+const BundleBuddyWebpackPlugin = require("bundle-buddy-webpack-plugin");
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractSass = new ExtractTextPlugin({
     filename: '[name].[contenthash].css'
@@ -19,10 +22,14 @@ const extractSass = new ExtractTextPlugin({
 
 const plugins = [
   new webpack.optimize.CommonsChunkPlugin({
-    name: 'common'
+    name: 'common',
+    children: true,
+    async: true,
+    minChunks: 3
   }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'manifest',
+    minChunks: Infinity
   })
 ];
 
@@ -76,6 +83,17 @@ if (production) {
       // make it work consistently with multiple chunks (CommonChunksPlugin)
       chunksSortMode: 'dependency'
     }),
+    new ScriptExtHtmlWebpackPlugin({
+      preload: ['manifest.bundle.*.js', 'common.bundle.*.js', 'app.bundle.*.js'],
+      prefetch: {
+        test: /\.js$/,
+        chunks: 'async'
+      }
+    }),
+    // new PreloadWebpackPlugin({
+    //   rel: 'prefetch',
+    // }),
+    // new ResourceHintWebpackPlugin(),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../public/icons/'),
@@ -92,9 +110,6 @@ if (production) {
        to: path.resolve(__dirname, '../dist/manifest.json')
       }
     ]),
-    new PreloadWebpackPlugin({
-      rel: 'prefetch',
-    }),
     new WorkboxPlugin({
       "globDirectory": "dist/",
       "globPatterns": [
@@ -120,7 +135,8 @@ if (production) {
       "globIgnores": [
         "../workbox-cli-config.js"
       ]
-    })
+    }),
+    new ProgressBarPlugin()
   );
 } else {
   plugins.push(
