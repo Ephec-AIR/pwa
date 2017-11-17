@@ -114,7 +114,7 @@ export default {
       &-logo {
         display: flex;
         align-items: center;
-        background: url(/public/icons/air@128x128.png) left center no-repeat;
+        background: url(/public/icons/air@128x128.webp) left center no-repeat;
         background-size: 48px 48px;
         height: 48px;
         padding-left: 56px;

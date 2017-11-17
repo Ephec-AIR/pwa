@@ -89,7 +89,7 @@ if (production) {
       },
       {
        from: path.resolve(__dirname, '../manifest.json'),
-       to: path.resolve(__dirname, '../dist/manifest.[hash].json')
+       to: path.resolve(__dirname, '../dist/manifest.json')
       }
     ]),
     new PreloadWebpackPlugin({
