@@ -1,28 +1,30 @@
 <template>
   <div class="air-nav" ref="airnav">
-    <header class="air-nav__header">
-      <div class="air-nav__logo-container">
-        <router-link to="home" class="air-nav__logo-container-logo" href="/" aria-label="home"></router-link>
-      </div>
-      <nav class="air-nav__nav-container" role="navigation" ref="nav">
-        <ul class="air-nav__nav-content">
-          <li>
-            <router-link to="home" class="air-nav__nav-link" aria-label="home" @click="hide">Home</router-link>
-          </li>
-          <li>
-            <a href="https://air.ephec-ti.org/forum/" class="air-nav__nav-link" aria-label="forum" @click="hide">Forum</a>
-          </li>
-          <li>
-            <router-link to="parameters" class="air-nav__nav-link" aria-label="parameter" @click="hide">Parametres</router-link>
-          </li>
-          <li v-if="isLoggedIn" >
-            <a href="#" class="air-nav__nav-link" aria-label="logout" @click.prevent="logout">Deconnection</a>
-          </li>
-        </ul>
-      </nav>
-      <div class="air-nav__username" v-if="isLoggedIn">{{username}}</div>
-      <button class="air-nav__show" aria-label="show side-nav" ref="showNav" @click="toggle"></button>
-    </header>
+    <div class="air-nav__nav-wrapper">
+      <header class="air-nav__header">
+        <div class="air-nav__logo-container">
+          <router-link to="home" class="air-nav__logo-container-logo" href="/" aria-label="home"></router-link>
+        </div>
+        <nav class="air-nav__nav-container" role="navigation" ref="nav">
+          <ul class="air-nav__nav-content">
+            <li>
+              <router-link to="home" class="air-nav__nav-link" aria-label="home" @click="hide">Home</router-link>
+            </li>
+            <li>
+              <a href="https://air.ephec-ti.org/forum/" class="air-nav__nav-link" aria-label="forum" @click="hide">Forum</a>
+            </li>
+            <li>
+              <router-link to="parameters" class="air-nav__nav-link" aria-label="parameter" @click="hide">Parametres</router-link>
+            </li>
+            <li v-if="isLoggedIn" >
+              <a href="#" class="air-nav__nav-link" aria-label="logout" @click.prevent="logout">Deconnection</a>
+            </li>
+          </ul>
+        </nav>
+        <div class="air-nav__username" v-if="isLoggedIn">{{username}}</div>
+        <button class="air-nav__show" aria-label="show side-nav" ref="showNav" @click="toggle"></button>
+      </header>
+    </div>
   </div>
 </template>
 
@@ -76,7 +78,7 @@ export default {
   $header-height: 60px;
 
   .air-nav {
-    height: 60px;
+    height: $header-height;
 
     &__header {
       display: flex;
@@ -89,7 +91,7 @@ export default {
       padding: 0 8px;
       background: #FFF;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      z-index: 10000;
+      z-index: 100000;
     }
 
     &__username {
@@ -139,22 +141,51 @@ export default {
       display: none;
     }
 
+    &__nav-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 100000;
+    }
+
+    &__nav-wrapper::before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,.4);
+      opacity: 0;
+      will-change: opacity;
+      transition: opacity .3s cubic-bezier(0,0,.3,1);
+    }
+
+    &--visible &__nav-wrapper::before {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
     &__nav-container {
       position: relative;
       display: flex;
       width: 100%;
       height: 100%;
       background: #FFF;
-      transition: opacity .3s cubic-bezier(0, 0, 0.3, 1);
+      transition: opacity .3s cubic-bezier(0, 0, 0.3, 1),
+        transform .5s cubic-bezier(0, 0, 0.3, 1);
+      will-change: transform;
     }
 
     &--visible &__nav-container {
+      transform: translateY(0);
       opacity: 1;
       pointer-events: auto;
-    }
-
-    &--visible::before {
-      opacity: 0.7;
     }
 
     &__nav-content {
@@ -204,6 +235,7 @@ export default {
         height: 200px;
         opacity: 0;
         pointer-events: none;
+        transform: translateY(-200px);
       }
 
       &__nav-content {
