@@ -85,7 +85,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: url(/public/images/bulb.png) center center no-repeat;
+      background: url(/public/images/bulb.webp) center center no-repeat;
       background-size: contain;
       height: 70%;
       width: 100%;

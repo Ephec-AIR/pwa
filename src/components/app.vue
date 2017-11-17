@@ -2,7 +2,7 @@
   <div class="main" ref="container">
     <air-nav></air-nav>
     <transition name="router-fade-in" mode="out-in">
-      <router-view><!-- router views --></router-view>
+      <router-view class="router-view"><!-- router views --></router-view>
     </transition>
     <air-toast></air-toast>
   </div>
@@ -31,6 +31,15 @@
     flex-direction: column;
     min-height: 100%;
     width: 100%;
+  }
+
+  .router-view {
+    transition: transform .5s cubic-bezier(0, 0, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .router-view--translate {
+    transform: translateY(200px);
   }
 
   .simple-button {

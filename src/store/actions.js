@@ -167,6 +167,7 @@ const fetchData = async ({start, end}, type, commit) => {
   // transaction.complete;
 
   // 4. store data
+  commit('CONSUMPTION_LABEL_TYPE', type);
   storeConsumption(commit, idbData, fetchData);
 }
 
@@ -186,7 +187,7 @@ const getIDBByRange = (index, range) => {
 
 const storeConsumption = (commit, idbData = [], fetchData = []) => {
   commit('SAVE_CONSUMPTION', {
-    consumption: {...idbData, ...fetchData}
+    consumption: [...idbData, ...fetchData]
   });
 }
 

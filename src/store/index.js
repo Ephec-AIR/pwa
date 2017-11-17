@@ -18,7 +18,8 @@ export default new Vuex.Store({
       username: '',
       serial: ''
     },
-    consumption: {}
+    consumptionLabelType: "month",
+    consumption: []
   },
   actions,
   mutations,

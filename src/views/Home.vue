@@ -31,6 +31,11 @@
     },
     data () {
       return {
+        months: ["Jan", "Fev", "Mar", "Avr", "Mai", "Juin", "Jui", "Août", "Sept", "Oct", "Nov", "Dec"],
+        daysOfWeek: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+        hours: ["00h00", "01h00", "02h00", "03h00", "04h00", "05h00", "06h00", "07h00", "08h00",
+          "09h00", "10h00", "11h00", "12h00", "13h00", "14h00", "15h00", "16h00", "17h00", "18h00",
+          "19h00", "20h00", "21h00", "22h00", "23h00"],
         chartOptions: {
           onlyInteger: true,
           fullWidth: true,
@@ -63,166 +68,42 @@
           fn: (data) => {
 
           }
-        }]
+        }],
+        labelsFunc: {
+          year: (stop) => {
+            return this.months.slice(0, stop);
+          },
+          month: (stop) => {
+            const currentMonth = new Date().getMonth() + 1;
+            const daysOfMonth = [];
+            for (let i = 1; i <= stop; i++) {
+              daysOfMonth.push(`${(i < 10 ? '0' + i : i)}/${currentMonth}`);
+            }
+            return daysOfMonth;
+          },
+          week: (stop) => {
+            return this.daysOfWeek.slice(0, stop);
+          },
+          day: (stop) => {
+            return this.hours.slice(0, stop)
+          }
+        }
+      }
+    },
+    methods: {
+      labels (type, stop) {
+        return this.labelsFunc[type](stop);
       }
     },
     computed: {
       chartData () {
-        const labels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
-        const consumption = this.$store.state.consumption;
-        const series = [Object.keys(consumption).map(range => consumption[range].end - consumption[range].start)];
-        console.table(series);
+        const type = this.$store.state.consumptionLabelType;
+        const labels = this.labels(type, this.$store.state.consumption.length);
+        const series = [this.$store.state.consumption];
         return {labels, series}
       }
-    },
-    mounted () {
-      return;
-      const consumptions = [
-        {
-          date: new Date(2017, 9, 23, 12),
-          value: 300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 23, 13),
-          value: 350,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 23, 14),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 23, 15),
-          value: 450,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 12),
-          value: 510,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 13),
-          value: 520,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 14),
-          value: 560,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 15),
-          value: 610,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 12),
-          value: 630,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 13),
-          value: 670,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 14),
-          value: 700,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 15),
-          value: 705,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 12),
-          value: 710,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 13),
-          value: 717,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 14),
-          value: 800,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 15),
-          value: 820,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 12),
-          value: 850,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 13),
-          value: 920,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 14),
-          value: 970,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 15),
-          value: 1000,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 12),
-          value: 1100,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 13),
-          value: 1300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 14),
-          value: 1350,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 15),
-          value: 1410,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 12),
-          value: 1435,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 13),
-          value: 1450,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 14),
-          value: 1480,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 15),
-          value: 1520,
-          serial: 0
-        }
-      ];
-
-      const consumptionRange = getConsumptionAccordingToType(consumptions, 'year');
-      this.chartData.series = [Object.keys(consumptionRange).map(range => consumption[range].end - consumption[range].start)];
     }
   }
-
-  function getConsumptionAccordingToType (consumption, type) {
-    console.log(consumption);
-
-    return consumption.reduce((prev, current) => {
-      const index = getRangeIndex(type, current.date);
-      console.log(index);
-      if (prev[index] && prev[index].start) {
-        prev[index].end = current.value;
-      } else {
-        prev[index] = {};
-        prev[index].start = current.value;
-      }
-      return prev;
-    }, {});
-  }
-
-  function getRangeIndex (type, date) {
-    const types = {
-      'year': date => new Date(date).getMonth(),
-      'month': date => new Date(date).getDate(),
-      'week': date => new Date(date).getDay(),
-      'day': date => new Date(date).getHours()
-    }
-    return types[type];
-  };
 </script>
 
 <style lang="scss">
