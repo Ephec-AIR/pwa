@@ -96,20 +96,17 @@ if (production) {
       minify: {
         removeComments: true
       },
-      preload: ['manifest.bundle.*.js', 'async.bundle.*.js', 'common.bundle.*.js', 'app.bundle.*.js'],
       // make it work consistently with multiple chunks (CommonChunksPlugin)
       chunksSortMode: 'dependency'
     }),
     new ScriptExtHtmlWebpackPlugin({
+      preload: ['manifest.bundle.*.js', 'async.bundle.*.js', 'common.bundle.*.js', 'app.bundle.*.js'],
       prefetch: {
         test: /\.js$/,
         chunks: 'async'
       }
     }),
-    // new PreloadWebpackPlugin({
-    //   rel: 'prefetch',
-    // }),
-    new ResourceHintWebpackPlugin(),
+    //new ResourceHintWebpackPlugin(),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../public/icons/'),
