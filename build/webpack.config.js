@@ -79,11 +79,13 @@ if (production) {
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../public/icons/'),
-        to: path.resolve(__dirname, '../dist/public/icons/[name].[hash].[ext]'),
+        to: path.resolve(__dirname, '../dist/public/icons/'),
+        ignore: '.*'
       },
       {
         from: path.resolve(__dirname, '../public/images/'),
-        to: path.resolve(__dirname, '../dist/public/images/[name].[hash].[ext]'),
+        to: path.resolve(__dirname, '../dist/public/images/'),
+        ignore: '.*'
       },
       {
        from: path.resolve(__dirname, '../manifest.json'),
@@ -91,7 +93,7 @@ if (production) {
       }
     ]),
     new PreloadWebpackPlugin({
-      rel: 'prefetch'
+      rel: 'prefetch',
     }),
     new WorkboxPlugin({
       "globDirectory": "dist/",
