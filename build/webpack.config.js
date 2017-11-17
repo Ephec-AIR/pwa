@@ -78,16 +78,21 @@ if (production) {
     }),
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, '../public'),
-        to: path.resolve(__dirname, '../dist/public'),
-        ignore: ['.*']
+        from: path.resolve(__dirname, '../public/icons/'),
+        to: path.resolve(__dirname, '../dist/public/icons/[name].[hash].[ext]'),
+      },
+      {
+        from: path.resolve(__dirname, '../public/images/'),
+        to: path.resolve(__dirname, '../dist/public/images/[name].[hash].[ext]'),
       },
       {
        from: path.resolve(__dirname, '../manifest.json'),
-       to: path.resolve(__dirname, '../dist/manifest.json')
+       to: path.resolve(__dirname, '../dist/manifest.[hash].json')
       }
     ]),
-    new PreloadWebpackPlugin(),
+    new PreloadWebpackPlugin({
+      rel: 'prefetch'
+    }),
     new WorkboxPlugin({
       "globDirectory": "dist/",
       "globPatterns": [

@@ -32,7 +32,6 @@
     data () {
       return {
         months: ["Jan", "Fev", "Mar", "Avr", "Mai", "Juin", "Jui", "Août", "Sept", "Oct", "Nov", "Dec"],
-        daysOfMonth: [],
         daysOfWeek: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
         hours: ["00h00", "01h00", "02h00", "03h00", "04h00", "05h00", "06h00", "07h00", "08h00",
           "09h00", "10h00", "11h00", "12h00", "13h00", "14h00", "15h00", "16h00", "17h00", "18h00",
@@ -69,20 +68,16 @@
           fn: (data) => {
 
           }
-        }]
-      }
-    },
-    methods: {
-      labels (type, stop) {
-        const labels = {
+        }],
+        labelsFunc: {
           year: (stop) => {
             return this.months.slice(0, stop);
           },
           month: (stop) => {
             const currentMonth = new Date().getMonth() + 1;
             const daysOfMonth = [];
-            for (let i = 0; i < stop; i++) {
-              this.daysOfMonth.push(`${(i < 10 ? '0' + i : i)}/${currentMonth}`);
+            for (let i = 1; i <= stop; i++) {
+              daysOfMonth.push(`${(i < 10 ? '0' + i : i)}/${currentMonth}`);
             }
             return daysOfMonth;
           },
@@ -92,8 +87,12 @@
           day: (stop) => {
             return this.hours.slice(0, stop)
           }
-        };
-        labels[type](stop)
+        }
+      }
+    },
+    methods: {
+      labels (type, stop) {
+        return this.labelsFunc[type](stop);
       }
     },
     computed: {
@@ -101,8 +100,6 @@
         const type = this.$store.state.consumptionLabelType;
         const labels = this.labels(type, this.$store.state.consumption.length);
         const series = [this.$store.state.consumption];
-        console.log(this.$store.state.consumption, labels);
-        console.table(series);
         return {labels, series}
       }
     }

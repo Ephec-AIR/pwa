@@ -34,11 +34,11 @@
   }
 
   .router-view {
-    transition: transform .3s cubic-bezier(0, 0, 0.3, 1);
+    transition: transform .5s cubic-bezier(0, 0, 0.3, 1);
     will-change: opacity, transform;
   }
 
-  .air-nav--visible .router-view {
+  .router-view--translate {
     transform: translateY(200px);
   }
 

@@ -38,12 +38,6 @@ export default {
 
     }
   },
-  methods: {
-    logout () {
-      this.hide();
-      this.$store.dispatch('LOGOUT');
-    }
-  },
   computed: {
     ...mapGetters([
       'isLoggedIn'
@@ -55,13 +49,16 @@ export default {
   methods: {
     toggle () {
       this.$refs.airnav.classList.toggle('air-nav--visible');
+      document.querySelector('.router-view').classList.toggle('router-view--translate');
     },
     hide () {
-
+      this.$refs.airnav.classList.remove('air-nav--visible');
+      document.querySelector('.router-view').classList.remove('router-view--translate');
+    },
+    logout () {
+      this.hide();
+      this.$store.dispatch('LOGOUT');
     }
-  },
-  mounted () {
-
   }
 }
 </script>
@@ -91,6 +88,7 @@ export default {
       padding: 0 8px;
       background: #FFF;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      pointer-events: auto;
       z-index: 100000;
     }
 
