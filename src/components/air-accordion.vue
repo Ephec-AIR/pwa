@@ -35,18 +35,20 @@ export default{
 }
 
 </script>
-<style>
+<style lang="scss">
+
     .air-accordion{
-       
+        font-family: Nunito;
         position : relative;
-        width : 45vw;
+        width : 800px;
+        max-width:800px;
         top : 15vh;
         margin : auto;
-        background : #FFF;
+        background: transparent;
         display: flex;
         flex-direction: column;
         font-family: Nunito;
-        transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+        
     }
 
 </style>

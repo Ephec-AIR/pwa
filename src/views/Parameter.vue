@@ -27,6 +27,7 @@ import AirParam from 'components/air-param';
   .main {
     flex-grow: 1;
     background: linear-gradient(45deg, $background-first-color, $background-second-color, $background-third-color);
+    overflow: hidden;
   }
 </style>
 

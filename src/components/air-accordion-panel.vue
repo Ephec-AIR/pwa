@@ -1,11 +1,11 @@
 <template>
   <div  class="air-accordion-panel" >
-      <button class="air-accordion-panel__button" @click.prevent="togglePanel">
+      <button class="air-accordion-panel__button" @click.prevent="togglePanel" >
           {{title}}
       </button>
-        <div class="air-accordion-panel__container" id="content" v-bind:class="{close:!open}">
+        <div class="air-accordion-panel__container" id="content">
           <slot></slot> 
-        </div>    
+        </div>   
   </div>
 </template>
 <script>
@@ -19,11 +19,23 @@ export default {
       }
     },
     methods:{
-      togglePanel(){
+      togglePanel(){       
           this.open = !this.open
-          this.$parent.movePanels();
+          this.managePanel();
+          },
+          managePanel(){
+              if(this.open){
+              this.$el.querySelector(".air-accordion-panel__container").classList.remove('close');
+              this.$el.querySelector(".air-accordion-panel__container").classList.add('open');
+          }else{
+              this.$el.querySelector(".air-accordion-panel__container").classList.remove('open');
+              this.$el.querySelector(".air-accordion-panel__container").classList.add('close');
           }
+          this.$parent.movePanels();
+        }
     },
+    
+
   computed : {
       _headerHeight(){
           return this.$el.querySelector('button').offsetHeight;
@@ -34,11 +46,15 @@ export default {
       
     },
     mounted(){
-        
+        this.managePanel();
     }
 }
 </script>
 <style lang="scss">
+  $background-first-color: #DBEB41;
+  $background-second-color: #C0ED70;
+  $background-third-color: #C7E967;
+
   .air-accordion-panel{
       position: absolute;  
       width: 100%;
@@ -46,6 +62,8 @@ export default {
       display: flex;
       flex-direction: column;
       overflow-y : auto;
+      transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+      background: transparent;
       & button{
           width: 100%;
           height : 48px;
@@ -54,24 +72,29 @@ export default {
           font-size: 48px;
           text-align: left;
           background: transparent;
-          border-bottom: 1px solid #444;  
-          &:focus{
-              background: #333;
-          }
+          border-bottom: 1px solid #000;  
       }
+
+      .close{
+          transition: opacity 0.3s ease;
+          opacity: 0;
+      }
+
+      .open{
+          transition: opacity 1s ease;
+          opacity:1;
+      }
+
   }
 
-  .close{
-      opacity: 0;
-  }
 
-  .slide-enter-active,.slide-leave-active{
-      transition : max-height 0.3s ease-in;
+
+  .fade-enter-active,.fade-leave-active{
+      transition : opacity 0.3s ease-in;
   }
 
   .slide-enter,.slide-leave-active{
-     max-height: 0;
-      visibility: hidden;
+     opacity:0;
   }
 </style>
 

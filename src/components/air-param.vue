@@ -73,6 +73,7 @@ import AirAccordionPanel from './air-accordion-panel';
     font-family : Nunito;
     display:flex;
     flex-direction : column;
+    
   }
 
    .air-param-list {
