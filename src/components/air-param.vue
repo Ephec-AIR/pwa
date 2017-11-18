@@ -1,35 +1,56 @@
 <template>
   <div class="air-param">
-      <ul class="air-param-list">
+      <!--
+        <ul class="air-param-list">      
         <li class="air-param-list-profil__container">
-          Profil
-          <ul class="air-param-list-profil__datas">
-            <li>
-             <span class="air-param-list-profil-firstname__title">Nom</span>{{firstName}}
-            </li>
-            <li>
-              <span  class="air-param-list-profil-lastname__title">Prenom</span>    {{lastName}}
-            </li>
-            <li>
-              <span class="air-param-list-profil-postalCode__title">Code Postal</span>   {{postalCode}}
-            </li>
-          </ul>
+          <button>Profil</button>      
+          
         </li>
         <li class="air-param-list-House__container">
-          Mon Habitat
+          <button>Mon habitat</button>
         </li>
         <li class="air-param-list-OCR__container">
-          Mon OCR
+         <button>Mon OCR</button> 
         </li>
         <li class="air-param-list-Datas__container">
-          Mes Données
+          <button>Mes Données</button>
         </li>
       </ul>
+      -->
+      <air-accordion class="air-param__accordion">
+        <air-accordion-panel  title="Profil">
+          <p>Et Epigonus quidem amictu tenus philosophus, ut apparuit, prece frustra temptata, sulcatis lateribus mortisque metu admoto turpi confessione cogitatorum socium, quae nulla erant, fuisse firmavit cum nec vidisset quicquam nec audisset penitus expers forensium rerum; Eusebius vero obiecta fidentius negans, suspensus in eodem gradu constantiae stetit latrocinium illud esse, non iudicium clamans.</p>
+
+          <p>Saraceni tamen nec amici nobis umquam nec hostes optandi, ultro citroque discursantes quicquid inveniri poterat momento temporis parvi vastabant milvorum rapacium similes, qui si praedam dispexerint celsius, volatu rapiunt celeri, aut nisi impetraverint, non inmorantur.</p>
+
+          <p>Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis professio medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa metuitur labes.</p>
+        </air-accordion-panel>
+        <air-accordion-panel title="OCR">
+          <p>Et Epigonus quidem amictu tenus philosophus, ut apparuit, prece frustra temptata, sulcatis lateribus mortisque metu admoto turpi confessione cogitatorum socium, quae nulla erant, fuisse firmavit cum nec vidisset quicquam nec audisset penitus expers forensium rerum; Eusebius vero obiecta fidentius negans, suspensus in eodem gradu constantiae stetit latrocinium illud esse, non iudicium clamans.</p>
+
+          <p>Saraceni tamen nec amici nobis umquam nec hostes optandi, ultro citroque discursantes quicquid inveniri poterat momento temporis parvi vastabant milvorum rapacium similes, qui si praedam dispexerint celsius, volatu rapiunt celeri, aut nisi impetraverint, non inmorantur.</p>
+
+          <p>Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis professio medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa metuitur labes.</p>
+        </air-accordion-panel>
+        <air-accordion-panel title="Test">
+          <p>Et Epigonus quidem amictu tenus philosophus, ut apparuit, prece frustra temptata, sulcatis lateribus mortisque metu admoto turpi confessione cogitatorum socium, quae nulla erant, fuisse firmavit cum nec vidisset quicquam nec audisset penitus expers forensium rerum; Eusebius vero obiecta fidentius negans, suspensus in eodem gradu constantiae stetit latrocinium illud esse, non iudicium clamans.</p>
+
+          <p>Saraceni tamen nec amici nobis umquam nec hostes optandi, ultro citroque discursantes quicquid inveniri poterat momento temporis parvi vastabant milvorum rapacium similes, qui si praedam dispexerint celsius, volatu rapiunt celeri, aut nisi impetraverint, non inmorantur.</p>
+
+          <p>Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis professio medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa metuitur labes.</p>
+        </air-accordion-panel>
+      </air-accordion>
   </div>
 </template>
 
 <script>
+import AirAccordion from './air-accordion';
+import AirAccordionPanel from './air-accordion-panel';
   export default{
+    components:{
+      AirAccordion,
+      AirAccordionPanel
+    },
     data (){
       return {
         firstName :'John',
@@ -45,10 +66,13 @@
 </script>
 
 <style lang="scss">
-  .air-param {
-    height: 100%;
-    display: flex;
-    flex-direction: row;
+
+  .air-param {   
+    margin : 0;
+    padding : 0;
+    font-family : Nunito;
+    display:flex;
+    flex-direction : column;
   }
 
    .air-param-list {
@@ -60,49 +84,31 @@
       margin-left: -100px;
       font-size: 2em; 
       width: 25%; 
+      &>*{
+        width : 10em;
+      }
     }
 
-    .air-param-list li{
-      margin-bottom: 10%;
+    .air-param-list button{
+      background: transparent;
+      border : none;
+      font-size : 30px;
+      font-family: Nunito;
     }
 
-
-
-
-
-    .air-param-list-profil__titles{
+    .air-param-list-profil__entries{
       list-style: none;
       font-size : 20px;
+      text-align: left;
+      display :grid;
+      grid-template-columns: 150px 50px;
+    }
+
+    .air-param-list-profil__entries>*:nth-child(even){
+      color: #f34548;
     }
 
 
-    .air-param-list-profil__datas li{
-      font-size : 20px;
-      color : #F34548;
-      font-style: bold;
-      list-style: none;
-      
-    }
-
-    .air-param-list-profil__datas li span{
-      font-size : 20px;
-      color : black;
-      font-style: bold;
-     
-      
-    }
-
-    .air-param-list-profil-firstname__title{
-       margin-right : 30%;
-    }
-
-    .air-param-list-profil-lastname__title{
-      margin-right: 20%;
-    }
-
-    .air-param-list-profil-postalCode__title{
-      margin-right: 7%;
-    }
 
     
 </style>
