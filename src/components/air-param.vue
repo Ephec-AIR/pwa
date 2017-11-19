@@ -40,14 +40,11 @@
 </script>
 
 <style lang="scss">
-
   .air-param {
     margin : 0;
     padding : 0;
-    font-family : Nunito;
     display:flex;
     flex-direction : column;
-
   }
 
    .air-param-list {
@@ -59,27 +56,26 @@
       margin-left: -100px;
       font-size: 2em;
       width: 25%;
-      &>*{
+      & > * {
         width : 10em;
       }
     }
 
-    .air-param-list button{
+    .air-param-list button {
       background: transparent;
       border : none;
       font-size : 30px;
-      font-family: Nunito;
     }
 
-    .air-param-list-profil__entries{
+    .air-param-list-profil__entries {
       list-style: none;
       font-size : 20px;
       text-align: left;
-      display :grid;
+      display: grid;
       grid-template-columns: 150px 50px;
     }
 
-    .air-param-list-profil__entries>*:nth-child(even){
+    .air-param-list-profil__entries > *:nth-child(even) {
       color: #f34548;
     }
 </style>

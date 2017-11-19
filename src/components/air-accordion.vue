@@ -10,11 +10,11 @@
     data () {
       return {
         selectedIndex : 0,
-        panels :[]
+        panels: []
       }
     },
     methods: {
-      movePanels(){
+      movePanels() {
         let baseY = 0;
         this.panels.forEach((panel) => {
           panel.$el.style.transform = `translateY(${baseY + panel._headerHeight * panel.index}px)`;
@@ -26,7 +26,7 @@
     },
     mounted () {
       this.panels = this.$children;
-      this.panels.forEach((panel,i) => {
+      this.panels.forEach((panel, i) => {
         panel.index = i;
       });
       this.movePanels();
@@ -35,16 +35,17 @@
 </script>
 
 <style lang="scss">
-    .air-accordion {
-      font-family: Nunito;
-      position : relative;
-      width : 800px;
-      max-width:800px;
-      top : 15vh;
-      margin : auto;
-      background: transparent;
-      display: flex;
-      flex-direction: column;
-      font-family: Nunito;
-    }
+  .air-accordion {
+    position : relative;
+    width : 800px;
+    max-width:800px;
+    top : 15vh;
+    margin : auto;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    background: #FFF;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.4);
+    border-radius: 3px;
+  }
 </style>

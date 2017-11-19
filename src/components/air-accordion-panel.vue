@@ -61,17 +61,18 @@
     flex-direction: column;
     overflow-y : auto;
     transition: transform 0.3s ease-in, opacity 0.3s ease-in;
-    background: transparent;
+    will-change: transform, opacity;
 
     & button {
+      font-size: 18px;
       width: 100%;
       height : 48px;
       line-height: 48px;
       border: none;
-      font-size: 48px;
       text-align: left;
       background: transparent;
-      border-bottom: 1px solid #000;
+      border-bottom: 1px solid #777;
+      color: #444;
     }
 
     .close {
@@ -80,6 +81,7 @@
     }
 
     .open {
+      padding: 5px;
       transition: opacity 1s ease;
       opacity: 1;
     }
@@ -87,12 +89,12 @@
 
 
 
-  .fade-enter-active,.fade-leave-active{
-      transition : opacity 0.3s ease-in;
+  .fade-enter-active,.fade-leave-active {
+    transition : opacity 0.3s ease-in;
   }
 
-  .slide-enter,.slide-leave-active{
-     opacity:0;
+  .slide-enter,.slide-leave-active {
+    opacity:0;
   }
 </style>
 
