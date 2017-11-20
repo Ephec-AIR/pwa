@@ -107,17 +107,11 @@
 </script>
 
 <style lang="scss">
-  $background-first-color: #FFE803;
-  $background-second-color: #C0ED70;
-  $background-third-color: #D4E157;
-
   .home {
     position: relative;
     display: flex;
     align-items: center;
-    flex-grow: 1;
     justify-content: space-between;
-    background: linear-gradient(135deg, $background-first-color, $background-second-color 20%, $background-third-color 90%);
   }
 
   .air-tips, .air-graph, .air-graph-controls {

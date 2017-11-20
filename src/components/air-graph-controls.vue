@@ -180,7 +180,7 @@
     }
   }
 
-  @media (max-width: 530px) {
+  @media (max-width: 680px) {
     .air-graph-controls {
       display: flex;
       justify-content: center;

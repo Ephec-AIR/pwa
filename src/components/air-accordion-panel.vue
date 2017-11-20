@@ -1,9 +1,9 @@
 <template>
-  <div class="air-accordion-panel" >
-    <button class="air-accordion-panel__button" @click.prevent="togglePanel" >
+  <div class="air-accordion-panel" role="tabpanel">
+    <button class="air-accordion-panel__button" @click="togglePanel" role="tab">
       {{title}}
     </button>
-    <div class="air-accordion-panel__container" id="content">
+    <div class="air-accordion-panel__container" ref="content">
       <slot></slot>
     </div>
   </div>
@@ -12,67 +12,55 @@
 <script>
   export default {
     props: ['title'],
-    data () {
-      return {
-        index : 0,
-        open : false
-      }
-    },
     methods: {
-      togglePanel () {
-        this.open = !this.open;
-        this.managePanel();
-      },
-      managePanel() {
-        if (this.open) {
-          this.$el.querySelector(".air-accordion-panel__container").classList.remove('close');
-          this.$el.querySelector(".air-accordion-panel__container").classList.add('open');
-        } else {
-          this.$el.querySelector(".air-accordion-panel__container").classList.remove('open');
-          this.$el.querySelector(".air-accordion-panel__container").classList.add('close');
-        }
+      togglePanel (evt) {
+        const customEvent = new CustomEvent('panel-change', {
+          bubbles: true
+        });
 
-        this.$parent.movePanels();
-      }
+        this.$el.dispatchEvent(customEvent);
+      },
     },
     computed: {
-      _headerHeight () {
-          return this.$el.querySelector('button').offsetHeight;
+      content () {
+        return this.$el.querySelector('.air-accordion-panel__container');
       },
-      _contentHeight () {
-          return this.$el.querySelector('.air-accordion-panel__container').offsetHeight;
+      headerHeight () {
+        return this.$el.querySelector('.air-accordion-panel__button').offsetHeight;
       }
-    },
-    mounted () {
-      this.managePanel();
     }
   }
 </script>
+
 <style lang="scss">
-  $background-first-color: #DBEB41;
-  $background-second-color: #C0ED70;
-  $background-third-color: #C7E967;
+  $background-third-color: #D4E157;
 
   .air-accordion-panel {
     position: absolute;
+    top: 0;
     width: 100%;
-    font-family: Nunito;
     display: flex;
     flex-direction: column;
-    overflow-y : auto;
+    flex: 0 0 auto;
+    background: $background-third-color;
     transition: transform 0.3s ease-in, opacity 0.3s ease-in;
     will-change: transform, opacity;
 
-    & button {
-      font-size: 18px;
+    &__button {
       width: 100%;
       height : 48px;
       line-height: 48px;
+      font-size: 18px;
       border: none;
-      text-align: left;
       background: transparent;
-      border-bottom: 1px solid #777;
-      color: #444;
+      color: #777;
+      border-bottom: 1px solid #444;
+    }
+
+    &__container {
+      padding: 16px;
+      overflow-y: auto;
+      background: transparent;
     }
 
     .close {
@@ -87,14 +75,12 @@
     }
   }
 
-
-
   .fade-enter-active,.fade-leave-active {
     transition : opacity 0.3s ease-in;
   }
 
   .slide-enter,.slide-leave-active {
-    opacity:0;
+    opacity: 0;
   }
 </style>
 

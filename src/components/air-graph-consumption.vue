@@ -68,7 +68,7 @@
     }
   }
 
-  @media (max-width: 530px) {
+  @media (max-width: 680px) {
     .consumption-type {
       position: absolute;
       top: 15px;
