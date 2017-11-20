@@ -71,11 +71,11 @@
         }],
         labelsFunc: {
           year: (start, stop) => {
-            const start = start.getMonth();
+            //const start = start.getMonth();
             return this.months.slice(start, stop);
           },
           month: (start, stop) => {
-            const start = start.getDate();
+            //const start = start.getDate();
             const currentMonth = new Date().getMonth() + 1;
             const daysOfMonth = [];
             for (let i = start; i <= stop; i++) {
@@ -84,11 +84,11 @@
             return daysOfMonth;
           },
           week: (start, stop) => {
-            const start = start.getDay();
+            //const start = start.getDay();
             return this.daysOfWeek.slice(start, stop);
           },
           day: (start, stop) => {
-            const start = start.getHours();
+            //const start = start.getHours();
             return this.hours.slice(start, stop)
           }
         }
