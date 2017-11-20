@@ -70,22 +70,26 @@
           }
         }],
         labelsFunc: {
-          year: (stop) => {
-            return this.months.slice(0, stop);
+          year: (start, stop) => {
+            //const start = start.getMonth();
+            return this.months.slice(start, stop);
           },
-          month: (stop) => {
+          month: (start, stop) => {
+            //const start = start.getDate();
             const currentMonth = new Date().getMonth() + 1;
             const daysOfMonth = [];
-            for (let i = 1; i <= stop; i++) {
+            for (let i = start; i <= stop; i++) {
               daysOfMonth.push(`${(i < 10 ? '0' + i : i)}/${currentMonth}`);
             }
             return daysOfMonth;
           },
-          week: (stop) => {
-            return this.daysOfWeek.slice(0, stop);
+          week: (start, stop) => {
+            //const start = start.getDay();
+            return this.daysOfWeek.slice(start, stop);
           },
-          day: (stop) => {
-            return this.hours.slice(0, stop)
+          day: (start, stop) => {
+            //const start = start.getHours();
+            return this.hours.slice(start, stop)
           }
         }
       }
@@ -128,6 +132,17 @@
     flex: 1;
     margin-left: 50px;
     height: 95%;
+  }
+
+  .air-graph--nodata {
+    margin: 140px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    color: #de002a;
   }
 
   .ct-grid {
