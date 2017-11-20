@@ -1,81 +1,50 @@
 <template>
-    <div class="air-accordion" enhanced role="tablist">
-      <slot></slot>
+    <div class="air-accordion">
+        <slot></slot>
     </div>
 </template>
-
 <script>
-  export default {
+export default{
     props : ['title'],
-    data () {
-      return {
-        panels: [],
-        headerHeight: 0,
-        availableHeight: 0
-      }
-    },
-    methods: {
-      onPanelChange (evt) {
-        this.panels.forEach(panel => {
-          panel.$el.removeAttribute('aria-expanded');
-          panel.$el.setAttribute('aria-hidden', 'true');
-        });
-
-        evt.target.setAttribute('aria-expanded', 'true');
-        evt.target.removeAttribute('aria-hidden');
-
-        requestAnimationFrame(_ => this.movePanels());
-      },
-      calculateGeometries () {
-        if (this.panels.length === 0) {
-          return;
+    data(){
+        return {
+            selectedIndex : 0,
+            panels :[]
         }
-
-        this.headerHeight = this.panels[0].headerHeight;
-        this.availableHeight = this.$el.offsetHeight - (this.panels.length * this.headerHeight);
-      },
-      movePanels() {
-        let baseY = 0;
-        this.panels.forEach((panel, index) => {
-          panel.$el.style.transform = `translateY(${baseY + (this.headerHeight * index)}px)`;
-          panel.content.style.height = `${this.availableHeight}px`;
-
-          if (panel.$el.getAttribute('aria-expanded')) {
-            baseY += this.availableHeight;
-          }
-        });
-      }
     },
-    mounted () {
+    methods:{
+        movePanels(){
+          let baseY = 0;
+          this.panels.forEach((panel)=>{
+              panel.$el.style.transform = `translateY(${baseY + panel._headerHeight * panel.index}px)`;
+              
+              if(panel.open){
+                  baseY += panel._contentHeight;                
+              }
+          });
+        }
+    },
+    mounted (){
       this.panels = this.$children;
-      this.$el.addEventListener('panel-change', this.onPanelChange);
-      this.calculateGeometries();
-      this.movePanels();
-    }
-  }
+      this.panels.forEach((panel,i)=> {
+        panel.index = i;     
+      }); 
+      this.movePanels();          
+    },
+    
+}
 </script>
-
 <style lang="scss">
-  .air-accordion {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin: 0 15px;
-    background: transparent;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.4);
-    border-radius: 3px;
-
-    &[enhanced] {
-      position: relative;
-      visibility: visible;
-      height: 600px;
-      overflow: hidden;
+    .air-accordion{
+        position : relative;
+        min-width: 750px;
+        max-width:800px;
+        top : 15vh;
+        margin : auto;
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+       
+        
     }
-
-    &[enhanced] .air-accordion-panel {
-      position: absolute;
-      top: 0;
-      width: 100%;
-    }
-  }
 </style>

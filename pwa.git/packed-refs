@@ -1,0 +1,5 @@
+# pack-refs with: peeled fully-peeled 
+dc47fb0094bf8c725f921f690a342d2c1eea998f refs/heads/Nathan
+736f9c648709d1731451336abc1a478842c19e1a refs/heads/dev
+0c9539085ca245f60a624ccad53cfe8cc7f0c02d refs/heads/master
+5f93c6dca4c34ab9eaec5a05a5252b49603f8f1d refs/heads/rm-pkg-lock

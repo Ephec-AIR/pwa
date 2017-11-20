@@ -5,15 +5,9 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 import AirParam from 'components/air-param';
   export default {
     components:{
-=======
-  import AirParam from 'components/air-param';
-  export default {
-    components: {
->>>>>>> 0c9539085ca245f60a624ccad53cfe8cc7f0c02d
       AirParam
     },
     data () {
@@ -24,14 +18,16 @@ import AirParam from 'components/air-param';
 </script>
 
 <style lang="scss">
-  .parameters {
-<<<<<<< HEAD
-    height: 100%;
-=======
-    display: flex;
-    justify-content: center;
-    align-items: center;
->>>>>>> 0c9539085ca245f60a624ccad53cfe8cc7f0c02d
+  $background-first-color: #FFE803;
+  $background-second-color: #C0ED70;
+  $background-third-color: #D4E157;
+  *{
+      font-family: Nunito;
+    }
+  .main {
+    
+    flex-grow: 1;
+    background: linear-gradient(45deg, $background-first-color, $background-second-color, $background-third-color);
+    overflow: hidden;
   }
 </style>
-
