@@ -19,6 +19,11 @@ export default {
 </script>
 
 <style lang="scss">
+  $text-color: rgba(0, 0, 0, 0.54);
+  $nav-text-color: #464A3F;
+  $button-color: rgb(255, 23, 68);
+  $placeholder-color: rgba(255, 23, 68, 0.27);
+
   .air-toast {
     display: flex;
     flex-direction: column;

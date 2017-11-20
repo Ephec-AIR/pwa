@@ -6,6 +6,7 @@
       type="Line"
       :data="chartData"
       :options="chartOptions"
+      :responsive-options="responsiveOptions"
       :event-handlers="eventHandlers"
     >
     </chartist>
@@ -17,6 +18,7 @@
 </template>
 
 <script>
+  //import Chartist from 'chartist';
   import AirTips from 'components/air-tips';
   import AirGraphControls from 'components/air-graph-controls';
   import AirGraphConsumption from 'components/air-graph-consumption';
@@ -29,10 +31,11 @@
     },
     data () {
       return {
-        chartData: {
-          labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
-          series: []
-        },
+        months: ["Jan", "Fev", "Mar", "Avr", "Mai", "Juin", "Jui", "Août", "Sept", "Oct", "Nov", "Dec"],
+        daysOfWeek: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+        hours: ["00h00", "01h00", "02h00", "03h00", "04h00", "05h00", "06h00", "07h00", "08h00",
+          "09h00", "10h00", "11h00", "12h00", "13h00", "14h00", "15h00", "16h00", "17h00", "18h00",
+          "19h00", "20h00", "21h00", "22h00", "23h00"],
         chartOptions: {
           onlyInteger: true,
           fullWidth: true,
@@ -41,144 +44,68 @@
           },
           low: 0,
           showPoint: true,
-          showArea: true
+          showArea: true,
+          axisY: {
+            offset: 60,
+            labelInterpolationFnc: value => `${value} kwh`
+          },
+          plugins: [
+            //Chartist.plugins.ctThreshold({
+            //  threshold: 50
+            //})
+          ]
         },
+        responsiveOptions: [
+          ['screen and (max-width: 530px)', {
+            showPoint: false,
+            axisX: {
+              labelInterpolationFnc: value => value[0]
+            }
+          }]
+        ],
         eventHandlers: [{
           event: 'draw',
           fn: (data) => {
 
           }
-        }]
+        }],
+        labelsFunc: {
+          year: (start, stop) => {
+            //const start = start.getMonth();
+            return this.months.slice(start, stop);
+          },
+          month: (start, stop) => {
+            //const start = start.getDate();
+            const currentMonth = new Date().getMonth() + 1;
+            const daysOfMonth = [];
+            for (let i = start; i <= stop; i++) {
+              daysOfMonth.push(`${(i < 10 ? '0' + i : i)}/${currentMonth}`);
+            }
+            return daysOfMonth;
+          },
+          week: (start, stop) => {
+            //const start = start.getDay();
+            return this.daysOfWeek.slice(start, stop);
+          },
+          day: (start, stop) => {
+            //const start = start.getHours();
+            return this.hours.slice(start, stop)
+          }
+        }
       }
     },
-    mounted () {
-      const consumptions = [
-        {
-          date: new Date(2017, 9, 23, 12),
-          value: 300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 23, 13),
-          value: 350,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 23, 14),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 23, 15),
-          value: 450,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 12),
-          value: 250,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 13),
-          value: 350,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 14),
-          value: 450,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 15),
-          value: 550,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 12),
-          value: 300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 13),
-          value: 200,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 14),
-          value: 500,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 15),
-          value: 450,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 12),
-          value: 300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 13),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 14),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 15),
-          value: 450,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 12),
-          value: 300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 13),
-          value: 300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 14),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 15),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 12),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 13),
-          value: 410,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 14),
-          value: 420,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 15),
-          value: 430,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 12),
-          value: 440,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 13),
-          value: 350,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 14),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 15),
-          value: 450,
-          serial: 0
-        }
-      ];
-
-      const stackedConsumption = consumptions.reduce((prev, current) => {
-        const weekDay = current.date.getDay();
-        if (prev[weekDay]) {
-          prev[weekDay] += current.value;
-        } else {
-          prev[weekDay] = current.value;
-        }
-        return prev;
-      }, {});
-
-      this.chartData.series = [Object.keys(stackedConsumption).map(weekDay => stackedConsumption[weekDay])];
+    methods: {
+      labels (type, stop) {
+        return this.labelsFunc[type](stop);
+      }
+    },
+    computed: {
+      chartData () {
+        const type = this.$store.state.consumptionLabelType;
+        const labels = this.labels(type, this.$store.state.consumption.length);
+        const series = [this.$store.state.consumption];
+        return {labels, series}
+      }
     }
   }
 </script>
@@ -189,8 +116,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #FFD400;
-    height: 100%;
   }
 
   .air-tips, .air-graph, .air-graph-controls {
@@ -205,8 +130,19 @@
 
   .air-graph {
     flex: 1;
-    margin-top: 70px;
-    height: 100%;
+    margin-left: 50px;
+    height: 95%;
+  }
+
+  .air-graph--nodata {
+    margin: 140px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    color: #de002a;
   }
 
   .ct-grid {
@@ -229,8 +165,28 @@
 
   .ct-series-a .ct-point {
     stroke: #d70206;
-    stroke-width: 5px;
+    stroke-width: 10px;
     stroke-linecap: round;
+  }
+
+  .ct-chart-bar .ct-label, .ct-chart-line .ct-label {
+    display: flex;
+  }
+
+  .ct-label.ct-vertical.ct-start {
+    align-items: flex-end;
+    justify-content: flex-end;
+    fill: rgba(0,0,0,.4);
+    color: rgba(0,0,0,.4);
+    font-size: .75rem;
+    line-height: 1;
+  }
+
+  .ct-label.ct-horizontal.ct-end {
+    fill: rgba(0,0,0,.4);
+    color: rgba(0,0,0,.4);
+    font-size: .85rem;
+    line-height: 1;
   }
 
   .ct-line.ct-threshold-above, .ct-point.ct-threshold-above, .ct-bar.ct-threshold-above {
@@ -253,6 +209,10 @@
     .home {
       position: relative;
       flex-direction: column;
+    }
+
+    .air-graph {
+      margin-top: 140px;
     }
   }
 </style>

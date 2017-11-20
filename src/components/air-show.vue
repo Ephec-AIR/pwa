@@ -13,6 +13,11 @@
 </script>
 
 <style lang="scss">
+  $text-color: rgba(0, 0, 0, 0.54);
+  $nav-text-color: #464A3F;
+  $button-color: rgb(255, 23, 68);
+  $placeholder-color: rgba(255, 23, 68, 0.27);
+
   .air-show {
     display: flex;
     flex-direction: column;
@@ -29,11 +34,11 @@
     &--subtitle {
       font-size: 32px;
       font-weight: bold;
-      color: #01a875;
+      color: $text-color;
     }
   }
 
-  @media (max-width: 530px) {
+  @media (max-width: 680px) {
     .air-show {
       width: 100%;
     }

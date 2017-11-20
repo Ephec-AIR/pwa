@@ -21,8 +21,6 @@
   .welcome {
     display: flex;
     flex-direction: row;
-    background: #FFD400;
-    min-height: 100%;
   }
 
   @media (max-width: 530px) {

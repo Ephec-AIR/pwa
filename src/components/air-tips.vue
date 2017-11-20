@@ -56,6 +56,11 @@
 </script>
 
 <style lang="scss">
+  $text-color: rgba(0, 0, 0, 0.54);
+  $nav-text-color: #464A3F;
+  $button-color: rgb(255, 23, 68);
+  $placeholder-color: rgba(255, 23, 68, 0.27);
+
   .air-tips {
     position: absolute;
     top: 10px;
@@ -68,7 +73,7 @@
       margin-bottom: 5px;
       position: relative;
       border-radius: 50%;
-      background: #01a875;
+      background: $button-color;
       box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
       height: 40px;
       width: 40px;
@@ -80,7 +85,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: url(/public/images/bulb.png) center center no-repeat;
+      background: url(/public/images/bulb.webp) center center no-repeat;
       background-size: contain;
       height: 70%;
       width: 100%;

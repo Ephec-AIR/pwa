@@ -3,17 +3,17 @@
     <section class="air-graph-controls--choices">
       <div class="air-graph-controls--choices__container">
         <div class="air-graph-controls--choices__left-arrow" @click="selectChoice(-1)"></div>
-        <button class="controls-button air-graph-controls--choices__day" @focus="getConsumptionDay">JOUR</button>
+        <button class="controls-button air-graph-controls--choices__day" @click="onClick" @focus="getConsumptionDay">JOUR</button>
         <div class="air-graph-controls--choices__right-arrow" @click="selectChoice(1)"></div>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__week" @focus="getConsumptionWeek">SEMAINE</button>
+        <button class="controls-button air-graph-controls--choices__week" @click="onClick" @focus="getConsumptionWeek">SEMAINE</button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__month" @focus="getConsumptionMonth">MOIS</button>
+        <button class="controls-button air-graph-controls--choices__month" @click="onClick" @focus="getConsumptionMonth">MOIS</button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__year" @focus="getConsumptionYear">ANNEE</button>
+        <button class="controls-button air-graph-controls--choices__year" @click="onClick" @focus="getConsumptionYear">ANNEE</button>
       </div>
     </section>
     <section class="air-graph-controls--compare" hidden>
@@ -48,18 +48,9 @@
         getConsumptionMonth: 'GET_CONSUMPTION_MONTH',
         getConsumptionYear: 'GET_CONSUMPTION_YEAR',
       }),
-      onTouchStart (evt) {
-        if (!(evt.target.classList.contains('air-graph-controls'))) {
-          return;
-        }
-
-        this.startX = evt.touches[0].pageX;
-      },
-      onTouchMove (evt) {
-
-      },
-      onTouchEnd (evt) {
-
+      onClick (evt) {
+        this.index = this.buttons.findIndex(b => b == evt.target);
+        this.moveArrows();
       },
       moveIndex (increment) {
         this.lastIndex = this.index;
@@ -110,20 +101,27 @@
       }
     },
     mounted () {
+      this.index = 2;
       this.buttons = Array.from(document.querySelectorAll('.controls-button'));
       this.leftArrow = document.querySelector('.air-graph-controls--choices__left-arrow');
       this.rightArrow = document.querySelector('.air-graph-controls--choices__right-arrow');
 
       window.addEventListener('resize', _ => this.onResize());
-      document.querySelector('.air-graph-controls--choices__day').focus();
-      document.querySelector('.air-graph-controls--choices__day').style.opacity = 1;
-      document.addEventListener('keydown', this.onKeyDown)
+      document.querySelector('.air-graph-controls--choices__month').focus();
+      document.querySelector('.air-graph-controls--choices__month').style.opacity = 1;
+      document.addEventListener('keydown', this.onKeyDown);
+      this.moveArrows();
       this.onResize();
     }
   }
 </script>
 
 <style lang="scss">
+  $text-color: rgba(0, 0, 0, 0.54);
+  $nav-text-color: #464A3F;
+  $button-color: rgb(255, 23, 68);
+  $placeholder-color: rgba(255, 23, 68, 0.27);
+
   .air-graph-controls {
     &--choices {
       position: relative;
@@ -148,7 +146,7 @@
         width: 150px;
 
         &:focus {
-           color: #01a875;
+           color: $text-color;
         }
       }
 
@@ -182,7 +180,7 @@
     }
   }
 
-  @media (max-width: 530px) {
+  @media (max-width: 680px) {
     .air-graph-controls {
       display: flex;
       justify-content: center;
@@ -207,11 +205,11 @@
     }
 
     .air-graph-controls--choices__left-arrow {
-      transform: translate(0);
+      transform: translate(0) !important;
     }
 
     .air-graph-controls--choices__right-arrow {
-      transform: translate(0);
+      transform: translate(0) !important;
     }
   }
 </style>

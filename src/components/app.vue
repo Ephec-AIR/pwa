@@ -2,7 +2,7 @@
   <div class="main" ref="container">
     <air-nav></air-nav>
     <transition name="router-fade-in" mode="out-in">
-      <router-view><!-- router views --></router-view>
+      <router-view class="router-view"><!-- router views --></router-view>
     </transition>
     <air-toast></air-toast>
   </div>
@@ -26,9 +26,26 @@
 </script>
 
 <style lang="scss">
+  $background-first-color: #FFE803;
+  $background-second-color: #C0ED70;
+  $background-third-color: #D4E157;
+
   .main {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
     width: 100%;
+  }
+
+  .router-view {
+    flex-grow: 1;
+    background: linear-gradient(135deg, $background-first-color, $background-second-color 0%, $background-third-color 20%);
+    transition: transform .5s cubic-bezier(0, 0, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .router-view--translate {
+    transform: translateY(200px);
   }
 
   .simple-button {

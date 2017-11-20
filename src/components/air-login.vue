@@ -2,15 +2,15 @@
   <div class="air-login">
     <form class="air-login-form" @submit.prevent="login">
       <div class="air-login-form-username" :class="{'has-error': errors.has('username')}">
-        <input type="text" class="air-login-form-username--input" name="username" v-model="username" v-validate:username="'required'" placeholder="identifiant">
+        <input type="text" class="air-login-form-username--input" aria-label="username" name="username" v-model="username" v-validate:username="'required'" placeholder="identifiant">
         <p class="air-login-form-username--error error-message">{{errors.first('username')}}</p>
       </div>
       <div class="air-login-form-password" :class="{'has-error': errors.has('username')}">
-        <input type="password" class="air-login-form-password--input" name="password" v-model="password" v-validate="'required'" placeholder="mot de passe">
+        <input type="password" class="air-login-form-password--input" aria-label="password" name="password" v-model="password" v-validate="'required'" placeholder="mot de passe">
         <p class="air-login-form-password--error error-message">{{errors.first('password')}}</p>
       </div>
       <div class="air-login-form--button">
-        <button type="submit" class="air-login-form--button-login simple-button">S'identifier</button>
+        <button type="submit" aria-label="submit login form" class="air-login-form--button-login simple-button">S'identifier</button>
       </div>
     </form>
     <button class="air-login-form--button-register simple-button">
@@ -42,6 +42,11 @@ export default {
 </script>
 
 <style lang="scss">
+  $text-color: rgba(0, 0, 0, 0.54);
+  $nav-text-color: #464A3F;
+  $button-color: rgb(255, 23, 68);
+  $placeholder-color: rgba(255, 23, 68, 0.27);
+
   .air-login {
     display: flex;
     flex-direction: column;
@@ -60,7 +65,7 @@ export default {
       margin: 5px 0;
       padding-left: 5px;
       font-size: 16px;
-      color: #444;
+      color: $text-color;
       border-radius: 3px;
       border: none;
     }
@@ -72,7 +77,7 @@ export default {
       &-login, &-register {
         width: 100%;
         margin: 5px 0;
-        background: #01a875;
+        background: $button-color;
       }
 
       &-register > a {
@@ -83,13 +88,20 @@ export default {
 
     .error-message {
       font-size: 12px;
-      color: #f33636;
+      color: $button-color;
       margin: 5px 0;
       font-style: italic;
     }
   }
 
-  @media (max-width: 530px) {
+  ::-webkit-input-placeholder {
+    color: $placeholder-color;
+  }
+  ::-moz-placeholder {
+    color: $placeholder-color;
+  }
+
+  @media (max-width: 680px) {
     .air-login {
       width: 100%;
     }

@@ -83,22 +83,22 @@ export default {
   },
 
   GET_CONSUMPTION_DAY ({commit, state}) {
-    fetchData(DateRangeHelper.dayRange, commit)
+    fetchData(DateRangeHelper.dayRange, 'day', commit)
       .catch(err => console.error(err));
   },
 
   GET_CONSUMPTION_WEEK ({commit, state}) {
-    fetchData(DateRangeHelper.weekRange, commit)
+    fetchData(DateRangeHelper.weekRange, 'week', commit)
       .catch(err => console.error(err));
   },
 
   GET_CONSUMPTION_MONTH ({commit, state}) {
-    fetchData(DateRangeHelper.monthRange, commit)
+    fetchData(DateRangeHelper.monthRange, 'month', commit)
       .catch(err => console.error(err));
   },
 
   GET_CONSUMPTION_YEAR ({commit, state}) {
-    fetchData(DateRangeHelper.yearRange, commit)
+    fetchData(DateRangeHelper.yearRange, 'year', commit)
       .catch(err => console.error(err));
   }
 }
@@ -110,38 +110,39 @@ export default {
  * @param {Object} range, range of the desired consumption
  * @param {*} commit, vuex
  */
-const fetchData = async ({start, end}, commit) => {
+const fetchData = async ({start, end}, type, commit) => {
   // 1. Get data from IDB
-  const db = await idb.open('air', 1, db => {
-    const consumptionStore = db.createObjectStore('consumption', {
-      keyPath: 'date'
-    });
-    consumptionStore.createIndex('date', 'date');
-  });
+  // DO NOT REMOVE ANY COMMENTS IN THIS FUNCTION
+  // const db = await idb.open('air', 1, db => {
+  //   const consumptionStore = db.createObjectStore('consumption', {
+  //     keyPath: 'date'
+  //   });
+  //   consumptionStore.createIndex('date', 'date');
+  // });
 
-  let transaction = db.transaction('consumption');
-  let store = transaction.objectStore('consumption');
-  const index = store.index('date');
+  // let transaction = db.transaction('consumption');
+  // let store = transaction.objectStore('consumption');
+  // const index = store.index('date');
 
-  const range = IDBKeyRange.bound(DateRangeHelper.adjustISOHours(start), DateRangeHelper.adjustISOHours(end));
-  const idbData = await getIDBByRange(index, range);
+  // const range = IDBKeyRange.bound(DateRangeHelper.adjustISOHours(start), DateRangeHelper.adjustISOHours(end));
+  // const idbData = await getIDBByRange(index, range);
 
-  const lastDate = idbData.length > 0 ? idbData[idbData.length - 1].date : start;
-  const firstDate = idbData.length > 0 ? idbData[0].date : end;
-  if (DateRangeHelper.removeMinutesAndSeconds(firstDate) <= DateRangeHelper.removeMinutesAndSeconds(start)
-    && DateRangeHelper.removeMinutesAndSeconds(lastDate) >= DateRangeHelper.removeMinutesAndSeconds(end)) {
-    console.log('not fetching...')
-    // store data
-    storeConsumption(commit, idbData);
-    return;
-  }
+  // const lastDate = idbData.length > 0 ? idbData[idbData.length - 1].date : start;
+  // const firstDate = idbData.length > 0 ? idbData[0].date : end;
+  // if (DateRangeHelper.removeMinutesAndSeconds(firstDate) <= DateRangeHelper.removeMinutesAndSeconds(start)
+  //   && DateRangeHelper.removeMinutesAndSeconds(lastDate) >= DateRangeHelper.removeMinutesAndSeconds(end)) {
+  //   console.log('not fetching...')
+  //   // store data
+  //   storeConsumption(commit, idbData);
+  //   return;
+  // }
 
   // NOTE: Fetching everything or only the missing ranges [start - firstDate], [lastDate - end] ?
   // NOTE: 2 requests or only 1 with multiple range (if needed) ?
 
   // 2. Get missing data from API
   //start = lastDate ? lastDate : start; // move start date
-  const response = await fetch(`${Constant.API_URL}/consumption?start=${start}&end=${end}`, {
+  const response = await fetch(`${Constant.API_URL}/consumption?start=${start}&end=${end}&type=${type}`, {
     method: 'GET',
     headers: {
       authorization: `Bearer ${await idbKeyVal.get('token')}`
@@ -157,14 +158,16 @@ const fetchData = async ({start, end}, commit) => {
   }
 
   const fetchData = await response.json();
+  const idbData = [];
 
   // 3. Put data in IDB
-  transaction = db.transaction('consumption', 'readwrite');
-  store = transaction.objectStore('consumption');
-  fetchData.forEach(data => store.put(data));
-  transaction.complete;
+  // transaction = db.transaction('consumption', 'readwrite');
+  // store = transaction.objectStore('consumption');
+  // fetchData.forEach(data => store.put(data));
+  // transaction.complete;
 
   // 4. store data
+  commit('CONSUMPTION_LABEL_TYPE', type);
   storeConsumption(commit, idbData, fetchData);
 }
 
@@ -187,3 +190,5 @@ const storeConsumption = (commit, idbData = [], fetchData = []) => {
     consumption: [...idbData, ...fetchData]
   });
 }
+
+
