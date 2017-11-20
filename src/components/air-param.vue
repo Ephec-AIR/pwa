@@ -40,6 +40,9 @@
 </script>
 
 <style lang="scss">
-
+  .air-param {
+    display: flex;
+    width: 100%;
+  }
 </style>
 
