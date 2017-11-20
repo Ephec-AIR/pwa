@@ -101,7 +101,7 @@ export default {
     color: $placeholder-color;
   }
 
-  @media (max-width: 530px) {
+  @media (max-width: 680px) {
     .air-login {
       width: 100%;
     }

@@ -18,13 +18,10 @@
 </script>
 
 <style lang="scss">
-  $background-first-color: #FFE803;
-  $background-second-color: #C0ED70;
-  $background-third-color: #D4E157;
-
-  .main {
-    flex-grow: 1;
-    background: linear-gradient(45deg, $background-first-color, $background-second-color, $background-third-color);
+  .parameters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
 

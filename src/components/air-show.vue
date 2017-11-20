@@ -38,7 +38,7 @@
     }
   }
 
-  @media (max-width: 530px) {
+  @media (max-width: 680px) {
     .air-show {
       width: 100%;
     }

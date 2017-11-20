@@ -26,6 +26,10 @@
 </script>
 
 <style lang="scss">
+  $background-first-color: #FFE803;
+  $background-second-color: #C0ED70;
+  $background-third-color: #D4E157;
+
   .main {
     display: flex;
     flex-direction: column;
@@ -34,6 +38,8 @@
   }
 
   .router-view {
+    flex-grow: 1;
+    background: linear-gradient(135deg, $background-first-color, $background-second-color 0%, $background-third-color 20%);
     transition: transform .5s cubic-bezier(0, 0, 0.3, 1);
     will-change: opacity, transform;
   }

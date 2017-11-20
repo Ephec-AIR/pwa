@@ -219,7 +219,7 @@ export default {
     color: green;
   }
 
-  @media (max-width: 530px) {
+  @media (max-width: 680px) {
     .air-nav {
       &__show {
         display: block;
