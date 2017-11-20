@@ -21,7 +21,7 @@
         <air-accordion-panel  title="Profil">
           <ul>
             <li>Test1</li>
-            <li>{{_getUser.name}}</li>
+            <li></li>
             <li>test2</li>
             <li>test2</li>
             <li>test3</li>
@@ -55,7 +55,7 @@ import AirAccordionPanel from './air-accordion-panel';
     },
     computed:{
       _getUser(){
-        return this.$store.state._getUser();
+        
       }
     },
     methods: {

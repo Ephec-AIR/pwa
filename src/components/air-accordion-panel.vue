@@ -55,7 +55,7 @@ export default {
   $background-third-color: #C7E967;
   .air-accordion-panel{
       position: absolute;  
-      width: 100%;
+      width: 75%;
       display: flex;
       flex-direction: column;
       transition: transform 0.2s ease-in, opacity 0.3s ease-in;
@@ -70,7 +70,7 @@ export default {
           background: transparent;
           border-bottom: 2px solid #000;  
           border-radius: 5px;
-          box-shadow: 2px 2px 5px #ABCC51;
+          box-shadow: 0 5px 10px #A9CC51;
       }
       .close{
           transition: opacity 0.3s ease;
