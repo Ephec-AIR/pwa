@@ -46,7 +46,7 @@
           showPoint: true,
           showArea: true,
           axisY: {
-            offset: 60,
+            offset: 100,
             labelInterpolationFnc: value => `${value} kwh`
           },
           plugins: [
@@ -70,12 +70,12 @@
           }
         }],
         labelsFunc: {
-          year: (start, stop) => {
-            //const start = start.getMonth();
+          year: (start, length) => {
+            const stop = Number(start) + length;
             return this.months.slice(start, stop);
           },
-          month: (start, stop) => {
-            //const start = start.getDate();
+          month: (start, length) => {
+            const stop = Number(start) + length;
             const currentMonth = new Date().getMonth() + 1;
             const daysOfMonth = [];
             for (let i = start; i <= stop; i++) {
@@ -83,28 +83,33 @@
             }
             return daysOfMonth;
           },
-          week: (start, stop) => {
-            //const start = start.getDay();
+          week: (start, length) => {
+            const stop = Number(start) + length;
             return this.daysOfWeek.slice(start, stop);
           },
-          day: (start, stop) => {
-            //const start = start.getHours();
-            return this.hours.slice(start, stop)
+          day: (start, length) => {
+            const stop = Number(start) + length;
+            return this.hours.slice(start, stop);
           }
         }
       }
     },
     methods: {
-      labels (type, stop) {
-        return this.labelsFunc[type](stop);
+      labels (type, start, stop) {
+        return this.labelsFunc[type](start, stop);
       }
     },
     computed: {
       chartData () {
+        const consumption = this.$store.state.consumption;
         const type = this.$store.state.consumptionLabelType;
-        const labels = this.labels(type, this.$store.state.consumption.length);
-        const series = [this.$store.state.consumption];
-        return {labels, series}
+        if (!Object.keys(consumption).length) {
+          return;
+        }
+
+        const labels = this.labels(type, Object.keys(consumption)[0], Object.keys(consumption).length);
+        const series = [Object.values(consumption)];
+        return {labels, series};
       }
     }
   }
@@ -143,6 +148,10 @@
     font-weight: bold;
     text-align: center;
     color: #de002a;
+
+    & svg {
+      display: none;
+    }
   }
 
   .ct-grid {

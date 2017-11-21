@@ -43,7 +43,6 @@
     flex-direction: column;
     flex: 0 0 auto;
     background: $background-third-color;
-    transition: transform 0.3s ease-in, opacity 0.3s ease-in;
     will-change: transform, opacity;
 
     &__button {

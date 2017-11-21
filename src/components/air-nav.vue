@@ -30,14 +30,8 @@
 
 <script>
 import {mapGetters} from 'vuex';
-import Constants from 'src/constants';
 
 export default {
-  data () {
-    return {
-
-    }
-  },
   computed: {
     ...mapGetters([
       'isLoggedIn'
@@ -52,6 +46,7 @@ export default {
       document.querySelector('.router-view').classList.toggle('router-view--translate');
     },
     hide () {
+      console.log(this.$refs.airnav, document.querySelector('.router-view'));
       this.$refs.airnav.classList.remove('air-nav--visible');
       document.querySelector('.router-view').classList.remove('router-view--translate');
     },
