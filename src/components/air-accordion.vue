@@ -1,5 +1,5 @@
 <template>
-    <div class="air-accordion" enhanced role="tablist">
+    <div class="air-accordion" role="tablist" enhanced>
       <slot></slot>
     </div>
 </template>
@@ -49,6 +49,7 @@
     mounted () {
       this.panels = this.$children;
       this.$el.addEventListener('panel-change', this.onPanelChange);
+      requestAnimationFrame(_ => this.$el.setAttribute('active', ''));
       this.calculateGeometries();
       this.movePanels();
     }
@@ -67,7 +68,7 @@
 
     &[enhanced] {
       position: relative;
-      visibility: visible;
+      visibility: hidden;
       height: 600px;
       overflow: hidden;
     }
@@ -76,6 +77,14 @@
       position: absolute;
       top: 0;
       width: 100%;
+    }
+
+    &[active] {
+      visibility: visible;
+    }
+
+    &[active] .air-accordion-panel {
+      transition: transform 0.3s ease-in, opacity 0.3s ease-in;
     }
   }
 </style>

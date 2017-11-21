@@ -41,7 +41,6 @@
     flex-grow: 1;
     background: linear-gradient(135deg, $background-first-color, $background-second-color 0%, $background-third-color 20%);
     transition: transform .5s cubic-bezier(0, 0, 0.3, 1);
-    will-change: opacity, transform;
   }
 
   .router-view--translate {
