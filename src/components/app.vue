@@ -29,6 +29,7 @@
   $background-first-color: #FFE803;
   $background-second-color: #C0ED70;
   $background-third-color: #D4E157;
+  $button-color: rgb(255, 23, 68);
 
   .main {
     display: flex;
@@ -55,6 +56,7 @@
     color: #FFF;
     font-size: 14px;
     font-weight: bold;
+    background: $button-color;
   }
 
   .router-fade-in-enter-active {

@@ -20,7 +20,7 @@ export default {
       })
     })
     .then(response => response.json())
-    .then(response => {
+    .then(async response => {
       // if field no provided
       if (response.error) {
         commit('TOAST_MESSAGE', {
@@ -37,12 +37,7 @@ export default {
         return;
       }
 
-      idbKeyVal.set('token', response.token).then(() => {
-        console.log('[IDB] token saved to indexDB.');
-      });
-
-      const user = decode(response.token);
-      commit('SAVE_USER', user);
+      const user = await setAndDecodeToken(response.token, commit);
 
       // if user is not linked with serial
       if (!user.serial) {
@@ -82,6 +77,93 @@ export default {
     }).catch(err => console.error(err));
   },
 
+  SYNC ({commit, state}, {serial, secret}) {
+    idbKeyVal.get('token').then(token => {
+      if (!token) return;
+      if (Token.isExpired(token)) {
+        return idbKeyVal.delete('token');
+      }
+
+      return fetch(`${Constant.API_URL}/sync`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          serial,
+          user_secret: secret
+        })
+      });
+    })
+    .then(response => {
+      if (response.status === 404) {
+        commit('TOAST_MESSAGE', {
+          messages: ['Le produit n\'existe pas']
+        });
+        return;
+      }
+
+      if (response.status === 403) {
+        commit('TOAST_MESSAGE', {
+          messages: ['Mauvais secret...']
+        });
+        return;
+      }
+
+      return response.json()
+    })
+    .then(response => {
+      if (response.error) {
+        commit('TOAST_MESSAGE', {
+          messages: response.error
+        });
+        return;
+      }
+
+      setAndDecodeToken(response.token, commit);
+
+      commit('TOAST_MESSAGE', {
+        messages: ['Produit synchronisé avec succès !']
+      });
+    })
+    .catch(err => console.error(err));
+  },
+
+  async UPDATE_PROFILE ({commit, state}, postalCode) {
+    try {
+      const response = await fetch(`${Constant.API_URL}/product`, {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json',
+          'authorization': `Bearer ${await idbKeyVal.get('token')}`
+        },
+        body: JSON.stringify({
+          serial: state.user.serial,
+          user_secret: state.user.user_secret,
+          postalCode
+        })
+      });
+
+      if (response.status === 412) {
+        commit('TOAST_MESSAGE', {
+          messages: ["Sérial non trouvé.", "Vous n'êtes pas synchronisé avec un appareil."],
+          duration: 5000
+        });
+        return;
+      }
+
+      const data = await response.json();
+      await setAndDecodeToken(response.token, commit);
+
+      commit('TOAST_MESSAGE', {
+        message: ['Profil mis à jour avec succès !']
+      });
+    } catch (err) {
+      console.error(err)
+    }
+  },
+
   GET_CONSUMPTION_DAY ({commit, state}) {
     fetchData(DateRangeHelper.dayRange, 'day', commit)
       .catch(err => console.error(err));
@@ -101,6 +183,15 @@ export default {
     fetchData(DateRangeHelper.yearRange, 'year', commit)
       .catch(err => console.error(err));
   }
+}
+
+const setAndDecodeToken = (token, commit) => {
+  idbKeyVal.set('token', token).then(() => {
+    console.log('[IDB] token saved to indexDB.');
+  });
+
+  const user = decode(token);
+  commit('SAVE_USER', user);
 }
 
 /**

@@ -1,20 +1,18 @@
 <template>
   <div class="air-param">
     <air-accordion class="air-param__accordion">
-      <air-accordion-panel title="Profil" aria-expanded="true">
-        <p>Et Epigonus quidem amictu tenus philosophus, ut apparuit, prece frustra temptata, sulcatis lateribus mortisque metu admoto turpi confessione cogitatorum socium, quae nulla erant, fuisse firmavit cum nec vidisset quicquam nec audisset penitus expers forensium rerum; Eusebius vero obiecta fidentius negans, suspensus in eodem gradu constantiae stetit latrocinium illud esse, non iudicium clamans.</p>
-        <p>Saraceni tamen nec amici nobis umquam nec hostes optandi, ultro citroque discursantes quicquid inveniri poterat momento temporis parvi vastabant milvorum rapacium similes, qui si praedam dispexerint celsius, volatu rapiunt celeri, aut nisi impetraverint, non inmorantur.</p>
-        <p>Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis professio medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa metuitur labes.</p>
+      <air-accordion-panel title="Sync" aria-expanded="true">
+        <form class="air-param__sync" @submit.prevent="sync">
+          <input type="text" name="serial" v-model="user.serial" class="air-param__sync-serial" placeholder="serial...">
+          <input type="text" name="secret" v-model="user.secret" class="air-param__sync-secret" placeholder="secret...">
+          <button type="submit" class="air-param__sync-button simple-button" tabindex="0">Synchroniser</button>
+        </form>
       </air-accordion-panel>
-      <air-accordion-panel title="OCR">
-        <p>Et Epigonus quidem amictu tenus philosophus, ut apparuit, prece frustra temptata, sulcatis lateribus mortisque metu admoto turpi confessione cogitatorum socium, quae nulla erant, fuisse firmavit cum nec vidisset quicquam nec audisset penitus expers forensium rerum; Eusebius vero obiecta fidentius negans, suspensus in eodem gradu constantiae stetit latrocinium illud esse, non iudicium clamans.</p>
-        <p>Saraceni tamen nec amici nobis umquam nec hostes optandi, ultro citroque discursantes quicquid inveniri poterat momento temporis parvi vastabant milvorum rapacium similes, qui si praedam dispexerint celsius, volatu rapiunt celeri, aut nisi impetraverint, non inmorantur.</p>
-        <p>Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis professio medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa metuitur labes.</p>
-      </air-accordion-panel>
-      <air-accordion-panel title="Test">
-        <p>Et Epigonus quidem amictu tenus philosophus, ut apparuit, prece frustra temptata, sulcatis lateribus mortisque metu admoto turpi confessione cogitatorum socium, quae nulla erant, fuisse firmavit cum nec vidisset quicquam nec audisset penitus expers forensium rerum; Eusebius vero obiecta fidentius negans, suspensus in eodem gradu constantiae stetit latrocinium illud esse, non iudicium clamans.</p>
-        <p>Saraceni tamen nec amici nobis umquam nec hostes optandi, ultro citroque discursantes quicquid inveniri poterat momento temporis parvi vastabant milvorum rapacium similes, qui si praedam dispexerint celsius, volatu rapiunt celeri, aut nisi impetraverint, non inmorantur.</p>
-        <p>Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis professio medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa metuitur labes.</p>
+      <air-accordion-panel title="Profil">
+        <form class="air-param__profile" @submit.prevent="update">
+          <input type="text" name="postalCode" v-model="user.postalCode" class="air-param__profile-postalcode" placeholder="code postal...">
+          <button type="submit" class="air-param__profile-button simple-button" tabindex="0">Mettre à jour</button>
+        </form>
       </air-accordion-panel>
     </air-accordion>
   </div>
@@ -31,18 +29,52 @@
     },
     data () {
       return {
-        firstName :'John',
-        lastName :'Doe',
-        postalCode :'1234'
+        serial: '',
+        secret: ''
+      }
+    },
+    computed: {
+      user () {
+        return this.$store.state.user;
+      }
+    },
+    methods: {
+      sync () {
+        this.$store.dispatch('SYNC', this.user);
+      },
+      update () {
+        this.$store.dispatch('UPDATE_PROFILE', this.user.postalCode)
       }
     }
   }
 </script>
 
 <style lang="scss">
+  $text-color: rgba(0, 0, 0, 0.74);
+  $nav-text-color: #464A3F;
+  $button-color: rgb(255, 23, 68);
+  $placeholder-color: rgba(255, 23, 68, 0.27);
+
   .air-param {
     display: flex;
+    justify-content: center;
     width: 100%;
+
+    &__sync, &__profile {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__sync input, &__profile input {
+      height: 30px;
+      width: 100%;
+      margin: 5px 0;
+      padding-left: 5px;
+      font-size: 16px;
+      color: $text-color;
+      border-radius: 3px;
+      border: none;
+    }
   }
 </style>
 

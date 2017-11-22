@@ -38,7 +38,8 @@
         let baseY = 0;
         this.panels.forEach((panel, index) => {
           panel.$el.style.transform = `translateY(${baseY + (this.headerHeight * index)}px)`;
-          panel.content.style.height = `${this.availableHeight}px`;
+          // NOTE this one causes 50% perf lost => 60fps to 30fps
+          //panel.content.style.height = `${this.availableHeight}px`;
 
           if (panel.$el.getAttribute('aria-expanded')) {
             baseY += this.availableHeight;
@@ -69,7 +70,8 @@
     &[enhanced] {
       position: relative;
       visibility: hidden;
-      height: 600px;
+      width: 75%;
+      height: 250px;
       overflow: hidden;
     }
 

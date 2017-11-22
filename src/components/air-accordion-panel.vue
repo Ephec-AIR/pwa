@@ -36,9 +36,6 @@
   $background-third-color: #D4E157;
 
   .air-accordion-panel {
-    position: absolute;
-    top: 0;
-    width: 100%;
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
@@ -54,23 +51,13 @@
       background: transparent;
       color: #777;
       border-bottom: 1px solid #444;
+      box-shadow: 0 5px 10px #A9CC51;
     }
 
     &__container {
       padding: 16px;
       overflow-y: auto;
       background: transparent;
-    }
-
-    .close {
-      transition: opacity 0.3s ease;
-      opacity: 0;
-    }
-
-    .open {
-      padding: 5px;
-      transition: opacity 1s ease;
-      opacity: 1;
     }
   }
 
