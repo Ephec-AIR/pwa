@@ -63,15 +63,15 @@
     flex-direction: column;
     width: 100%;
     margin: 0 15px;
-    background: transparent;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.4);
-    border-radius: 3px;
+    background: #FFF;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
 
     &[enhanced] {
       position: relative;
       visibility: hidden;
       width: 75%;
-      height: 250px;
+      height: 270px;
       overflow: hidden;
     }
 

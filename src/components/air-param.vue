@@ -66,14 +66,14 @@
     }
 
     &__sync input, &__profile input {
-      height: 30px;
+      height: 40px;
       width: 100%;
       margin: 5px 0;
       padding-left: 5px;
-      font-size: 16px;
+      font-size: 14px;
       color: $text-color;
       border-radius: 3px;
-      border: none;
+      border: 1px solid #777;
     }
   }
 </style>

@@ -6,7 +6,8 @@ export default {
       userId: user.userId,
       username: user.username,
       serial: user.serial,
-      secret: user.user_secret
+      secret: user.user_secret,
+      postalCode: user.postalCode
     };
   },
   REMOVE_USER (state) {

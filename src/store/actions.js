@@ -154,10 +154,10 @@ export default {
       }
 
       const data = await response.json();
-      await setAndDecodeToken(response.token, commit);
+      await setAndDecodeToken(data.token, commit);
 
       commit('TOAST_MESSAGE', {
-        message: ['Profil mis à jour avec succès !']
+        messages: ['Profil mis à jour avec succès !']
       });
     } catch (err) {
       console.error(err)
@@ -186,12 +186,13 @@ export default {
 }
 
 const setAndDecodeToken = (token, commit) => {
-  idbKeyVal.set('token', token).then(() => {
+  return idbKeyVal.set('token', token).then(() => {
     console.log('[IDB] token saved to indexDB.');
-  });
 
-  const user = decode(token);
-  commit('SAVE_USER', user);
+    const user = decode(token);
+    commit('SAVE_USER', user);
+    return user;
+  });
 }
 
 /**

@@ -1,9 +1,7 @@
 <template>
   <div class="main" ref="container">
     <air-nav></air-nav>
-    <transition name="router-fade-in" mode="out-in">
-      <router-view class="router-view"><!-- router views --></router-view>
-    </transition>
+    <router-view class="router-view"><!-- router views --></router-view>
     <air-toast></air-toast>
   </div>
 </template>
@@ -60,7 +58,7 @@
   }
 
   .router-fade-in-enter-active {
-    transition: opacity 0.2s cubic-bezier(0, 0, 0.3, 1);
+    transition: opacity 0.1s cubic-bezier(0, 0, 0.3, 1);
   }
 
   .router-fade-in-enter, .router-fade-in-leave-active {
