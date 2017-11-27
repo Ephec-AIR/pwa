@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <air-tips></air-tips>
+    <air-price></air-price>
     <chartist
       class="air-graph"
       type="Line"
@@ -20,12 +21,14 @@
 <script>
   //import Chartist from 'chartist';
   import AirTips from 'components/air-tips';
+  import AirPrice from 'components/air-price';
   import AirGraphControls from 'components/air-graph-controls';
   import AirGraphConsumption from 'components/air-graph-consumption';
 
   export default {
     components: {
       AirTips,
+      AirPrice,
       AirGraphControls,
       AirGraphConsumption
     },
@@ -97,6 +100,18 @@
     methods: {
       labels (type, start, stop) {
         return this.labelsFunc[type](start, stop);
+      },
+      onShowNowConsumption (evt) {
+        const consumption = this.$store.state.consumption.now.values;
+        this.chartData.series[0] = Object.values(consumption);
+      },
+      onShowLastConsumption (evt) {
+        const consumption = this.$store.state.consumption.before.values;
+        this.chartData.series[0] = Object.values(consumption);
+      },
+      onShowAverage (evt) {
+        const consumption = this.$store.state.consumption.now.values;
+        this.chartData.series[0] = Object.values(consumption);
       }
     },
     computed: {

@@ -18,8 +18,28 @@ export default new Vuex.Store({
       username: '',
       serial: ''
     },
-    consumptionLabelType: "month",
-    consumption: {}
+    graph: {
+      consumptionNow: true,
+      consumptionBefore: false,
+      consumptionAverage: false
+    },
+    consumptionLabelType: 'month',
+    consumption: {
+      before: {
+        values: {},
+        price: 0
+      },
+      now: {
+        values: {},
+        price: 0
+      }
+    },
+    average: {
+      serial: '',
+      value: 0,
+      username: '',
+      values: {}
+    }
   },
   actions,
   mutations,

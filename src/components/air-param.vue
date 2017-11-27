@@ -11,6 +11,13 @@
       <air-accordion-panel title="Profil">
         <form class="air-param__profile" @submit.prevent="update">
           <input type="text" name="postalCode" v-model="user.postalCode" class="air-param__profile-postalcode" placeholder="code postal...">
+          <select name="supplier" v-model="user.supplier" class="air-param__profile-supplier">
+            <option value="EDF Luminus">EDF Luminus</option>
+            <option value="Engie Electrabel">Engie Electrabel</option>
+            <option value="Eni">Eni</option>
+            <option value="Essent">Essent</option>
+            <option value="Lampiris">Lampiris</option>
+          </select>
           <button type="submit" class="air-param__profile-button simple-button" tabindex="0">Mettre à jour</button>
         </form>
       </air-accordion-panel>
@@ -43,7 +50,7 @@
         this.$store.dispatch('SYNC', this.user);
       },
       update () {
-        this.$store.dispatch('UPDATE_PROFILE', this.user.postalCode)
+        this.$store.dispatch('UPDATE_PROFILE', this.user.postalCode, this.user.supplier)
       }
     }
   }

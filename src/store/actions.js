@@ -130,7 +130,7 @@ export default {
     .catch(err => console.error(err));
   },
 
-  async UPDATE_PROFILE ({commit, state}, postalCode) {
+  async UPDATE_PROFILE ({commit, state}, postalCode, supplier) {
     try {
       const response = await fetch(`${Constant.API_URL}/product`, {
         method: 'PUT',
@@ -141,7 +141,8 @@ export default {
         body: JSON.stringify({
           serial: state.user.serial,
           user_secret: state.user.user_secret,
-          postalCode
+          postalCode,
+          supplier
         })
       });
 
@@ -182,6 +183,35 @@ export default {
   GET_CONSUMPTION_YEAR ({commit, state}) {
     fetchData(DateRangeHelper.yearRange, 'year', commit)
       .catch(err => console.error(err));
+  },
+
+  GET_AVERAGE ({commit, state}, graph, toShow) {
+    if (toShow) {
+      // not the best
+      let range;
+      switch (graph) {
+        case 'day': range = DateRangeHelper.dayRange;
+          break;
+        case 'week': range = DateRangeHelper.weekRange;
+          break;
+        case 'month': range = DateRangeHelper.monthRange;
+          break;
+        case 'year': range = DateRangeHelper.yearRange;
+          break;
+        default: throw new Error('unknown type');
+          break;
+      }
+      const type = state.consumptionLabelType;
+
+      fetchAverage(range, type, graph, commit)
+        .catch(err => console.error(err));
+    }
+
+    commit('SET_GRAPH_TO_SHOW', graph, toShow);
+  },
+
+  GRAPH_TO_SHOW ({commit, state}, graph, toShow) {
+    commit('SET_GRAPH_TO_SHOW', graph, toShow);
   }
 }
 
@@ -192,6 +222,21 @@ const setAndDecodeToken = (token, commit) => {
     const user = decode(token);
     commit('SAVE_USER', user);
     return user;
+  });
+}
+
+const fetchAverage = async ({start, end}, type, graph, commit) => {
+  const response = await fetch(`${Constant.API_URL}/match?start=${start}&end=${end}&type=${type}`, {
+    method: 'GET',
+    headers: {
+      authorization: `Bearer ${await idbKeyVal.get('token')}`
+    }
+  });
+
+  const average = await response.json();
+
+  commit('SAVE_AVERAGE', {
+    average
   });
 }
 
@@ -250,7 +295,6 @@ const fetchData = async ({start, end}, type, commit) => {
   }
 
   const fetchData = await response.json();
-  const idbData = [];
 
   // 3. Put data in IDB
   // transaction = db.transaction('consumption', 'readwrite');
@@ -260,7 +304,7 @@ const fetchData = async ({start, end}, type, commit) => {
 
   // 4. store data
   commit('CONSUMPTION_LABEL_TYPE', type);
-  storeConsumption(commit, idbData, fetchData);
+  storeConsumption(commit, fetchData);
 }
 
 const getIDBByRange = (index, range) => {
@@ -277,9 +321,9 @@ const getIDBByRange = (index, range) => {
   });
 }
 
-const storeConsumption = (commit, idbData = [], fetchData = []) => {
+const storeConsumption = (commit, fetchData = []) => {
   commit('SAVE_CONSUMPTION', {
-    consumption: {...idbData, ...fetchData}
+    consumption: fetchData
   });
 }
 

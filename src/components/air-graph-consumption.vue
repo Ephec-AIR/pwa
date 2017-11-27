@@ -1,19 +1,19 @@
 <template>
   <div class="consumption-type">
     <div class="consumption-now">
-      <input type="checkbox" id="consumption-now" class="consumption-checkbox consumption-now--checkbox">
+      <input type="checkbox" id="consumption-now" class="consumption-checkbox consumption-now--checkbox" @change="e => show(e, 'consumptionNow')">
       <label for="consumption-now" class="consumption-label consumption-now--label">
         Ma consommation
       </label>
     </div>
     <div class="consumption-before">
-      <input type="checkbox" id="consumption-before" class="consumption-checkbox consumption-before--checkbox">
+      <input type="checkbox" id="consumption-before" class="consumption-checkbox consumption-before--checkbox" @change="e => show(e, 'consumptionBefore')">
       <label for="consumption-before" class="consumption-label consumption-before--label">
         Ma consommation d'avant
       </label>
     </div>
     <div class="consumption-users">
-      <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox">
+      <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox" @change="e => show(e, 'consumptionAverage')">
       <label for="consumption-users" class="consumption-label consumption-users--label">
         La moyenne des utilisateurs
       </label>
@@ -23,7 +23,14 @@
 
 <script>
   export default {
-
+    methods: {
+      show (evt, graph) {
+        this.$store.dispatch('GRAPH_TO_SHOW', graph, evt.target.checked);
+      },
+      showAndFetchAverageIfNeeded (evt) {
+        this.$store.dispatch('GET_AVERAGE', 'consumptionAverage', evt.target.checked);
+      }
+    }
   }
 </script>
 
