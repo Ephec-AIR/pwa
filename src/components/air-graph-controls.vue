@@ -3,28 +3,23 @@
     <section class="air-graph-controls--choices">
       <div class="air-graph-controls--choices__container">
         <div class="air-graph-controls--choices__left-arrow" @click="selectChoice(-1)"></div>
-        <button class="controls-button air-graph-controls--choices__day" @click="onClick" @focus="getConsumptionDay">JOUR</button>
+        <button class="controls-button air-graph-controls--choices__day" @click="onClick" @focus="getConsumption($event, 'day')">JOUR</button>
         <div class="air-graph-controls--choices__right-arrow" @click="selectChoice(1)"></div>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__week" @click="onClick" @focus="getConsumptionWeek">SEMAINE</button>
+        <button class="controls-button air-graph-controls--choices__week" @click="onClick" @focus="getConsumption($event, 'week')">SEMAINE</button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__month" @click="onClick" @focus="getConsumptionMonth">MOIS</button>
+        <button class="controls-button air-graph-controls--choices__month" @click="onClick" @focus="getConsumption($event, 'month')">MOIS</button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__year" @click="onClick" @focus="getConsumptionYear">ANNEE</button>
+        <button class="controls-button air-graph-controls--choices__year" @click="onClick" @focus="getConsumption($event, 'year')">ANNEE</button>
       </div>
-    </section>
-    <section class="air-graph-controls--compare" hidden>
-      <button class="simple-button">COMPARER</button>
     </section>
   </div>
 </template>
 
 <script>
-  import {mapActions} from 'vuex';
-
   export default {
     data () {
       return {
@@ -42,12 +37,14 @@
       onResize () {
         this.viewportWidth = window.innerWidth;
       },
-      ...mapActions({
-        getConsumptionDay: 'GET_CONSUMPTION_DAY',
-        getConsumptionWeek: 'GET_CONSUMPTION_WEEK',
-        getConsumptionMonth: 'GET_CONSUMPTION_MONTH',
-        getConsumptionYear: 'GET_CONSUMPTION_YEAR',
-      }),
+      getConsumption (evt, type) {
+        this.$store.dispatch('GET_CONSUMPTION', {type}).then(_ => {
+          const customEvent = new CustomEvent('label-change', {
+            bubbles: true
+          });
+          evt.target.dispatchEvent(customEvent);
+        })
+      },
       onClick (evt) {
         this.index = this.buttons.findIndex(b => b == evt.target);
         this.moveArrows();

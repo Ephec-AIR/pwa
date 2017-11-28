@@ -7,7 +7,8 @@ export default {
       username: user.username,
       serial: user.serial,
       secret: user.user_secret,
-      postalCode: user.postalCode
+      postalCode: user.postalCode,
+      supplier: user.supplier
     };
   },
   REMOVE_USER (state) {
@@ -26,9 +27,9 @@ export default {
   SAVE_AVERAGE (state, {average}) {
     state.average = average;
   },
-  SET_GRAPH_TO_SHOW (state, {graph, toShow}) {
-    state['graph'][graph] = toShow;
-  },
+  // SET_GRAPH_TO_SHOW (state, {graph, toShow}) {
+  //   state['graph'][graph] = toShow;
+  // },
   TOAST_MESSAGE (state, options) {
     const duration = options.duration || 3000;
     state.toast = {

@@ -53,6 +53,7 @@
       border-radius: 0px;
       background: #FFF;
       color: #444;
+      outline: none;
     }
 
     &__container {

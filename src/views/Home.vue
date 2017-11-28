@@ -1,16 +1,18 @@
 <template>
   <div class="home">
     <air-tips></air-tips>
-    <air-price></air-price>
-    <chartist
-      class="air-graph"
-      type="Line"
-      :data="chartData"
-      :options="chartOptions"
-      :responsive-options="responsiveOptions"
-      :event-handlers="eventHandlers"
-    >
-    </chartist>
+    <section class="air-graph__container">
+      <air-price></air-price>
+      <chartist
+        class="air-graph"
+        type="Line"
+        :data="chartData"
+        :options="chartOptions"
+        :responsive-options="responsiveOptions"
+        :event-handlers="eventHandlers"
+      >
+      </chartist>
+    </section>
     <section class="air-graph-controls">
       <air-graph-consumption></air-graph-consumption>
       <air-graph-controls></air-graph-controls>
@@ -39,6 +41,10 @@
         hours: ["00h00", "01h00", "02h00", "03h00", "04h00", "05h00", "06h00", "07h00", "08h00",
           "09h00", "10h00", "11h00", "12h00", "13h00", "14h00", "15h00", "16h00", "17h00", "18h00",
           "19h00", "20h00", "21h00", "22h00", "23h00"],
+        chartData: {
+          series: [],
+          labels: []
+        },
         chartOptions: {
           onlyInteger: true,
           fullWidth: true,
@@ -101,31 +107,33 @@
       labels (type, start, stop) {
         return this.labelsFunc[type](start, stop);
       },
-      onShowNowConsumption (evt) {
+      onToggleNowConsumption (evt) {
         const consumption = this.$store.state.consumption.now.values;
-        this.chartData.series[0] = Object.values(consumption);
+        console.log(consumption);
+        this.chartData.series[0] = evt.target.checked ? Object.values(consumption) : [];
       },
-      onShowLastConsumption (evt) {
+      onToggleLastConsumption (evt) {
         const consumption = this.$store.state.consumption.before.values;
-        this.chartData.series[0] = Object.values(consumption);
+        this.chartData.series[1] = evt.target.checked ? Object.values(consumption) : [];
       },
-      onShowAverage (evt) {
+      onToggleAverageConsumption (evt) {
+        const consumption = this.$store.state.average.values;
+        this.chartData.series[2] = evt.target.checked ? Object.values(consumption) : [];
+      },
+      onLabelChange (evt) {
+        const type = this.$store.state.consumptionLabelType;
+        // to change ?
         const consumption = this.$store.state.consumption.now.values;
-        this.chartData.series[0] = Object.values(consumption);
+        console.log('TYPE: ', type);
+        const labels = this.labels(type, Object.keys(consumption)[0], Object.keys(consumption).length);
+        this.chartData.labels = labels;
       }
     },
-    computed: {
-      chartData () {
-        const consumption = this.$store.state.consumption;
-        const type = this.$store.state.consumptionLabelType;
-        if (!Object.keys(consumption).length) {
-          return;
-        }
-
-        const labels = this.labels(type, Object.keys(consumption)[0], Object.keys(consumption).length);
-        const series = [Object.values(consumption)];
-        return {labels, series};
-      }
+    mounted () {
+      document.addEventListener('toggle-now-consumption', this.onToggleNowConsumption);
+      document.addEventListener('toggle-last-consumption', this.onToggleLastConsumption);
+      document.addEventListener('toggle-average-consumption', this.onToggleAverageConsumption);
+      document.addEventListener('label-change', this.onLabelChange);
     }
   }
 </script>
@@ -142,6 +150,14 @@
     margin: 10px;
   }
 
+  .air-graph__container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-left: 50px;
+    height: 95%;
+  }
+
   .air-graph-controls {
     display: flex;
     justify-content: space-between;
@@ -149,9 +165,9 @@
   }
 
   .air-graph {
-    flex: 1;
-    margin-left: 50px;
-    height: 95%;
+    // flex: 1;
+    // margin-left: 50px;
+    // height: 95%;
   }
 
   .air-graph--nodata {
@@ -175,19 +191,19 @@
     stroke-dasharray: 2px
   }
 
-  .ct-series-a .ct-area {
+  .ct-series-a .ct-area, .ct-series-b .ct-area, .ct-series-c .ct-area {
     fill: #d70206;
     fill-opacity: 0.1;
     stroke: none;
   }
 
-  .ct-series-a .ct-line {
+  .ct-series-a .ct-line, .ct-series-b .ct-line, .ct-series-c .ct-line {
     stroke: #d70206;
     fill: none;
     stroke-width: 3px;
   }
 
-  .ct-series-a .ct-point {
+  .ct-series-a .ct-point, .ct-series-b .ct-point, .ct-series-c .ct-point {
     stroke: #d70206;
     stroke-width: 10px;
     stroke-linecap: round;

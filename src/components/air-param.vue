@@ -10,14 +10,16 @@
       </air-accordion-panel>
       <air-accordion-panel title="Profil">
         <form class="air-param__profile" @submit.prevent="update">
-          <input type="text" name="postalCode" v-model="user.postalCode" class="air-param__profile-postalcode" placeholder="code postal...">
-          <select name="supplier" v-model="user.supplier" class="air-param__profile-supplier">
-            <option value="EDF Luminus">EDF Luminus</option>
-            <option value="Engie Electrabel">Engie Electrabel</option>
-            <option value="Eni">Eni</option>
-            <option value="Essent">Essent</option>
-            <option value="Lampiris">Lampiris</option>
-          </select>
+          <div class="air-param__profile-inputs">
+            <input type="text" name="postalCode" v-model="user.postalCode" class="air-param__profile-postalcode" placeholder="code postal...">
+            <select name="supplier" v-model="user.supplier" class="air-param__profile-supplier">
+              <option value="EDF Luminus">EDF Luminus</option>
+              <option value="Engie Electrabel">Engie Electrabel</option>
+              <option value="Eni">Eni</option>
+              <option value="Essent">Essent</option>
+              <option value="Lampiris">Lampiris</option>
+            </select>
+          </div>
           <button type="submit" class="air-param__profile-button simple-button" tabindex="0">Mettre à jour</button>
         </form>
       </air-accordion-panel>
@@ -50,7 +52,8 @@
         this.$store.dispatch('SYNC', this.user);
       },
       update () {
-        this.$store.dispatch('UPDATE_PROFILE', this.user.postalCode, this.user.supplier)
+        console.log(this.user.supplier)
+        this.$store.dispatch('UPDATE_PROFILE', {postalCode: this.user.postalCode, supplier: this.user.supplier})
       }
     }
   }
@@ -81,6 +84,15 @@
       color: $text-color;
       border-radius: 3px;
       border: 1px solid #777;
+    }
+
+    &__profile-inputs {
+      display: flex;
+      align-items: center;
+    }
+
+    &__profile-postalCode, &__profile-supplier {
+      margin: 5px
     }
   }
 </style>

@@ -130,7 +130,7 @@ export default {
     .catch(err => console.error(err));
   },
 
-  async UPDATE_PROFILE ({commit, state}, postalCode, supplier) {
+  async UPDATE_PROFILE ({commit, state}, {postalCode, supplier}) {
     try {
       const response = await fetch(`${Constant.API_URL}/product`, {
         method: 'PUT',
@@ -155,6 +155,15 @@ export default {
       }
 
       const data = await response.json();
+
+      // if field no provided
+      if (data.error) {
+        commit('TOAST_MESSAGE', {
+          messages: data.error
+        });
+        return;
+      }
+
       await setAndDecodeToken(data.token, commit);
 
       commit('TOAST_MESSAGE', {
@@ -165,64 +174,42 @@ export default {
     }
   },
 
-  GET_CONSUMPTION_DAY ({commit, state}) {
-    fetchData(DateRangeHelper.dayRange, 'day', commit)
+  GET_CONSUMPTION ({commit, state}, {type}) {
+    console.log('FETCH !');
+    const range = getRange(type);
+    fetchData(range, type, commit)
       .catch(err => console.error(err));
   },
 
-  GET_CONSUMPTION_WEEK ({commit, state}) {
-    fetchData(DateRangeHelper.weekRange, 'week', commit)
+  // GET_CONSUMPTION_DAY ({commit, state}) {
+  //   fetchData(DateRangeHelper.dayRange, 'day', commit)
+  //     .catch(err => console.error(err));
+  // },
+
+  // GET_CONSUMPTION_WEEK ({commit, state}) {
+  //   fetchData(DateRangeHelper.weekRange, 'week', commit)
+  //     .catch(err => console.error(err));
+  // },
+
+  // GET_CONSUMPTION_MONTH ({commit, state}) {
+  //   fetchData(DateRangeHelper.monthRange, 'month', commit)
+  //     .catch(err => console.error(err));
+  // },
+
+  // GET_CONSUMPTION_YEAR ({commit, state}) {
+  //   fetchData(DateRangeHelper.yearRange, 'year', commit)
+  //     .catch(err => console.error(err));
+  // },
+
+  GET_AVERAGE ({commit, state}, {graph, toShow}) {
+    const range = getRange(type);
+    const type = state.consumptionLabelType;
+
+    fetchAverage(range, type, graph, commit)
       .catch(err => console.error(err));
-  },
 
-  GET_CONSUMPTION_MONTH ({commit, state}) {
-    fetchData(DateRangeHelper.monthRange, 'month', commit)
-      .catch(err => console.error(err));
-  },
-
-  GET_CONSUMPTION_YEAR ({commit, state}) {
-    fetchData(DateRangeHelper.yearRange, 'year', commit)
-      .catch(err => console.error(err));
-  },
-
-  GET_AVERAGE ({commit, state}, graph, toShow) {
-    if (toShow) {
-      // not the best
-      let range;
-      switch (graph) {
-        case 'day': range = DateRangeHelper.dayRange;
-          break;
-        case 'week': range = DateRangeHelper.weekRange;
-          break;
-        case 'month': range = DateRangeHelper.monthRange;
-          break;
-        case 'year': range = DateRangeHelper.yearRange;
-          break;
-        default: throw new Error('unknown type');
-          break;
-      }
-      const type = state.consumptionLabelType;
-
-      fetchAverage(range, type, graph, commit)
-        .catch(err => console.error(err));
-    }
-
-    commit('SET_GRAPH_TO_SHOW', graph, toShow);
-  },
-
-  GRAPH_TO_SHOW ({commit, state}, graph, toShow) {
-    commit('SET_GRAPH_TO_SHOW', graph, toShow);
+    //commit('SET_GRAPH_TO_SHOW', {graph, toShow});
   }
-}
-
-const setAndDecodeToken = (token, commit) => {
-  return idbKeyVal.set('token', token).then(() => {
-    console.log('[IDB] token saved to indexDB.');
-
-    const user = decode(token);
-    commit('SAVE_USER', user);
-    return user;
-  });
 }
 
 const fetchAverage = async ({start, end}, type, graph, commit) => {
@@ -233,10 +220,59 @@ const fetchAverage = async ({start, end}, type, graph, commit) => {
     }
   });
 
-  const average = await response.json();
+  if (response.status === 412) {
+    commit('TOAST_MESSAGE', {
+      messages: [
+        "Vous n'êtes pas synchronisé avec un appareil.",
+        "Votre profile n'est pas à jour.",
+        "Code postal et/ou fournisseur non indiqué."
+      ],
+      duration: 8000
+    });
+    return;
+  }
+
+  const data = await response.json();
+
+  // Not really an error, just no better consummer than you in your area.
+  if (data.error) {
+    commit('TOAST_MESSAGE', {
+      messages: [data.error],
+      duration: 5000
+    });
+    return;
+  }
 
   commit('SAVE_AVERAGE', {
-    average
+    average: data
+  });
+}
+
+const getRange = (type) => {
+  let range;
+  switch (type) {
+    case 'day': range = DateRangeHelper.dayRange;
+      break;
+    case 'week': range = DateRangeHelper.weekRange;
+      break;
+    case 'month': range = DateRangeHelper.monthRange;
+      break;
+    case 'year': range = DateRangeHelper.yearRange;
+      break;
+    default: throw new Error('unknown type');
+      break;
+  }
+
+  return range;
+}
+
+const setAndDecodeToken = (token, commit) => {
+  return idbKeyVal.set('token', token).then(() => {
+    console.log('[IDB] token saved to indexDB.');
+
+    const user = decode(token);
+    commit('SAVE_USER', user);
+    return user;
   });
 }
 

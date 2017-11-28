@@ -1,19 +1,19 @@
 <template>
   <div class="consumption-type">
     <div class="consumption-now">
-      <input type="checkbox" id="consumption-now" class="consumption-checkbox consumption-now--checkbox" @change="e => show(e, 'consumptionNow')">
+      <input type="checkbox" id="consumption-now" class="consumption-checkbox consumption-now--checkbox" @change="show($event, 'toggle-now-consumption')">
       <label for="consumption-now" class="consumption-label consumption-now--label">
         Ma consommation
       </label>
     </div>
     <div class="consumption-before">
-      <input type="checkbox" id="consumption-before" class="consumption-checkbox consumption-before--checkbox" @change="e => show(e, 'consumptionBefore')">
+      <input type="checkbox" id="consumption-before" class="consumption-checkbox consumption-before--checkbox" @change="show($event, 'toggle-last-consumption')">
       <label for="consumption-before" class="consumption-label consumption-before--label">
         Ma consommation d'avant
       </label>
     </div>
-    <div class="consumption-users">
-      <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox" @change="e => show(e, 'consumptionAverage')">
+    <div class="consumption-users" v-show="showAvgButton">
+      <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox" @change="showAndFetchAverageIfNeeded($event, 'toggle-average-consumption')">
       <label for="consumption-users" class="consumption-label consumption-users--label">
         La moyenne des utilisateurs
       </label>
@@ -24,11 +24,32 @@
 <script>
   export default {
     methods: {
-      show (evt, graph) {
-        this.$store.dispatch('GRAPH_TO_SHOW', graph, evt.target.checked);
+      show (evt, evtName) {
+        const customEvent = new CustomEvent(evtName, {
+          bubbles: true
+        });
+        evt.target.dispatchEvent(customEvent);
       },
-      showAndFetchAverageIfNeeded (evt) {
-        this.$store.dispatch('GET_AVERAGE', 'consumptionAverage', evt.target.checked);
+      showAndFetchAverageIfNeeded (evt, evtName) {
+        const checked = evt.target.checked;
+        if (checked) {
+          this.$store.dispatch('GET_AVERAGE', {graph: 'consumptionAverage'}).then(_ => {
+            this.dispatchEventAverage(evt, evtName);
+          });
+        } else {
+          this.dispatchEventAverage(evt, evtName);
+        }
+      },
+      dispatchEventAverage (evt, evtName) {
+        const customEvent = new CustomEvent(evtName, {
+          bubbles: true
+        });
+        evt.target.dispatchEvent(customEvent);
+      }
+    },
+    computed: {
+      showAvgButton () {
+        return (this.$store.consumptionLabelType === 'month' || this.$store.consumptionLabelType === 'year');
       }
     }
   }
