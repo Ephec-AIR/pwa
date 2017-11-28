@@ -2,18 +2,18 @@
   <div class="air-graph-controls">
     <section class="air-graph-controls--choices">
       <div class="air-graph-controls--choices__container">
-        <div class="air-graph-controls--choices__left-arrow" @click="selectChoice(-1)"></div>
-        <button class="controls-button air-graph-controls--choices__day" @click="onClick" @focus="getConsumption($event, 'day')">JOUR</button>
-        <div class="air-graph-controls--choices__right-arrow" @click="selectChoice(1)"></div>
+        <div class="air-graph-controls--choices__left-arrow" @click="selectChoice($event, -1)"></div>
+        <button class="controls-button air-graph-controls--choices__day" data-type="day" @click="onClick($event, 'day')">JOUR</button>
+        <div class="air-graph-controls--choices__right-arrow" @click="selectChoice($event, 1)"></div>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__week" @click="onClick" @focus="getConsumption($event, 'week')">SEMAINE</button>
+        <button class="controls-button air-graph-controls--choices__week" data-type="week" @click="onClick($event, 'week')">SEMAINE</button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__month" @click="onClick" @focus="getConsumption($event, 'month')">MOIS</button>
+        <button class="controls-button air-graph-controls--choices__month" data-type="month" @click="onClick($event, 'month')">MOIS</button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__year" @click="onClick" @focus="getConsumption($event, 'year')">ANNEE</button>
+        <button class="controls-button air-graph-controls--choices__year" data-type="year" @click="onClick($event, 'year')">ANNEE</button>
       </div>
     </section>
   </div>
@@ -39,17 +39,19 @@
       },
       getConsumption (evt, type) {
         this.$store.dispatch('GET_CONSUMPTION', {type}).then(_ => {
+          this.$store.commit('CONSUMPTION_LABEL_TYPE', type);
           const customEvent = new CustomEvent('label-change', {
             bubbles: true
           });
           evt.target.dispatchEvent(customEvent);
         })
       },
-      onClick (evt) {
-        this.index = this.buttons.findIndex(b => b == evt.target);
+      onClick (evt, type) {
+        this.index = this.buttons.findIndex(b => b === evt.target);
         this.moveArrows();
+        this.getConsumption(evt, type);
       },
-      moveIndex (increment) {
+      moveIndex (evt, increment) {
         this.lastIndex = this.index;
         this.index += increment;
 
@@ -59,11 +61,12 @@
           this.index = 0;
         }
 
+        this.getConsumption(evt, this.buttons[this.index].dataset.type);
         this.buttons[this.index].focus();
       },
-      selectChoice (increment) {
+      selectChoice (evt, increment) {
         if (this.viewportWidth > 530) return;
-        this.moveIndex(increment);
+        this.moveIndex(evt, increment);
         this.moveChoicesWhenResponsive();
       },
       moveChoicesWhenResponsive () {
@@ -71,6 +74,14 @@
         this.buttons[this.index].style.opacity = 1;
       },
       moveArrows () {
+        this.buttons.forEach((b, index) => {
+          if (index === this.index) {
+            this.buttons[index].classList.add('air-graph-controls--choices__focus');
+            return;
+          }
+          this.buttons[index].classList.remove('air-graph-controls--choices__focus');
+        });
+
         this.leftArrow.style.transform = `translateY(${this.index * this.DELTAY}px)`;
         this.rightArrow.style.transform = `translateY(${this.index * this.DELTAY}px)`;
       },
@@ -81,10 +92,10 @@
 
         switch(evt.keyCode) {
           case 38: // UP
-            this.moveIndex(-1)
+            this.moveIndex(evt, -1)
             break;
           case 40: // DOWN
-            this.moveIndex(1);
+            this.moveIndex(evt, 1);
             break;
           default:
             break;
@@ -142,9 +153,9 @@
         outline: none;
         width: 150px;
 
-        &:focus {
-           color: $text-color;
-        }
+        // &:focus {
+        //    color: $text-color;
+        // }
       }
 
       &__left-arrow, &__right-arrow{
@@ -164,16 +175,12 @@
       }
 
       &__day, &__week, &__month, &__year {
-        background: #00C853;
         margin: 5px 0;
       }
     }
 
-    &--compare {
-      button {
-        background: #FF3D00;
-
-      }
+    &--choices .air-graph-controls--choices__focus {
+        color: $text-color;
     }
   }
 
@@ -184,10 +191,6 @@
       align-items: center;
       width: 300px;
       height: 50px;
-
-      &__choices {
-
-      }
     }
 
     .air-graph-controls--choices__container {

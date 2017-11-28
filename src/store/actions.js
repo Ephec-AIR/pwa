@@ -175,7 +175,6 @@ export default {
   },
 
   GET_CONSUMPTION ({commit, state}, {type}) {
-    console.log('FETCH !');
     const range = getRange(type);
     fetchData(range, type, commit)
       .catch(err => console.error(err));
@@ -339,7 +338,6 @@ const fetchData = async ({start, end}, type, commit) => {
   // transaction.complete;
 
   // 4. store data
-  commit('CONSUMPTION_LABEL_TYPE', type);
   storeConsumption(commit, fetchData);
 }
 

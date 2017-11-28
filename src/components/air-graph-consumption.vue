@@ -12,7 +12,7 @@
         Ma consommation d'avant
       </label>
     </div>
-    <div class="consumption-users" v-show="showAvgButton">
+    <div class="consumption-users" v-show="type === 'month' || type === 'year'">
       <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox" @change="showAndFetchAverageIfNeeded($event, 'toggle-average-consumption')">
       <label for="consumption-users" class="consumption-label consumption-users--label">
         La moyenne des utilisateurs
@@ -48,8 +48,8 @@
       }
     },
     computed: {
-      showAvgButton () {
-        return (this.$store.consumptionLabelType === 'month' || this.$store.consumptionLabelType === 'year');
+      type () {
+        return this.$store.consumptionLabelType;
       }
     }
   }

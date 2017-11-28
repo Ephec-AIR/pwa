@@ -124,7 +124,6 @@
         const type = this.$store.state.consumptionLabelType;
         // to change ?
         const consumption = this.$store.state.consumption.now.values;
-        console.log('TYPE: ', type);
         const labels = this.labels(type, Object.keys(consumption)[0], Object.keys(consumption).length);
         this.chartData.labels = labels;
       }
