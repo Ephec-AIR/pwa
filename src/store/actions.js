@@ -176,42 +176,20 @@ export default {
 
   GET_CONSUMPTION ({commit, state}, {type}) {
     const range = getRange(type);
-    fetchData(range, type, commit)
+    return fetchData(range, type, commit)
       .catch(err => console.error(err));
   },
 
-  // GET_CONSUMPTION_DAY ({commit, state}) {
-  //   fetchData(DateRangeHelper.dayRange, 'day', commit)
-  //     .catch(err => console.error(err));
-  // },
-
-  // GET_CONSUMPTION_WEEK ({commit, state}) {
-  //   fetchData(DateRangeHelper.weekRange, 'week', commit)
-  //     .catch(err => console.error(err));
-  // },
-
-  // GET_CONSUMPTION_MONTH ({commit, state}) {
-  //   fetchData(DateRangeHelper.monthRange, 'month', commit)
-  //     .catch(err => console.error(err));
-  // },
-
-  // GET_CONSUMPTION_YEAR ({commit, state}) {
-  //   fetchData(DateRangeHelper.yearRange, 'year', commit)
-  //     .catch(err => console.error(err));
-  // },
-
-  GET_AVERAGE ({commit, state}, {graph, toShow}) {
-    const range = getRange(type);
+  GET_AVERAGE ({commit, state}) {
     const type = state.consumptionLabelType;
+    const range = getRange(type);
 
-    fetchAverage(range, type, graph, commit)
+    fetchAverage(range, type, commit)
       .catch(err => console.error(err));
-
-    //commit('SET_GRAPH_TO_SHOW', {graph, toShow});
   }
 }
 
-const fetchAverage = async ({start, end}, type, graph, commit) => {
+const fetchAverage = async ({start, end}, type, commit) => {
   const response = await fetch(`${Constant.API_URL}/match?start=${start}&end=${end}&type=${type}`, {
     method: 'GET',
     headers: {
@@ -242,9 +220,11 @@ const fetchAverage = async ({start, end}, type, graph, commit) => {
     return;
   }
 
-  commit('SAVE_AVERAGE', {
-    average: data
-  });
+  return data;
+
+  // commit('SAVE_AVERAGE', {
+  //   average: data
+  // });
 }
 
 const getRange = (type) => {
@@ -314,7 +294,7 @@ const fetchData = async ({start, end}, type, commit) => {
 
   // 2. Get missing data from API
   //start = lastDate ? lastDate : start; // move start date
-  const response = await fetch(`${Constant.API_URL}/consumption?start=${start}&end=${end}&type=${type}`, {
+  const response = await fetch(`${Constant.API_URL}/consumption?start=${start.toISOString()}&end=${end.toISOString()}&type=${type}`, {
     method: 'GET',
     headers: {
       authorization: `Bearer ${await idbKeyVal.get('token')}`
@@ -338,7 +318,8 @@ const fetchData = async ({start, end}, type, commit) => {
   // transaction.complete;
 
   // 4. store data
-  storeConsumption(commit, fetchData);
+  return fetchData;
+  //storeConsumption(commit, fetchData);
 }
 
 const getIDBByRange = (index, range) => {
@@ -355,10 +336,10 @@ const getIDBByRange = (index, range) => {
   });
 }
 
-const storeConsumption = (commit, fetchData = []) => {
-  commit('SAVE_CONSUMPTION', {
-    consumption: fetchData
-  });
-}
+// const storeConsumption = (commit, fetchData = []) => {
+//   commit('SAVE_CONSUMPTION', {
+//     consumption: fetchData
+//   });
+// }
 
 

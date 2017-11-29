@@ -1,19 +1,19 @@
 <template>
   <div class="consumption-type">
     <div class="consumption-now">
-      <input type="checkbox" id="consumption-now" class="consumption-checkbox consumption-now--checkbox" @change="show($event, 'toggle-now-consumption')">
+      <input type="checkbox" id="consumption-now" class="consumption-checkbox consumption-now--checkbox" data-type="toggle-now-consumption" @change="show($event, 'toggle-now-consumption')">
       <label for="consumption-now" class="consumption-label consumption-now--label">
         Ma consommation
       </label>
     </div>
     <div class="consumption-before">
-      <input type="checkbox" id="consumption-before" class="consumption-checkbox consumption-before--checkbox" @change="show($event, 'toggle-last-consumption')">
+      <input type="checkbox" id="consumption-before" class="consumption-checkbox consumption-before--checkbox" data-type="toggle-last-consumption" @change="show($event, 'toggle-last-consumption')">
       <label for="consumption-before" class="consumption-label consumption-before--label">
         Ma consommation d'avant
       </label>
     </div>
-    <div class="consumption-users" v-show="type === 'month' || type === 'year'">
-      <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox" @change="showAndFetchAverageIfNeeded($event, 'toggle-average-consumption')">
+    <div class="consumption-users">
+      <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox" data-type="toggle-average-consumption" @change="showAndFetchAverageIfNeeded($event, 'toggle-average-consumption')" ref="averageButton">
       <label for="consumption-users" class="consumption-label consumption-users--label">
         La moyenne des utilisateurs
       </label>
@@ -33,7 +33,8 @@
       showAndFetchAverageIfNeeded (evt, evtName) {
         const checked = evt.target.checked;
         if (checked) {
-          this.$store.dispatch('GET_AVERAGE', {graph: 'consumptionAverage'}).then(_ => {
+          this.$store.dispatch('GET_AVERAGE', {graph: 'consumptionAverage'}).then(average => {
+            commit('SAVE_AVERAGE', {average});
             this.dispatchEventAverage(evt, evtName);
           });
         } else {
@@ -49,6 +50,7 @@
     },
     computed: {
       type () {
+        //console.log(this.$store.consumptionLabelType)
         return this.$store.consumptionLabelType;
       }
     }

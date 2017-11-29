@@ -38,13 +38,24 @@
         this.viewportWidth = window.innerWidth;
       },
       getConsumption (evt, type) {
-        this.$store.dispatch('GET_CONSUMPTION', {type}).then(_ => {
+        const averageButtonChecked = document.querySelector('.consumption-users--checkbox').checked;
+        this.$store.dispatch('GET_CONSUMPTION', {type}).then((consumption => {
           this.$store.commit('CONSUMPTION_LABEL_TYPE', type);
-          const customEvent = new CustomEvent('label-change', {
-            bubbles: true
-          });
-          evt.target.dispatchEvent(customEvent);
-        })
+          this.$store.commit('SAVE_CONSUMPTION', {consumption});
+
+          if (averageButtonChecked) {
+            this.$store.dispatch('GET_AVERAGE', {type}).then(average => {
+              this.$store.commit('SAVE_AVERAGE', {average});
+            });
+          }
+          this.dispatchUpdateEvent(evt);
+        }));
+      },
+      dispatchUpdateEvent (evt) {
+        const customEvent = new CustomEvent('update', {
+          bubbles: true
+        });
+        evt.target.dispatchEvent(customEvent);
       },
       onClick (evt, type) {
         this.index = this.buttons.findIndex(b => b === evt.target);
