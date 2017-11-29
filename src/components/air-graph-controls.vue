@@ -37,7 +37,7 @@
       onResize () {
         this.viewportWidth = window.innerWidth;
       },
-      getConsumption (evt, type) {
+      getConsumption (type) {
         const averageButtonChecked = document.querySelector('.consumption-users--checkbox').checked;
         this.$store.dispatch('GET_CONSUMPTION', {type}).then((consumption => {
           this.$store.commit('CONSUMPTION_LABEL_TYPE', type);
@@ -48,19 +48,17 @@
               this.$store.commit('SAVE_AVERAGE', {average});
             });
           }
-          this.dispatchUpdateEvent(evt);
+
+          const checkboxes = document.querySelectorAll('.consumption-checkbox');
+          checkboxes.forEach(checkbox => {
+            this.$store.commit('SET_GRAPH_TO_SHOW', {graph: checkbox.dataset.graph, position: checkbox.dataset.position, toShow: checkbox.checked});
+          });
         }));
-      },
-      dispatchUpdateEvent (evt) {
-        const customEvent = new CustomEvent('update', {
-          bubbles: true
-        });
-        evt.target.dispatchEvent(customEvent);
       },
       onClick (evt, type) {
         this.index = this.buttons.findIndex(b => b === evt.target);
         this.moveArrows();
-        this.getConsumption(evt, type);
+        this.getConsumption(type);
       },
       moveIndex (evt, increment) {
         this.lastIndex = this.index;
@@ -72,7 +70,7 @@
           this.index = 0;
         }
 
-        this.getConsumption(evt, this.buttons[this.index].dataset.type);
+        this.getConsumption(this.buttons[this.index].dataset.type);
         this.buttons[this.index].focus();
       },
       selectChoice (evt, increment) {

@@ -184,7 +184,7 @@ export default {
     const type = state.consumptionLabelType;
     const range = getRange(type);
 
-    fetchAverage(range, type, commit)
+    return fetchAverage(range, type, commit)
       .catch(err => console.error(err));
   }
 }
@@ -221,10 +221,6 @@ const fetchAverage = async ({start, end}, type, commit) => {
   }
 
   return data;
-
-  // commit('SAVE_AVERAGE', {
-  //   average: data
-  // });
 }
 
 const getRange = (type) => {
@@ -319,7 +315,6 @@ const fetchData = async ({start, end}, type, commit) => {
 
   // 4. store data
   return fetchData;
-  //storeConsumption(commit, fetchData);
 }
 
 const getIDBByRange = (index, range) => {
@@ -335,11 +330,3 @@ const getIDBByRange = (index, range) => {
     });
   });
 }
-
-// const storeConsumption = (commit, fetchData = []) => {
-//   commit('SAVE_CONSUMPTION', {
-//     consumption: fetchData
-//   });
-// }
-
-

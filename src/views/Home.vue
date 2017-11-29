@@ -21,7 +21,6 @@
 </template>
 
 <script>
-  import getDaysInMonth from 'date-fns/get_days_in_month';
   import AirTips from 'components/air-tips';
   import AirPrice from 'components/air-price';
   import AirGraphControls from 'components/air-graph-controls';
@@ -36,15 +35,11 @@
     },
     data () {
       return {
-        months: ["Jan", "Fev", "Mar", "Avr", "Mai", "Juin", "Jui", "Août", "Sept", "Oct", "Nov", "Dec"],
-        daysOfWeek: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
-        hours: ["00h00", "01h00", "02h00", "03h00", "04h00", "05h00", "06h00", "07h00", "08h00",
-          "09h00", "10h00", "11h00", "12h00", "13h00", "14h00", "15h00", "16h00", "17h00", "18h00",
-          "19h00", "20h00", "21h00", "22h00", "23h00"],
-        chartData: {
-          series: [],
-          labels: []
-        },
+
+        // chartData: {
+        //   series: [],
+        //   labels: []
+        // },
         chartOptions: {
           seriesBarDistance: 15,
           onlyInteger: false,
@@ -79,89 +74,13 @@
           fn: (data) => {
 
           }
-        }],
-        labelsFunc: {
-          year: (start, length) => {
-            return this.months;
-            //const stop = Number(start) + length;
-            //return this.months.slice(start, stop);
-          },
-          month: (start, length) => {
-            //const stop = Number(start) + length;
-            const currentMonth = new Date().getMonth() + 1;
-            const stop = getDaysInMonth(new Date());
-            const daysOfMonth = [];
-            for (let i = 1; i <= 24; i++) {
-              daysOfMonth.push(`${(i < 10 ? '0' + i : i)}/${currentMonth}`);
-            }
-            return daysOfMonth;
-          },
-          week: (start, length) => {
-            return this.daysOfWeek;
-            //const stop = Number(start) + length;
-            //return this.daysOfWeek.slice(start, stop);
-          },
-          day: (start, length) => {
-            return this.hours;
-            //const stop = Number(start) + length;
-            //return this.hours.slice(start, stop);
-          }
-        }
+        }]
       }
     },
-    methods: {
-      labels (type, start, stop) {
-        return this.labelsFunc[type](start, stop);
-      },
-      fillArray (consumption) {
-        const cpt = [];
-        for (let i = 0; i <= this.chartData.labels.length; i++) {
-          if (consumption[i]) {
-            cpt[i] = consumption[i];
-          } else {
-            cpt[i] = null
-          }
-        }
-        return cpt;
-      },
-      onToggleNowConsumption (evt) {
-        const consumption = this.$store.state.consumption.now.values;
-        console.log(this.fillArray(consumption));
-        this.$set(this.chartData.series, 0, evt.target.checked ? this.fillArray(consumption) : []);
-      },
-      onToggleLastConsumption (evt) {
-        const consumption = this.$store.state.consumption.before.values;
-        this.$set(this.chartData.series, 1, evt.target.checked ? this.fillArray(consumption) : []);
-      },
-      onToggleAverageConsumption (evt) {
-        const consumption = this.$store.state.average.values;
-        this.$set(this.chartData.series, 2, evt.target.checked ? this.fillArray(consumption) : [])
-      },
-      onUpdate (evt) {
-        const checkboxes = document.querySelectorAll('.consumption-checkbox');
-        checkboxes.forEach(checkbox => {
-          const customEvent = new CustomEvent(checkbox.dataset.type, {
-            bubbles: true
-          });
-          checkbox.dispatchEvent(customEvent);
-        });
-        const type = this.$store.state.consumptionLabelType;
-        const consumption = this.$store.state.consumption.now.values;
-        const labels = this.labels(type, Object.keys(consumption)[0], Object.keys(consumption).length);
-        this.chartData.labels = labels;
+    computed: {
+      chartData () {
+        return this.$store.state.chartist;
       }
-    },
-    mounted () {
-      document.addEventListener('toggle-now-consumption', this.onToggleNowConsumption);
-      document.addEventListener('toggle-last-consumption', this.onToggleLastConsumption);
-      document.addEventListener('toggle-average-consumption', this.onToggleAverageConsumption);
-      document.addEventListener('update', this.onUpdate);
-    },
-    destroyed () {
-      document.removeEventListener('toggle-now-consumption', this.onToggleNowConsumption);
-      document.removeEventListener('toggle-last-consumption', this.onToggleLastConsumption);
-      document.removeEventListener('toggle-average-consumption', this.onToggleAverageConsumption);
-      document.removeEventListener('update', this.onUpdate);
     }
   }
 </script>

@@ -1,19 +1,19 @@
 <template>
   <div class="consumption-type">
     <div class="consumption-now">
-      <input type="checkbox" id="consumption-now" class="consumption-checkbox consumption-now--checkbox" data-type="toggle-now-consumption" @change="show($event, 'toggle-now-consumption')">
+      <input type="checkbox" id="consumption-now" class="consumption-checkbox consumption-now--checkbox" data-graph="now" data-position="0" @change="show($event, 0, 'now')">
       <label for="consumption-now" class="consumption-label consumption-now--label">
         Ma consommation
       </label>
     </div>
     <div class="consumption-before">
-      <input type="checkbox" id="consumption-before" class="consumption-checkbox consumption-before--checkbox" data-type="toggle-last-consumption" @change="show($event, 'toggle-last-consumption')">
+      <input type="checkbox" id="consumption-before" class="consumption-checkbox consumption-before--checkbox" data-graph="before" data-position="1" @change="show($event, 1, 'before')">
       <label for="consumption-before" class="consumption-label consumption-before--label">
         Ma consommation d'avant
       </label>
     </div>
     <div class="consumption-users">
-      <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox" data-type="toggle-average-consumption" @change="showAndFetchAverageIfNeeded($event, 'toggle-average-consumption')" ref="averageButton">
+      <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox" data-graph="average" data-position="2" @change="showAndFetchAverageIfNeeded($event, 2, 'average')">
       <label for="consumption-users" class="consumption-label consumption-users--label">
         La moyenne des utilisateurs
       </label>
@@ -24,28 +24,17 @@
 <script>
   export default {
     methods: {
-      show (evt, evtName) {
-        const customEvent = new CustomEvent(evtName, {
-          bubbles: true
-        });
-        evt.target.dispatchEvent(customEvent);
+      show (evt, position, graph) {
+        this.$store.commit('SET_GRAPH_TO_SHOW', {graph, position, toShow: evt.target.checked});
       },
-      showAndFetchAverageIfNeeded (evt, evtName) {
+      showAndFetchAverageIfNeeded (evt, position, graph) {
         const checked = evt.target.checked;
         if (checked) {
-          this.$store.dispatch('GET_AVERAGE', {graph: 'consumptionAverage'}).then(average => {
-            commit('SAVE_AVERAGE', {average});
-            this.dispatchEventAverage(evt, evtName);
+          this.$store.dispatch('GET_AVERAGE').then(average => {
+            this.$store.commit('SAVE_AVERAGE', {average});
           });
-        } else {
-          this.dispatchEventAverage(evt, evtName);
         }
-      },
-      dispatchEventAverage (evt, evtName) {
-        const customEvent = new CustomEvent(evtName, {
-          bubbles: true
-        });
-        evt.target.dispatchEvent(customEvent);
+        this.show(evt, position, graph);
       }
     },
     computed: {
