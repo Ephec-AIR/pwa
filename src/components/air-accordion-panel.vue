@@ -36,50 +36,30 @@
   $background-third-color: #D4E157;
 
   .air-accordion-panel {
-    position: absolute;
-    top: 0;
-    width: 100%;
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
-    background: $background-third-color;
-    will-change: transform, opacity;
+    background: #FFF;
+    will-change: transform;
 
     &__button {
       width: 100%;
       height : 48px;
       line-height: 48px;
       font-size: 18px;
+      font-weight: 500;
       border: none;
-      background: transparent;
-      color: #777;
-      border-bottom: 1px solid #444;
+      border-bottom: 2px solid #848383;
+      border-radius: 0px;
+      background: #FFF;
+      color: #444;
+      outline: none;
     }
 
     &__container {
       padding: 16px;
       overflow-y: auto;
-      background: transparent;
     }
-
-    .close {
-      transition: opacity 0.3s ease;
-      opacity: 0;
-    }
-
-    .open {
-      padding: 5px;
-      transition: opacity 1s ease;
-      opacity: 1;
-    }
-  }
-
-  .fade-enter-active,.fade-leave-active {
-    transition : opacity 0.3s ease-in;
-  }
-
-  .slide-enter,.slide-leave-active {
-    opacity: 0;
   }
 </style>
 

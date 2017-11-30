@@ -8,13 +8,13 @@
         <nav class="air-nav__nav-container" role="navigation" ref="nav">
           <ul class="air-nav__nav-content">
             <li>
-              <router-link to="home" class="air-nav__nav-link" aria-label="home" @click="hide">Home</router-link>
+              <router-link to="home" class="air-nav__nav-link" aria-label="home">Home</router-link>
             </li>
             <li>
-              <a href="https://air.ephec-ti.org/forum/" class="air-nav__nav-link" aria-label="forum" @click="hide">Forum</a>
+              <a href="https://air.ephec-ti.org/forum/" class="air-nav__nav-link" aria-label="forum">Forum</a>
             </li>
             <li>
-              <router-link to="parameters" class="air-nav__nav-link" aria-label="parameter" @click="hide">Parametres</router-link>
+              <router-link to="parameters" class="air-nav__nav-link" aria-label="parameter">Parametres</router-link>
             </li>
             <li v-if="isLoggedIn" >
               <a href="#" class="air-nav__nav-link" aria-label="logout" @click.prevent="logout">Deconnection</a>
@@ -45,13 +45,7 @@ export default {
       this.$refs.airnav.classList.toggle('air-nav--visible');
       document.querySelector('.router-view').classList.toggle('router-view--translate');
     },
-    hide () {
-      console.log(this.$refs.airnav, document.querySelector('.router-view'));
-      this.$refs.airnav.classList.remove('air-nav--visible');
-      document.querySelector('.router-view').classList.remove('router-view--translate');
-    },
     logout () {
-      this.hide();
       this.$store.dispatch('LOGOUT');
     }
   }

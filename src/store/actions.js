@@ -20,7 +20,7 @@ export default {
       })
     })
     .then(response => response.json())
-    .then(response => {
+    .then(async response => {
       // if field no provided
       if (response.error) {
         commit('TOAST_MESSAGE', {
@@ -37,12 +37,7 @@ export default {
         return;
       }
 
-      idbKeyVal.set('token', response.token).then(() => {
-        console.log('[IDB] token saved to indexDB.');
-      });
-
-      const user = decode(response.token);
-      commit('SAVE_USER', user);
+      const user = await setAndDecodeToken(response.token, commit);
 
       // if user is not linked with serial
       if (!user.serial) {
@@ -82,25 +77,178 @@ export default {
     }).catch(err => console.error(err));
   },
 
-  GET_CONSUMPTION_DAY ({commit, state}) {
-    fetchData(DateRangeHelper.dayRange, 'day', commit)
+  SYNC ({commit, state}, {serial, secret}) {
+    idbKeyVal.get('token').then(token => {
+      if (!token) return;
+      if (Token.isExpired(token)) {
+        return idbKeyVal.delete('token');
+      }
+
+      return fetch(`${Constant.API_URL}/sync`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          serial,
+          user_secret: secret
+        })
+      });
+    })
+    .then(response => {
+      if (response.status === 404) {
+        commit('TOAST_MESSAGE', {
+          messages: ['Le produit n\'existe pas']
+        });
+        return;
+      }
+
+      if (response.status === 403) {
+        commit('TOAST_MESSAGE', {
+          messages: ['Mauvais secret...']
+        });
+        return;
+      }
+
+      return response.json()
+    })
+    .then(response => {
+      if (response.error) {
+        commit('TOAST_MESSAGE', {
+          messages: response.error
+        });
+        return;
+      }
+
+      setAndDecodeToken(response.token, commit);
+
+      commit('TOAST_MESSAGE', {
+        messages: ['Produit synchronisé avec succès !']
+      });
+    })
+    .catch(err => console.error(err));
+  },
+
+  async UPDATE_PROFILE ({commit, state}, {postalCode, supplier}) {
+    try {
+      const response = await fetch(`${Constant.API_URL}/product`, {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json',
+          'authorization': `Bearer ${await idbKeyVal.get('token')}`
+        },
+        body: JSON.stringify({
+          serial: state.user.serial,
+          user_secret: state.user.user_secret,
+          postalCode,
+          supplier
+        })
+      });
+
+      if (response.status === 412) {
+        commit('TOAST_MESSAGE', {
+          messages: ["Sérial non trouvé.", "Vous n'êtes pas synchronisé avec un appareil."],
+          duration: 5000
+        });
+        return;
+      }
+
+      const data = await response.json();
+
+      // if field no provided
+      if (data.error) {
+        commit('TOAST_MESSAGE', {
+          messages: data.error
+        });
+        return;
+      }
+
+      await setAndDecodeToken(data.token, commit);
+
+      commit('TOAST_MESSAGE', {
+        messages: ['Profil mis à jour avec succès !']
+      });
+    } catch (err) {
+      console.error(err)
+    }
+  },
+
+  GET_CONSUMPTION ({commit, state}, {type}) {
+    const range = getRange(type);
+    return fetchData(range, type, commit)
       .catch(err => console.error(err));
   },
 
-  GET_CONSUMPTION_WEEK ({commit, state}) {
-    fetchData(DateRangeHelper.weekRange, 'week', commit)
-      .catch(err => console.error(err));
-  },
+  GET_AVERAGE ({commit, state}) {
+    const type = state.consumptionLabelType;
+    const range = getRange(type);
 
-  GET_CONSUMPTION_MONTH ({commit, state}) {
-    fetchData(DateRangeHelper.monthRange, 'month', commit)
-      .catch(err => console.error(err));
-  },
-
-  GET_CONSUMPTION_YEAR ({commit, state}) {
-    fetchData(DateRangeHelper.yearRange, 'year', commit)
+    return fetchAverage(range, type, commit)
       .catch(err => console.error(err));
   }
+}
+
+const fetchAverage = async ({start, end}, type, commit) => {
+  const response = await fetch(`${Constant.API_URL}/match?start=${start.toISOString()}&end=${end.toISOString()}&type=${type}`, {
+    method: 'GET',
+    headers: {
+      authorization: `Bearer ${await idbKeyVal.get('token')}`
+    }
+  });
+
+  if (response.status === 412) {
+    commit('TOAST_MESSAGE', {
+      messages: [
+        "Vous n'êtes pas synchronisé avec un appareil.",
+        "Votre profile n'est pas à jour.",
+        "Code postal et/ou fournisseur non indiqué."
+      ],
+      duration: 8000
+    });
+    return;
+  }
+
+  const data = await response.json();
+
+  // Not really an error, just no better consummer than you in your area.
+  if (data.error) {
+    commit('TOAST_MESSAGE', {
+      messages: [data.error],
+      duration: 5000
+    });
+    return;
+  }
+
+  return data;
+}
+
+const getRange = (type) => {
+  let range;
+  switch (type) {
+    case 'day': range = DateRangeHelper.dayRange;
+      break;
+    case 'week': range = DateRangeHelper.weekRange;
+      break;
+    case 'month': range = DateRangeHelper.monthRange;
+      break;
+    case 'year': range = DateRangeHelper.yearRange;
+      break;
+    default: throw new Error('unknown type');
+      break;
+  }
+
+  return range;
+}
+
+const setAndDecodeToken = (token, commit) => {
+  return idbKeyVal.set('token', token).then(() => {
+    console.log('[IDB] token saved to indexDB.');
+
+    const user = decode(token);
+    commit('SAVE_USER', user);
+    return user;
+  });
 }
 
 /**
@@ -142,7 +290,7 @@ const fetchData = async ({start, end}, type, commit) => {
 
   // 2. Get missing data from API
   //start = lastDate ? lastDate : start; // move start date
-  const response = await fetch(`${Constant.API_URL}/consumption?start=${start}&end=${end}&type=${type}`, {
+  const response = await fetch(`${Constant.API_URL}/consumption?start=${start.toISOString()}&end=${end.toISOString()}&type=${type}`, {
     method: 'GET',
     headers: {
       authorization: `Bearer ${await idbKeyVal.get('token')}`
@@ -158,7 +306,6 @@ const fetchData = async ({start, end}, type, commit) => {
   }
 
   const fetchData = await response.json();
-  const idbData = [];
 
   // 3. Put data in IDB
   // transaction = db.transaction('consumption', 'readwrite');
@@ -167,8 +314,7 @@ const fetchData = async ({start, end}, type, commit) => {
   // transaction.complete;
 
   // 4. store data
-  commit('CONSUMPTION_LABEL_TYPE', type);
-  storeConsumption(commit, idbData, fetchData);
+  return fetchData;
 }
 
 const getIDBByRange = (index, range) => {
@@ -184,11 +330,3 @@ const getIDBByRange = (index, range) => {
     });
   });
 }
-
-const storeConsumption = (commit, idbData = [], fetchData = []) => {
-  commit('SAVE_CONSUMPTION', {
-    consumption: {...idbData, ...fetchData}
-  });
-}
-
-

@@ -1,16 +1,20 @@
 <template>
   <div class="home">
     <air-tips></air-tips>
-    <chartist
-      class="air-graph"
-      type="Line"
-      :data="chartData"
-      :options="chartOptions"
-      :responsive-options="responsiveOptions"
-      :event-handlers="eventHandlers"
-    >
-    </chartist>
+    <section class="air-graph__container">
+      <air-price></air-price>
+      <chartist
+        class="air-graph"
+        type="Line"
+        :data="chartData"
+        :options="chartOptions"
+        :responsive-options="responsiveOptions"
+        :event-handlers="eventHandlers"
+      >
+      </chartist>
+    </section>
     <section class="air-graph-controls">
+      <!--<air-graph-legend></air-graph-legend>-->
       <air-graph-consumption></air-graph-consumption>
       <air-graph-controls></air-graph-controls>
     </section>
@@ -18,30 +22,37 @@
 </template>
 
 <script>
-  //import Chartist from 'chartist';
   import AirTips from 'components/air-tips';
+  import AirPrice from 'components/air-price';
   import AirGraphControls from 'components/air-graph-controls';
   import AirGraphConsumption from 'components/air-graph-consumption';
+  import AirGraphLegend from 'components/air-graph-legend';
+  import AirGraphBest from 'components/air-graph-best';
 
   export default {
     components: {
       AirTips,
+      AirPrice,
       AirGraphControls,
-      AirGraphConsumption
+      AirGraphConsumption,
+      AirGraphLegend,
+      AirGraphBest
     },
     data () {
       return {
-        months: ["Jan", "Fev", "Mar", "Avr", "Mai", "Juin", "Jui", "Août", "Sept", "Oct", "Nov", "Dec"],
-        daysOfWeek: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
-        hours: ["00h00", "01h00", "02h00", "03h00", "04h00", "05h00", "06h00", "07h00", "08h00",
-          "09h00", "10h00", "11h00", "12h00", "13h00", "14h00", "15h00", "16h00", "17h00", "18h00",
-          "19h00", "20h00", "21h00", "22h00", "23h00"],
+
+        // chartData: {
+        //   series: [],
+        //   labels: []
+        // },
         chartOptions: {
-          onlyInteger: true,
+          seriesBarDistance: 15,
+          onlyInteger: false,
           fullWidth: true,
           chartPadding: {
             right: 40
           },
+          height: 500,
           low: 0,
           showPoint: true,
           showArea: true,
@@ -68,54 +79,22 @@
           fn: (data) => {
 
           }
-        }],
-        labelsFunc: {
-          year: (start, length) => {
-            const stop = Number(start) + length;
-            return this.months.slice(start, stop);
-          },
-          month: (start, length) => {
-            const stop = Number(start) + length;
-            const currentMonth = new Date().getMonth() + 1;
-            const daysOfMonth = [];
-            for (let i = start; i <= stop; i++) {
-              daysOfMonth.push(`${(i < 10 ? '0' + i : i)}/${currentMonth}`);
-            }
-            return daysOfMonth;
-          },
-          week: (start, length) => {
-            const stop = Number(start) + length;
-            return this.daysOfWeek.slice(start, stop);
-          },
-          day: (start, length) => {
-            const stop = Number(start) + length;
-            return this.hours.slice(start, stop);
-          }
-        }
-      }
-    },
-    methods: {
-      labels (type, start, stop) {
-        return this.labelsFunc[type](start, stop);
+        }]
       }
     },
     computed: {
       chartData () {
-        const consumption = this.$store.state.consumption;
-        const type = this.$store.state.consumptionLabelType;
-        if (!Object.keys(consumption).length) {
-          return;
-        }
-
-        const labels = this.labels(type, Object.keys(consumption)[0], Object.keys(consumption).length);
-        const series = [Object.values(consumption)];
-        return {labels, series};
+        return this.$store.state.chartist;
       }
     }
   }
 </script>
 
 <style lang="scss">
+  $graph-first-color: #d70206;
+  $graph-second-color: #f05b4f;
+  $graph-third-color: #f4c63d;
+
   .home {
     position: relative;
     display: flex;
@@ -123,8 +102,16 @@
     justify-content: space-between;
   }
 
-  .air-tips, .air-graph, .air-graph-controls {
+  .air-tips, .air-graph__container, .air-graph-controls {
     margin: 10px;
+  }
+
+  .air-graph__container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-left: 50px;
+    height: 95%;
   }
 
   .air-graph-controls {
@@ -134,19 +121,25 @@
   }
 
   .air-graph {
-    flex: 1;
-    margin-left: 50px;
-    height: 95%;
+    background: #453D3F;
+    border-radius: 3px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    padding-top: 10px;
+    // flex: 1;
+    // margin-left: 50px;
+    // height: 95%;
   }
 
   .air-graph--nodata {
-    margin: 140px auto;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 140px auto;
     font-size: 22px;
     font-weight: bold;
     text-align: center;
+    background: none;
+    box-shadow: none;
     color: #de002a;
 
     & svg {
@@ -160,22 +153,60 @@
     stroke-dasharray: 2px
   }
 
-  .ct-series-a .ct-area {
-    fill: #d70206;
+  .ct-series-a .ct-area, .ct-series-b .ct-area, .ct-series-c .ct-area {
+    fill: none;
     fill-opacity: 0.1;
     stroke: none;
   }
 
-  .ct-series-a .ct-line {
-    stroke: #d70206;
+  // .ct-series-a .ct-area {
+  //   fill: $graph-first-color;
+  // }
+
+  // .ct-series-b .ct-area {
+  //   fill: $graph-second-color;
+  // }
+
+  // .ct-series-c .ct-area {
+  //   fill: $graph-third-color;
+  // }
+
+  .ct-series-a .ct-line, .ct-series-b .ct-line, .ct-series-c .ct-line {
     fill: none;
     stroke-width: 3px;
   }
 
-  .ct-series-a .ct-point {
-    stroke: #d70206;
-    stroke-width: 10px;
+  .ct-series-a .ct-line {
+    stroke: $graph-first-color;
+    stroke-dasharray: 4px;
+    animation: dashmove 1s linear infinite;
+  }
+
+  .ct-series-b .ct-line {
+    stroke: $graph-second-color;
+  }
+
+  .ct-series-c .ct-line {
+    stroke: $graph-third-color;
+  }
+
+  .ct-series-a .ct-point, .ct-series-b .ct-point, .ct-series-c .ct-point {
+    stroke-width: 7px;
     stroke-linecap: round;
+  }
+
+  .ct-series-a .ct-point {
+    stroke: $graph-first-color
+  }
+
+  .ct-series-b .ct-point {
+    stroke: $graph-second-color;
+    animation: bouncing-stroke 1.5s ease infinite;
+  }
+
+  .ct-series-c .ct-point {
+    stroke: $graph-third-color;
+    animation: exploding-stroke 1s ease-out infinite;
   }
 
   .ct-chart-bar .ct-label, .ct-chart-line .ct-label {
@@ -186,15 +217,17 @@
     align-items: flex-end;
     justify-content: flex-end;
     fill: rgba(0,0,0,.4);
-    color: rgba(0,0,0,.4);
+    //color: rgba(0,0,0,.4);
+    color: #94878a;
     font-size: .75rem;
     line-height: 1;
   }
 
   .ct-label.ct-horizontal.ct-end {
     fill: rgba(0,0,0,.4);
-    color: rgba(0,0,0,.4);
-    font-size: .85rem;
+    //color: rgba(0,0,0,.4);
+    color: #94878a;
+    font-size: .65rem;
     line-height: 1;
   }
 
@@ -214,7 +247,46 @@
     fill: #59922b;
   }
 
-  @media (max-width: 530px) {
+  @keyframes dashmove {
+    0% {
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dashoffset: -16px;
+    }
+  }
+
+  @keyframes bouncing-stroke {
+    0%, 100% {
+      stroke-width: 5px;
+    }
+    50% {
+      stroke-width: 10px;
+    }
+  }
+
+  @keyframes exploding-stroke {
+    0% {
+      stroke-width: 2px;
+      opacity: 1;
+    }
+    100% {
+      stroke-width: 20px;
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 880px) {
+    .ct-series-a .ct-point, .ct-series-b .ct-point, .ct-series-c .ct-point {
+      stroke-width: 5px;
+    }
+
+    .ct-series-a .ct-line, .ct-series-b .ct-line, .ct-series-c .ct-line {
+      stroke-width: 2px;
+    }
+  }
+
+  @media (max-width: 680px) {
     .home {
       position: relative;
       flex-direction: column;

@@ -1,19 +1,19 @@
 <template>
   <div class="consumption-type">
     <div class="consumption-now">
-      <input type="checkbox" id="consumption-now" class="consumption-checkbox consumption-now--checkbox">
+      <input type="checkbox" id="consumption-now" class="consumption-checkbox consumption-now--checkbox" data-graph="now" data-position="0" @change="show($event, '0', 'now')">
       <label for="consumption-now" class="consumption-label consumption-now--label">
         Ma consommation
       </label>
     </div>
     <div class="consumption-before">
-      <input type="checkbox" id="consumption-before" class="consumption-checkbox consumption-before--checkbox">
+      <input type="checkbox" id="consumption-before" class="consumption-checkbox consumption-before--checkbox" data-graph="before" data-position="1" @change="show($event, '1', 'before')">
       <label for="consumption-before" class="consumption-label consumption-before--label">
         Ma consommation d'avant
       </label>
     </div>
     <div class="consumption-users">
-      <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox">
+      <input type="checkbox" id="consumption-users" class="consumption-checkbox consumption-users--checkbox" data-graph="average" data-position="2" @change="showAndFetchAverageIfNeeded($event, '2', 'average')">
       <label for="consumption-users" class="consumption-label consumption-users--label">
         La moyenne des utilisateurs
       </label>
@@ -23,12 +23,34 @@
 
 <script>
   export default {
-
+    methods: {
+      show (evt, position, graph) {
+        this.$store.commit('SET_GRAPH_TO_SHOW', {graph, position, toShow: evt.target.checked});
+      },
+      showAndFetchAverageIfNeeded (evt, position, graph) {
+        const checked = evt.target.checked;
+        if (checked) {
+          this.$store.dispatch('GET_AVERAGE').then(average => {
+            this.$store.commit('SAVE_AVERAGE', {average});
+          });
+        }
+        this.show(evt, position, graph);
+      }
+    },
+    computed: {
+      type () {
+        //console.log(this.$store.consumptionLabelType)
+        return this.$store.consumptionLabelType;
+      }
+    }
   }
 </script>
 
 <style lang="scss">
   $text-color: rgba(0, 0, 0, 0.74);
+  $graph-now-color: #d70206;
+  $graph-before-color: #f05b4f;
+  $graph-average-color: #f4c63d;
 
   .consumption-type {
     display: flex;
@@ -45,8 +67,16 @@
       opacity: 0;
     }
 
-    .consumption-checkbox:checked~.consumption-label::before {
-      background: #FFF;
+    .consumption-checkbox:checked~.consumption-now--label::before {
+      background: $graph-now-color;
+    }
+
+    .consumption-checkbox:checked~.consumption-before--label::before {
+      background: $graph-before-color;
+    }
+
+    .consumption-checkbox:checked~.consumption-users--label::before {
+      background: $graph-average-color;
     }
 
     .consumption-label {

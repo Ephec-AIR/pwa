@@ -38,7 +38,8 @@
         let baseY = 0;
         this.panels.forEach((panel, index) => {
           panel.$el.style.transform = `translateY(${baseY + (this.headerHeight * index)}px)`;
-          panel.content.style.height = `${this.availableHeight}px`;
+          // NOTE this one causes 50% perf lost => 60fps to 30fps
+          //panel.content.style.height = `${this.availableHeight}px`;
 
           if (panel.$el.getAttribute('aria-expanded')) {
             baseY += this.availableHeight;
@@ -62,14 +63,15 @@
     flex-direction: column;
     width: 100%;
     margin: 0 15px;
-    background: transparent;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.4);
-    border-radius: 3px;
+    background: #FFF;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
 
     &[enhanced] {
       position: relative;
       visibility: hidden;
-      height: 600px;
+      width: 75%;
+      height: 270px;
       overflow: hidden;
     }
 

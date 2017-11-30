@@ -28,6 +28,7 @@
   "homepage": "https://github.com/Ephec-AIR/pwa#readme",
   "dependencies": {
     "chartist-plugin-threshold": "0.0.2",
+    "date-fns": "^1.29.0",
     "idb": "^2.0.4",
     "idb-keyval": "^2.3.0",
     "jwt-decode": "^2.2.0",
