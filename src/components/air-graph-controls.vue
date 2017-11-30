@@ -38,22 +38,33 @@
         this.viewportWidth = window.innerWidth;
       },
       getConsumption (type) {
-        const averageButtonChecked = document.querySelector('.consumption-users--checkbox').checked;
-        this.$store.dispatch('GET_CONSUMPTION', {type}).then((consumption => {
-          this.$store.commit('CONSUMPTION_LABEL_TYPE', type);
-          this.$store.commit('SAVE_CONSUMPTION', {consumption});
-
-          if (averageButtonChecked) {
-            this.$store.dispatch('GET_AVERAGE', {type}).then(average => {
-              this.$store.commit('SAVE_AVERAGE', {average});
+        this.fetchAndSaveConsumption(type)
+          .then(_ => {
+            console.log('then');
+            const checkboxes = document.querySelectorAll('.consumption-checkbox');
+            checkboxes.forEach(checkbox => {
+              this.$store.commit('SET_GRAPH_TO_SHOW', {graph: checkbox.dataset.graph, position: checkbox.dataset.position, toShow: checkbox.checked});
             });
-          }
-
-          const checkboxes = document.querySelectorAll('.consumption-checkbox');
-          checkboxes.forEach(checkbox => {
-            this.$store.commit('SET_GRAPH_TO_SHOW', {graph: checkbox.dataset.graph, position: checkbox.dataset.position, toShow: checkbox.checked});
           });
-        }));
+      },
+      fetchAndSaveConsumption (type) {
+        return new Promise ((resolve, reject) => {
+          const averageButtonChecked = document.querySelector('.consumption-users--checkbox').checked;
+          this.$store.dispatch('GET_CONSUMPTION', {type}).then((consumption => {
+            this.$store.commit('CONSUMPTION_LABEL_TYPE', type);
+            this.$store.commit('SAVE_CONSUMPTION', {consumption});
+
+            if (averageButtonChecked) {
+              this.$store.dispatch('GET_AVERAGE', {type}).then(average => {
+                this.$store.commit('SAVE_AVERAGE', {average});
+                console.log('average saved');
+                resolve();
+              });
+            } else {
+              resolve();
+            }
+          }));
+        });
       },
       onClick (evt, type) {
         this.index = this.buttons.findIndex(b => b === evt.target);

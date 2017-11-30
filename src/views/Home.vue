@@ -14,6 +14,7 @@
       </chartist>
     </section>
     <section class="air-graph-controls">
+      <!--<air-graph-legend></air-graph-legend>-->
       <air-graph-consumption></air-graph-consumption>
       <air-graph-controls></air-graph-controls>
     </section>
@@ -25,13 +26,17 @@
   import AirPrice from 'components/air-price';
   import AirGraphControls from 'components/air-graph-controls';
   import AirGraphConsumption from 'components/air-graph-consumption';
+  import AirGraphLegend from 'components/air-graph-legend';
+  import AirGraphBest from 'components/air-graph-best';
 
   export default {
     components: {
       AirTips,
       AirPrice,
       AirGraphControls,
-      AirGraphConsumption
+      AirGraphConsumption,
+      AirGraphLegend,
+      AirGraphBest
     },
     data () {
       return {
@@ -87,8 +92,8 @@
 
 <style lang="scss">
   $graph-first-color: #d70206;
-  $graph-second-color: #616729;
-  $graph-third-color: #ff9800;
+  $graph-second-color: #f05b4f;
+  $graph-third-color: #f4c63d;
 
   .home {
     position: relative;
@@ -97,7 +102,7 @@
     justify-content: space-between;
   }
 
-  .air-tips, .air-graph, .air-graph-controls {
+  .air-tips, .air-graph__container, .air-graph-controls {
     margin: 10px;
   }
 
@@ -116,19 +121,25 @@
   }
 
   .air-graph {
+    background: #453D3F;
+    border-radius: 3px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    padding-top: 10px;
     // flex: 1;
     // margin-left: 50px;
     // height: 95%;
   }
 
   .air-graph--nodata {
-    margin: 140px auto;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 140px auto;
     font-size: 22px;
     font-weight: bold;
     text-align: center;
+    background: none;
+    box-shadow: none;
     color: #de002a;
 
     & svg {
@@ -143,21 +154,22 @@
   }
 
   .ct-series-a .ct-area, .ct-series-b .ct-area, .ct-series-c .ct-area {
+    fill: none;
     fill-opacity: 0.1;
     stroke: none;
   }
 
-  .ct-series-a .ct-area {
-    fill: $graph-first-color;
-  }
+  // .ct-series-a .ct-area {
+  //   fill: $graph-first-color;
+  // }
 
-  .ct-series-b .ct-area {
-    fill: $graph-second-color;
-  }
+  // .ct-series-b .ct-area {
+  //   fill: $graph-second-color;
+  // }
 
-  .ct-series-c .ct-area {
-    fill: $graph-third-color;
-  }
+  // .ct-series-c .ct-area {
+  //   fill: $graph-third-color;
+  // }
 
   .ct-series-a .ct-line, .ct-series-b .ct-line, .ct-series-c .ct-line {
     fill: none;
@@ -166,6 +178,8 @@
 
   .ct-series-a .ct-line {
     stroke: $graph-first-color;
+    stroke-dasharray: 4px;
+    animation: dashmove 1s linear infinite;
   }
 
   .ct-series-b .ct-line {
@@ -177,7 +191,7 @@
   }
 
   .ct-series-a .ct-point, .ct-series-b .ct-point, .ct-series-c .ct-point {
-    stroke-width: 10px;
+    stroke-width: 7px;
     stroke-linecap: round;
   }
 
@@ -187,10 +201,12 @@
 
   .ct-series-b .ct-point {
     stroke: $graph-second-color;
+    animation: bouncing-stroke 1.5s ease infinite;
   }
 
   .ct-series-c .ct-point {
     stroke: $graph-third-color;
+    animation: exploding-stroke 1s ease-out infinite;
   }
 
   .ct-chart-bar .ct-label, .ct-chart-line .ct-label {
@@ -201,14 +217,16 @@
     align-items: flex-end;
     justify-content: flex-end;
     fill: rgba(0,0,0,.4);
-    color: rgba(0,0,0,.4);
+    //color: rgba(0,0,0,.4);
+    color: #94878a;
     font-size: .75rem;
     line-height: 1;
   }
 
   .ct-label.ct-horizontal.ct-end {
     fill: rgba(0,0,0,.4);
-    color: rgba(0,0,0,.4);
+    //color: rgba(0,0,0,.4);
+    color: #94878a;
     font-size: .65rem;
     line-height: 1;
   }
@@ -229,7 +247,46 @@
     fill: #59922b;
   }
 
-  @media (max-width: 530px) {
+  @keyframes dashmove {
+    0% {
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dashoffset: -16px;
+    }
+  }
+
+  @keyframes bouncing-stroke {
+    0%, 100% {
+      stroke-width: 5px;
+    }
+    50% {
+      stroke-width: 10px;
+    }
+  }
+
+  @keyframes exploding-stroke {
+    0% {
+      stroke-width: 2px;
+      opacity: 1;
+    }
+    100% {
+      stroke-width: 20px;
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 880px) {
+    .ct-series-a .ct-point, .ct-series-b .ct-point, .ct-series-c .ct-point {
+      stroke-width: 5px;
+    }
+
+    .ct-series-a .ct-line, .ct-series-b .ct-line, .ct-series-c .ct-line {
+      stroke-width: 2px;
+    }
+  }
+
+  @media (max-width: 680px) {
     .home {
       position: relative;
       flex-direction: column;

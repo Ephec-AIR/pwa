@@ -21,10 +21,13 @@
 </template>
 
 <script>
+  import Constant from '../constants';
+
   export default {
     data () {
       return {
-        showTips: false
+        showTips: false,
+        tip: ''
       }
     },
     methods: {
@@ -51,6 +54,14 @@
 
         }
       }
+    },
+    mounted () {
+      return;
+      fetch(`${Constant.API_URL}/tip`)
+        .then(response => response.json())
+        .then(response => {
+          this.tip = response.tip;
+        });
     }
   }
 </script>

@@ -190,7 +190,7 @@ export default {
 }
 
 const fetchAverage = async ({start, end}, type, commit) => {
-  const response = await fetch(`${Constant.API_URL}/match?start=${start}&end=${end}&type=${type}`, {
+  const response = await fetch(`${Constant.API_URL}/match?start=${start.toISOString()}&end=${end.toISOString()}&type=${type}`, {
     method: 'GET',
     headers: {
       authorization: `Bearer ${await idbKeyVal.get('token')}`

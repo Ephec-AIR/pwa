@@ -48,6 +48,9 @@
 
 <style lang="scss">
   $text-color: rgba(0, 0, 0, 0.74);
+  $graph-now-color: #d70206;
+  $graph-before-color: #f05b4f;
+  $graph-average-color: #f4c63d;
 
   .consumption-type {
     display: flex;
@@ -64,8 +67,16 @@
       opacity: 0;
     }
 
-    .consumption-checkbox:checked~.consumption-label::before {
-      background: #FFF;
+    .consumption-checkbox:checked~.consumption-now--label::before {
+      background: $graph-now-color;
+    }
+
+    .consumption-checkbox:checked~.consumption-before--label::before {
+      background: $graph-before-color;
+    }
+
+    .consumption-checkbox:checked~.consumption-users--label::before {
+      background: $graph-average-color;
     }
 
     .consumption-label {

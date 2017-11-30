@@ -31,11 +31,14 @@ export default {
     state.chartist.labels = labels;
   },
   SAVE_AVERAGE (state, {average}) {
+    console.log(average);
     state.graph.average = {...state.graph.average, ...average};
+    console.log(state.graph.average);
   },
   SET_GRAPH_TO_SHOW (state, {graph, position, toShow}) {
-    console.log(graph, position, toShow)
-    state.chartist.series[position] = toShow ? fillArray(state.graph[graph].values, state.chartist.labels.length) : [];
+    //console.log(graph, position, toShow)
+    //Vue.set()
+    Vue.set(state.chartist.series, position, toShow ? fillArray(state.graph[graph].values, state.chartist.labels.length) : []);
     state.graph[graph].show = toShow;
   },
   TOAST_MESSAGE (state, options) {

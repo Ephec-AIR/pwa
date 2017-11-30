@@ -80,9 +80,19 @@ export default {
         background: $button-color;
       }
 
+      &-login {
+        padding: 10px 25px;
+        cursor: pointer;
+      }
+
       &-register > a {
+        display: flex;
+        justify-content: center;
+        width: 100%;
         color: #FFF;
         text-decoration: none;
+        padding: 10px 25px;
+        width: 100%
       }
     }
 
