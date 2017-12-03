@@ -8,12 +8,7 @@
       <div class="air-tips-box air-tips-box--hide">
         <h2 class="air-tips-box--title">Conseil du jour</h2>
         <p class="air-tips-box--content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Praesent in nulla scelerisque neque varius rutrum vitae vel leo.
-          Phasellus eget lorem quam. Fusce ultrices pretium ex eu rutrum.
-          Praesent leo erat, condimentum at consequat eget, malesuada ac arcu.
-          Sed vehicula tortor dui, eu viverra enim feugiat eu.
-          Donec vitae magna a ipsum condimentum ultricies.
+          {{tip}}
         </p>
       </div>
     </div>
@@ -56,12 +51,12 @@
       }
     },
     mounted () {
-      return;
       fetch(`${Constant.API_URL}/tip`)
         .then(response => response.json())
         .then(response => {
           this.tip = response.tip;
-        });
+        })
+        .catch(err => console.error(err));
     }
   }
 </script>
@@ -114,7 +109,7 @@
 
       &-container {
         position: relative;
-        max-width: 392px;
+        max-width: 292px;
         overflow: hidden;
       }
 

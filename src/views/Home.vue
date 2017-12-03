@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <air-tips></air-tips>
+    <section class="air-graph__more">
+      <air-tips></air-tips>
+    </section>
     <section class="air-graph__container">
       <air-price></air-price>
       <chartist
@@ -97,7 +99,11 @@
 
   .home {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-areas:
+      "tips graph controls";
+    grid-column-gap: 10px;
     align-items: center;
     justify-content: space-between;
   }
