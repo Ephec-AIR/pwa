@@ -124,6 +124,8 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    align-self: center;
+    justify-self: center;
   }
 
   .air-graph {
