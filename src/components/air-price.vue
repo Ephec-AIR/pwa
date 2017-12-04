@@ -20,12 +20,16 @@ export default {
   $text-color: rgb(255, 23, 68);
 
   .air-price {
+    position: absolute;
     margin: 5px 0;
+    top : 10%;
     padding: 5px 10px;
     text-align: center;
     font-size: 18px;
     font-weight: bold;
     color: $text-color;
     border: 2px solid $text-color;
+    width : 8em;
+    align-self: center;
   }
 </style>

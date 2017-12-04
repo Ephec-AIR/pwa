@@ -106,6 +106,7 @@
     grid-column-gap: 10px;
     align-items: center;
     justify-content: space-between;
+    
   }
 
   .air-tips, .air-graph__container, .air-graph-controls {
@@ -113,12 +114,15 @@
   }
 
   .air-graph__container {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
+    display:flex;
+    flex-direction : column;
+    align-items: center;
+    justify-content: center;
     margin-left: 50px;
     height: 95%;
   }
+
+  
 
   .air-graph-controls {
     display: flex;

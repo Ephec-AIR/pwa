@@ -27,7 +27,6 @@
   $background-first-color: #FFE803;
   $background-second-color: #C0ED70;
   $background-third-color: #D4E157;
-  $gradient-background: linear-gradient(135deg, $background-first-color, $background-second-color 0%, $background-third-color 20%);
   $button-color: rgb(255, 23, 68);
 
   .main {
@@ -39,7 +38,7 @@
 
   .router-view {
     flex-grow: 1;
-    background: #9CCC65;
+    background: linear-gradient(135deg,#FFE803,#C0ED70,#D4E157);
     transition: transform .5s cubic-bezier(0, 0, 0.3, 1);
   }
 
