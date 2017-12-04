@@ -24,14 +24,18 @@ export default {
           this.managePanel();
           },
           managePanel(){
-              if(this.open){
+            if(this.open){
+
               this.$el.querySelector(".air-accordion-panel__container").classList.remove('close');
               this.$el.querySelector(".air-accordion-panel__container").classList.add('open');
-          }else{
+
+            }else{
+
               this.$el.querySelector(".air-accordion-panel__container").classList.remove('open');
               this.$el.querySelector(".air-accordion-panel__container").classList.add('close');
-          }
-          this.$parent.movePanels();
+            }
+            
+            this.$parent.movePanels();
         }
     },
     
