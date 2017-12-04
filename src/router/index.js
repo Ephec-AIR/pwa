@@ -10,7 +10,7 @@ const Home = () => import('views/Home');
 const Parameter = () => import('views/Parameter');
 const NotFound = () => import('views/404');
 
-export default new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   routes: [
     {
@@ -35,6 +35,8 @@ export default new VueRouter({
   ]
 });
 
+router.afterEach(pullUpMenuIfNeeded);
+
 function redirectUserIfNeeded(to, from, next) {
   Token.isLoggedIn().then(isLogged => {
     if (!isLogged) {
@@ -55,4 +57,11 @@ function protectRoute(to, from, next) {
   }).catch(err => console.error(err));
 }
 
+function pullUpMenuIfNeeded(to, from) {
+  if (document.querySelector('.air-nav').classList.contains('air-nav--visible')) {
+    document.querySelector('.air-nav').classList.remove('air-nav--visible');
+  }
+}
+
+export default router;
 

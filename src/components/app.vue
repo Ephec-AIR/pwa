@@ -1,9 +1,7 @@
 <template>
   <div class="main" ref="container">
     <air-nav></air-nav>
-    <transition name="router-fade-in" mode="out-in">
-      <router-view><!-- router views --></router-view>
-    </transition>
+    <router-view class="router-view"><!-- router views --></router-view>
     <air-toast></air-toast>
   </div>
 </template>
@@ -26,25 +24,41 @@
 </script>
 
 <style lang="scss">
+  $background-first-color: #FFE803;
+  $background-second-color: #C0ED70;
+  $background-third-color: #D4E157;
+  $gradient-background: linear-gradient(135deg, $background-first-color, $background-second-color 0%, $background-third-color 20%);
+  $button-color: rgb(255, 23, 68);
+
   .main {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    min-height: 100%;
     width: 100%;
   }
 
+  .router-view {
+    flex-grow: 1;
+    background: #9CCC65;
+    transition: transform .5s cubic-bezier(0, 0, 0.3, 1);
+  }
+
+  .router-view--translate {
+    transform: translateY(200px);
+  }
+
   .simple-button {
-    padding: 10px 25px;
     border: none;
     border-radius: 2px;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
     color: #FFF;
     font-size: 14px;
     font-weight: bold;
+    background: $button-color;
   }
 
   .router-fade-in-enter-active {
-    transition: opacity 0.2s cubic-bezier(0, 0, 0.3, 1);
+    transition: opacity 0.1s cubic-bezier(0, 0, 0.3, 1);
   }
 
   .router-fade-in-enter, .router-fade-in-leave-active {

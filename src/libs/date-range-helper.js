@@ -2,6 +2,9 @@
  * Give a date range between start of day, week, month, year and now
  */
 
+import startOfWeek from 'date-fns/start_of_week';
+//import subHours from 'date-fns/sub_hours';
+
 class DateRangeHelper {
   static get dayRange() {
     const end = new Date();
@@ -11,8 +14,9 @@ class DateRangeHelper {
 
   static get weekRange () {
     const end = new Date();
-    const start = new Date(new Date().setHours(0, 0, 0, 0));
-    start.setDate(start.getDate() - start.getDay());
+    const start = startOfWeek(end, {weekStartsOn: 1});
+    //console.log(start);
+    //console.log(subHours(start, 1));
     return {start, end}
   }
 

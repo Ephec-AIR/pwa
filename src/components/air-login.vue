@@ -80,9 +80,19 @@ export default {
         background: $button-color;
       }
 
+      &-login {
+        padding: 10px 25px;
+        cursor: pointer;
+      }
+
       &-register > a {
+        display: flex;
+        justify-content: center;
+        width: 100%;
         color: #FFF;
         text-decoration: none;
+        padding: 10px 25px;
+        width: 100%
       }
     }
 
@@ -101,7 +111,7 @@ export default {
     color: $placeholder-color;
   }
 
-  @media (max-width: 530px) {
+  @media (max-width: 680px) {
     .air-login {
       width: 100%;
     }

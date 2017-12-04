@@ -1,16 +1,22 @@
 <template>
   <div class="home">
-    <air-tips></air-tips>
-    <chartist
-      class="air-graph"
-      type="Line"
-      :data="chartData"
-      :options="chartOptions"
-      :responsive-options="responsiveOptions"
-      :event-handlers="eventHandlers"
-    >
-    </chartist>
+    <section class="air-graph__more">
+      <air-tips></air-tips>
+    </section>
+    <section class="air-graph__container">
+      <air-price></air-price>
+      <chartist
+        class="air-graph"
+        type="Line"
+        :data="chartData"
+        :options="chartOptions"
+        :responsive-options="responsiveOptions"
+        :event-handlers="eventHandlers"
+      >
+      </chartist>
+    </section>
     <section class="air-graph-controls">
+      <!--<air-graph-legend></air-graph-legend>-->
       <air-graph-consumption></air-graph-consumption>
       <air-graph-controls></air-graph-controls>
     </section>
@@ -19,26 +25,48 @@
 
 <script>
   import AirTips from 'components/air-tips';
+  import AirPrice from 'components/air-price';
   import AirGraphControls from 'components/air-graph-controls';
   import AirGraphConsumption from 'components/air-graph-consumption';
+  import AirGraphLegend from 'components/air-graph-legend';
+  import AirGraphBest from 'components/air-graph-best';
 
   export default {
     components: {
       AirTips,
+      AirPrice,
       AirGraphControls,
-      AirGraphConsumption
+      AirGraphConsumption,
+      AirGraphLegend,
+      AirGraphBest
     },
     data () {
       return {
+
+        // chartData: {
+        //   series: [],
+        //   labels: []
+        // },
         chartOptions: {
-          onlyInteger: true,
+          seriesBarDistance: 15,
+          onlyInteger: false,
           fullWidth: true,
           chartPadding: {
             right: 40
           },
+          height: 500,
           low: 0,
           showPoint: true,
-          showArea: true
+          showArea: true,
+          axisY: {
+            offset: 100,
+            labelInterpolationFnc: value => `${value} kwh`
+          },
+          plugins: [
+            //Chartist.plugins.ctThreshold({
+            //  threshold: 50
+            //})
+          ]
         },
         responsiveOptions: [
           ['screen and (max-width: 530px)', {
@@ -58,171 +86,38 @@
     },
     computed: {
       chartData () {
-        const labels = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
-        const consumption = this.$store.state.consumption;
-        const stackedConsumption = consumption.reduce((prev, current) => {
-          const weekDay = new Date(current.date).getDay();
-          if (prev[weekDay]) {
-            prev[weekDay] += current.value;
-          } else {
-            prev[weekDay] = current.value;
-          }
-          return prev;
-        }, {});
-        const series = [Object.keys(stackedConsumption).map(weekDay => stackedConsumption[weekDay])];
-
-        return {labels, series}
+        return this.$store.state.chartist;
       }
-    },
-    mounted () {
-      return;
-      const consumption = [
-        {
-          date: new Date(2017, 9, 23, 12),
-          value: 300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 23, 13),
-          value: 350,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 23, 14),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 23, 15),
-          value: 450,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 12),
-          value: 250,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 13),
-          value: 350,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 14),
-          value: 450,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 24, 15),
-          value: 550,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 12),
-          value: 300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 13),
-          value: 200,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 14),
-          value: 500,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 25, 15),
-          value: 450,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 12),
-          value: 300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 13),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 14),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 26, 15),
-          value: 450,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 12),
-          value: 300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 13),
-          value: 300,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 14),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 27, 15),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 12),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 13),
-          value: 410,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 14),
-          value: 420,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 28, 15),
-          value: 430,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 12),
-          value: 440,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 13),
-          value: 350,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 14),
-          value: 400,
-          serial: 0
-        },{
-          date: new Date(2017, 9, 29, 15),
-          value: 450,
-          serial: 0
-        }
-      ];
-
-      const stackedConsumption = consumption.reduce((prev, current) => {
-        const weekDay = current.date.getDay();
-        if (prev[weekDay]) {
-          prev[weekDay] += current.value;
-        } else {
-          prev[weekDay] = current.value;
-        }
-        return prev;
-      }, {});
-
-      this.chartData.series = [Object.keys(stackedConsumption).map(weekDay => stackedConsumption[weekDay])];
     }
   }
 </script>
 
 <style lang="scss">
-  $background-first-color: #FFE803;
-  $background-second-color: #C0ED70;
-  $background-third-color: #D4E157;
+  $graph-first-color: #d70206;
+  $graph-second-color: #f05b4f;
+  $graph-third-color: #f4c63d;
 
   .home {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-areas:
+      "tips graph controls";
+    grid-column-gap: 10px;
     align-items: center;
-    flex-grow: 1;
     justify-content: space-between;
-    background: linear-gradient(135deg, $background-first-color, $background-second-color 20%, $background-third-color 90%);
   }
 
-  .air-tips, .air-graph, .air-graph-controls {
+  .air-tips, .air-graph__container, .air-graph-controls {
     margin: 10px;
+  }
+
+  .air-graph__container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-left: 50px;
+    height: 95%;
   }
 
   .air-graph-controls {
@@ -232,9 +127,30 @@
   }
 
   .air-graph {
-    flex: 1;
-    margin-left: 50px;
-    height: 95%;
+    background: #453D3F;
+    border-radius: 3px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    padding-top: 10px;
+    // flex: 1;
+    // margin-left: 50px;
+    // height: 95%;
+  }
+
+  .air-graph--nodata {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 140px auto;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    background: none;
+    box-shadow: none;
+    color: #de002a;
+
+    & svg {
+      display: none;
+    }
   }
 
   .ct-grid {
@@ -243,22 +159,82 @@
     stroke-dasharray: 2px
   }
 
-  .ct-series-a .ct-area {
-    fill: #d70206;
+  .ct-series-a .ct-area, .ct-series-b .ct-area, .ct-series-c .ct-area {
+    fill: none;
     fill-opacity: 0.1;
     stroke: none;
   }
 
-  .ct-series-a .ct-line {
-    stroke: #d70206;
+  // .ct-series-a .ct-area {
+  //   fill: $graph-first-color;
+  // }
+
+  // .ct-series-b .ct-area {
+  //   fill: $graph-second-color;
+  // }
+
+  // .ct-series-c .ct-area {
+  //   fill: $graph-third-color;
+  // }
+
+  .ct-series-a .ct-line, .ct-series-b .ct-line, .ct-series-c .ct-line {
     fill: none;
     stroke-width: 3px;
   }
 
-  .ct-series-a .ct-point {
-    stroke: #d70206;
-    stroke-width: 5px;
+  .ct-series-a .ct-line {
+    stroke: $graph-first-color;
+    stroke-dasharray: 4px;
+    animation: dashmove 1s linear infinite;
+  }
+
+  .ct-series-b .ct-line {
+    stroke: $graph-second-color;
+  }
+
+  .ct-series-c .ct-line {
+    stroke: $graph-third-color;
+  }
+
+  .ct-series-a .ct-point, .ct-series-b .ct-point, .ct-series-c .ct-point {
+    stroke-width: 7px;
     stroke-linecap: round;
+  }
+
+  .ct-series-a .ct-point {
+    stroke: $graph-first-color
+  }
+
+  .ct-series-b .ct-point {
+    stroke: $graph-second-color;
+    animation: bouncing-stroke 1.5s ease infinite;
+  }
+
+  .ct-series-c .ct-point {
+    stroke: $graph-third-color;
+    animation: exploding-stroke 1s ease-out infinite;
+  }
+
+  .ct-chart-bar .ct-label, .ct-chart-line .ct-label {
+    display: flex;
+  }
+
+  .ct-label.ct-vertical.ct-start {
+    align-items: flex-end;
+    justify-content: flex-end;
+    fill: rgba(0,0,0,.4);
+    //color: rgba(0,0,0,.4);
+    color: #94878a;
+    font-size: .75rem;
+    line-height: 1;
+  }
+
+  .ct-label.ct-horizontal.ct-end {
+    fill: rgba(0,0,0,.4);
+    //color: rgba(0,0,0,.4);
+    color: #94878a;
+    font-size: .65rem;
+    line-height: 1;
   }
 
   .ct-line.ct-threshold-above, .ct-point.ct-threshold-above, .ct-bar.ct-threshold-above {
@@ -277,7 +253,46 @@
     fill: #59922b;
   }
 
-  @media (max-width: 530px) {
+  @keyframes dashmove {
+    0% {
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dashoffset: -16px;
+    }
+  }
+
+  @keyframes bouncing-stroke {
+    0%, 100% {
+      stroke-width: 5px;
+    }
+    50% {
+      stroke-width: 10px;
+    }
+  }
+
+  @keyframes exploding-stroke {
+    0% {
+      stroke-width: 2px;
+      opacity: 1;
+    }
+    100% {
+      stroke-width: 20px;
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 880px) {
+    .ct-series-a .ct-point, .ct-series-b .ct-point, .ct-series-c .ct-point {
+      stroke-width: 5px;
+    }
+
+    .ct-series-a .ct-line, .ct-series-b .ct-line, .ct-series-c .ct-line {
+      stroke-width: 2px;
+    }
+  }
+
+  @media (max-width: 680px) {
     .home {
       position: relative;
       flex-direction: column;

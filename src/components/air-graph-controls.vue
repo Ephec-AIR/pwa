@@ -2,29 +2,24 @@
   <div class="air-graph-controls">
     <section class="air-graph-controls--choices">
       <div class="air-graph-controls--choices__container">
-        <div class="air-graph-controls--choices__left-arrow" @click="selectChoice(-1)"></div>
-        <button class="controls-button air-graph-controls--choices__day" @click="onClick" @focus="getConsumptionDay">JOUR</button>
-        <div class="air-graph-controls--choices__right-arrow" @click="selectChoice(1)"></div>
+        <div class="air-graph-controls--choices__left-arrow" @click="selectChoice($event, -1)"></div>
+        <button class="controls-button air-graph-controls--choices__day" data-type="day" @click="onClick($event, 'day')">JOUR</button>
+        <div class="air-graph-controls--choices__right-arrow" @click="selectChoice($event, 1)"></div>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__week" @click="onClick" @focus="getConsumptionWeek">SEMAINE</button>
+        <button class="controls-button air-graph-controls--choices__week" data-type="week" @click="onClick($event, 'week')">SEMAINE</button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__month" @click="onClick" @focus="getConsumptionMonth">MOIS</button>
+        <button class="controls-button air-graph-controls--choices__month" data-type="month" @click="onClick($event, 'month')">MOIS</button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__year" @click="onClick" @focus="getConsumptionYear">ANNEE</button>
+        <button class="controls-button air-graph-controls--choices__year" data-type="year" @click="onClick($event, 'year')">ANNEE</button>
       </div>
-    </section>
-    <section class="air-graph-controls--compare" hidden>
-      <button class="simple-button">COMPARER</button>
     </section>
   </div>
 </template>
 
 <script>
-  import {mapActions} from 'vuex';
-
   export default {
     data () {
       return {
@@ -42,17 +37,41 @@
       onResize () {
         this.viewportWidth = window.innerWidth;
       },
-      ...mapActions({
-        getConsumptionDay: 'GET_CONSUMPTION_DAY',
-        getConsumptionWeek: 'GET_CONSUMPTION_WEEK',
-        getConsumptionMonth: 'GET_CONSUMPTION_MONTH',
-        getConsumptionYear: 'GET_CONSUMPTION_YEAR',
-      }),
-      onClick (evt) {
-        this.index = this.buttons.findIndex(b => b == evt.target);
-        this.moveArrows();
+      getConsumption (type) {
+        this.fetchAndSaveConsumption(type)
+          .then(_ => {
+            console.log('then');
+            const checkboxes = document.querySelectorAll('.consumption-checkbox');
+            checkboxes.forEach(checkbox => {
+              this.$store.commit('SET_GRAPH_TO_SHOW', {graph: checkbox.dataset.graph, position: checkbox.dataset.position, toShow: checkbox.checked});
+            });
+          });
       },
-      moveIndex (increment) {
+      fetchAndSaveConsumption (type) {
+        return new Promise ((resolve, reject) => {
+          const averageButtonChecked = document.querySelector('.consumption-users--checkbox').checked;
+          this.$store.dispatch('GET_CONSUMPTION', {type}).then((consumption => {
+            this.$store.commit('CONSUMPTION_LABEL_TYPE', type);
+            this.$store.commit('SAVE_CONSUMPTION', {consumption});
+
+            if (averageButtonChecked) {
+              this.$store.dispatch('GET_AVERAGE', {type}).then(average => {
+                this.$store.commit('SAVE_AVERAGE', {average});
+                console.log('average saved');
+                resolve();
+              });
+            } else {
+              resolve();
+            }
+          }));
+        });
+      },
+      onClick (evt, type) {
+        this.index = this.buttons.findIndex(b => b === evt.target);
+        this.moveArrows();
+        this.getConsumption(type);
+      },
+      moveIndex (evt, increment) {
         this.lastIndex = this.index;
         this.index += increment;
 
@@ -62,11 +81,12 @@
           this.index = 0;
         }
 
+        this.getConsumption(this.buttons[this.index].dataset.type);
         this.buttons[this.index].focus();
       },
-      selectChoice (increment) {
+      selectChoice (evt, increment) {
         if (this.viewportWidth > 530) return;
-        this.moveIndex(increment);
+        this.moveIndex(evt, increment);
         this.moveChoicesWhenResponsive();
       },
       moveChoicesWhenResponsive () {
@@ -74,6 +94,14 @@
         this.buttons[this.index].style.opacity = 1;
       },
       moveArrows () {
+        this.buttons.forEach((b, index) => {
+          if (index === this.index) {
+            this.buttons[index].classList.add('air-graph-controls--choices__focus');
+            return;
+          }
+          this.buttons[index].classList.remove('air-graph-controls--choices__focus');
+        });
+
         this.leftArrow.style.transform = `translateY(${this.index * this.DELTAY}px)`;
         this.rightArrow.style.transform = `translateY(${this.index * this.DELTAY}px)`;
       },
@@ -84,10 +112,10 @@
 
         switch(evt.keyCode) {
           case 38: // UP
-            this.moveIndex(-1)
+            this.moveIndex(evt, -1)
             break;
           case 40: // DOWN
-            this.moveIndex(1);
+            this.moveIndex(evt, 1);
             break;
           default:
             break;
@@ -145,9 +173,9 @@
         outline: none;
         width: 150px;
 
-        &:focus {
-           color: $text-color;
-        }
+        // &:focus {
+        //    color: $text-color;
+        // }
       }
 
       &__left-arrow, &__right-arrow{
@@ -167,30 +195,22 @@
       }
 
       &__day, &__week, &__month, &__year {
-        background: #00C853;
         margin: 5px 0;
       }
     }
 
-    &--compare {
-      button {
-        background: #FF3D00;
-
-      }
+    &--choices .air-graph-controls--choices__focus {
+        color: $text-color;
     }
   }
 
-  @media (max-width: 530px) {
+  @media (max-width: 680px) {
     .air-graph-controls {
       display: flex;
       justify-content: center;
       align-items: center;
       width: 300px;
       height: 50px;
-
-      &__choices {
-
-      }
     }
 
     .air-graph-controls--choices__container {
