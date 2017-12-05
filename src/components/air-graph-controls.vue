@@ -3,17 +3,36 @@
     <section class="air-graph-controls--choices">
       <div class="air-graph-controls--choices__container">
         <div class="air-graph-controls--choices__left-arrow" @click="selectChoice($event, -1)"></div>
-        <button class="controls-button air-graph-controls--choices__day" data-type="day" @click="onClick($event, 'day')">JOUR</button>
+        <button
+          class="controls-button air-graph-controls--choices__day"
+          data-type="day"
+          @click="onClick($event, 'day')">
+          JOUR
+        </button>
         <div class="air-graph-controls--choices__right-arrow" @click="selectChoice($event, 1)"></div>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__week" data-type="week" @click="onClick($event, 'week')">SEMAINE</button>
+        <button class="controls-button air-graph-controls--choices__week"
+          data-type="week"
+          @click="onClick($event, 'week')">
+          SEMAINE
+        </button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__month" data-type="month" @click="onClick($event, 'month')">MOIS</button>
+        <button
+          class="controls-button air-graph-controls--choices__month"
+          data-type="month"
+          @click="onClick($event, 'month')">
+          MOIS
+        </button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__year" data-type="year" @click="onClick($event, 'year')">ANNEE</button>
+        <button
+          class="controls-button air-graph-controls--choices__year"
+          data-type="year"
+          @click="onClick($event, 'year')">
+          ANNEE
+        </button>
       </div>
     </section>
   </div>
@@ -170,10 +189,6 @@
         border: none;
         outline: none;
         width: 150px;
-
-        // &:focus {
-        //    color: $text-color;
-        // }
       }
 
       &__left-arrow, &__right-arrow{
