@@ -40,7 +40,6 @@
       getConsumption (type) {
         this.fetchAndSaveConsumption(type)
           .then(_ => {
-            console.log('then');
             const checkboxes = document.querySelectorAll('.consumption-checkbox');
             checkboxes.forEach(checkbox => {
               this.$store.commit('SET_GRAPH_TO_SHOW', {graph: checkbox.dataset.graph, position: checkbox.dataset.position, toShow: checkbox.checked});
@@ -57,7 +56,6 @@
             if (averageButtonChecked) {
               this.$store.dispatch('GET_AVERAGE', {type}).then(average => {
                 this.$store.commit('SAVE_AVERAGE', {average});
-                console.log('average saved');
                 resolve();
               });
             } else {
@@ -209,7 +207,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 300px;
+      width: 100%;
       height: 50px;
     }
 

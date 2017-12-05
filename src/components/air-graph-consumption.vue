@@ -100,9 +100,12 @@
 
   @media (max-width: 680px) {
     .consumption-type {
-      position: absolute;
-      top: 15px;
-      right: 15px;
+      flex-direction: row;
+      max-width: none;
+    }
+
+    .consumption-type .consumption-label {
+      font-size: 10px;
     }
   }
 </style>
