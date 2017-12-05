@@ -42,11 +42,6 @@
     },
     data () {
       return {
-
-        // chartData: {
-        //   series: [],
-        //   labels: []
-        // },
         chartOptions: {
           seriesBarDistance: 15,
           onlyInteger: false,
@@ -61,12 +56,7 @@
           axisY: {
             offset: 100,
             labelInterpolationFnc: value => `${value} kwh`
-          },
-          plugins: [
-            //Chartist.plugins.ctThreshold({
-            //  threshold: 50
-            //})
-          ]
+          }
         },
         responsiveOptions: [
           ['screen and (max-width: 530px)', {
@@ -106,7 +96,7 @@
     grid-column-gap: 10px;
     align-items: center;
     justify-content: space-between;
-    
+
   }
 
   .air-tips, .air-graph__container, .air-graph-controls {
@@ -121,8 +111,6 @@
     margin-left: 50px;
     height: 95%;
   }
-
-  
 
   .air-graph-controls {
     display: flex;
