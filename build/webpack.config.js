@@ -126,7 +126,7 @@ if (production) {
     new WorkboxPlugin({
       "globDirectory": "dist/",
       "globPatterns": [
-        "**/*.{js,css,html,json,jpg,png,svg}"
+        "**/*.{js,css,html,json,jpg,png,svg,webp}"
       ],
       "swDest": "dist/sw.js",
       clientsClaim: true,

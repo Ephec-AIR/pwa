@@ -20,17 +20,14 @@
           panel.$el.removeAttribute('aria-expanded');
           panel.$el.setAttribute('aria-hidden', 'true');
         });
-
         evt.target.setAttribute('aria-expanded', 'true');
         evt.target.removeAttribute('aria-hidden');
-
         requestAnimationFrame(_ => this.movePanels());
       },
       calculateGeometries () {
         if (this.panels.length === 0) {
           return;
         }
-
         this.headerHeight = this.panels[0].headerHeight;
         this.availableHeight = this.$el.offsetHeight - (this.panels.length * this.headerHeight);
       },
@@ -40,7 +37,6 @@
           panel.$el.style.transform = `translateY(${baseY + (this.headerHeight * index)}px)`;
           // NOTE this one causes 50% perf lost => 60fps to 30fps
           //panel.content.style.height = `${this.availableHeight}px`;
-
           if (panel.$el.getAttribute('aria-expanded')) {
             baseY += this.availableHeight;
           }
@@ -66,7 +62,6 @@
     background: #FFF;
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
-
     &[enhanced] {
       position: relative;
       visibility: hidden;
@@ -74,17 +69,14 @@
       height: 270px;
       overflow: hidden;
     }
-
     &[enhanced] .air-accordion-panel {
       position: absolute;
       top: 0;
       width: 100%;
     }
-
     &[active] {
       visibility: visible;
     }
-
     &[active] .air-accordion-panel {
       transition: transform 0.3s ease-in, opacity 0.3s ease-in;
     }

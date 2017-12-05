@@ -17,7 +17,6 @@
         const customEvent = new CustomEvent('panel-change', {
           bubbles: true
         });
-
         this.$el.dispatchEvent(customEvent);
       },
     },
@@ -34,14 +33,12 @@
 
 <style lang="scss">
   $background-third-color: #D4E157;
-
   .air-accordion-panel {
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
     background: #FFF;
     will-change: transform;
-
     &__button {
       width: 100%;
       height : 48px;
@@ -55,11 +52,9 @@
       color: #444;
       outline: none;
     }
-
     &__container {
       padding: 16px;
       overflow-y: auto;
     }
   }
 </style>
-

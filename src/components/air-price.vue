@@ -27,5 +27,7 @@ export default {
     font-weight: bold;
     color: $text-color;
     border: 2px solid $text-color;
+    width: 8em;
+    align-self: center;
   }
 </style>

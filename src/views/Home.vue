@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <air-tips></air-tips>
+    <section class="air-graph__more">
+      <air-tips></air-tips>
+    </section>
     <section class="air-graph__container">
       <air-price></air-price>
       <chartist
@@ -13,7 +15,8 @@
       >
       </chartist>
     </section>
-    <section class="air-graph-controls">
+    <section class="air-graph-controls__container">
+      <h1 class="air-graph-controls__container__title">Controles</h1>
       <!--<air-graph-legend></air-graph-legend>-->
       <air-graph-consumption></air-graph-consumption>
       <air-graph-controls></air-graph-controls>
@@ -40,11 +43,6 @@
     },
     data () {
       return {
-
-        // chartData: {
-        //   series: [],
-        //   labels: []
-        // },
         chartOptions: {
           seriesBarDistance: 15,
           onlyInteger: false,
@@ -59,18 +57,17 @@
           axisY: {
             offset: 100,
             labelInterpolationFnc: value => `${value} kwh`
-          },
-          plugins: [
-            //Chartist.plugins.ctThreshold({
-            //  threshold: 50
-            //})
-          ]
+          }
         },
         responsiveOptions: [
-          ['screen and (max-width: 530px)', {
+          ['screen and (max-width: 1100px)', {
             showPoint: false,
             axisX: {
-              labelInterpolationFnc: value => value[0]
+              labelInterpolationFnc: (value, index) => {
+                if (index % 2 === 0) {
+                  return value.slice(0, 2);
+                }
+              }
             }
           }]
         ],
@@ -94,30 +91,56 @@
   $graph-first-color: #d70206;
   $graph-second-color: #f05b4f;
   $graph-third-color: #f4c63d;
+  $text-color: rgba(0, 0, 0, 0.54);
 
   .home {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: 200px 1fr 248px;
+    grid-template-areas:
+      "tips graph controls";
+    grid-column-gap: 10px;
     align-items: center;
     justify-content: space-between;
+
   }
 
-  .air-tips, .air-graph__container, .air-graph-controls {
+  .air-tips, .air-graph__container, .air-graph-controls__container {
     margin: 10px;
   }
 
   .air-graph__container {
     display: flex;
-    flex: 1;
-    flex-direction: column;
-    margin-left: 50px;
-    height: 95%;
+    flex-direction : column;
+    margin: 0;
   }
 
-  .air-graph-controls {
+  .air-graph-controls__container {
+    position: relative;
     display: flex;
-    justify-content: space-between;
     flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    justify-self: center;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    background: #c4eb6a;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
+    &__title {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      margin: 0;
+      padding: 10px;
+      color: $text-color;
+      text-transform: uppercase;
+      text-align: center;
+    }
   }
 
   .air-graph {
@@ -148,7 +171,7 @@
   }
 
   .ct-grid {
-    stroke: rgba(0,0,0,.2);
+    stroke: rgba(0, 0, 0, .2);
     stroke-width: 1px;
     stroke-dasharray: 2px
   }
@@ -216,7 +239,7 @@
   .ct-label.ct-vertical.ct-start {
     align-items: flex-end;
     justify-content: flex-end;
-    fill: rgba(0,0,0,.4);
+    fill: rgba(0, 0, 0, .4);
     //color: rgba(0,0,0,.4);
     color: #94878a;
     font-size: .75rem;
@@ -224,7 +247,7 @@
   }
 
   .ct-label.ct-horizontal.ct-end {
-    fill: rgba(0,0,0,.4);
+    fill: rgba(0, 0, 0, .4);
     //color: rgba(0,0,0,.4);
     color: #94878a;
     font-size: .65rem;
@@ -288,13 +311,21 @@
 
   @media (max-width: 680px) {
     .home {
-      position: relative;
+      display: flex;
       flex-direction: column;
     }
 
-    .air-graph {
-      margin-top: 140px;
+    .air-graph__container {
+      width: 95%;
+      margin: 5px 0;
+    }
+
+    .air-graph-controls__container {
+      max-height: 88px;
+    }
+
+    .air-graph-controls__container__title {
+      display: none;
     }
   }
 </style>
-

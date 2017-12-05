@@ -3,17 +3,36 @@
     <section class="air-graph-controls--choices">
       <div class="air-graph-controls--choices__container">
         <div class="air-graph-controls--choices__left-arrow" @click="selectChoice($event, -1)"></div>
-        <button class="controls-button air-graph-controls--choices__day" data-type="day" @click="onClick($event, 'day')">JOUR</button>
+        <button
+          class="controls-button air-graph-controls--choices__day"
+          data-type="day"
+          @click="onClick($event, 'day')">
+          JOUR
+        </button>
         <div class="air-graph-controls--choices__right-arrow" @click="selectChoice($event, 1)"></div>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__week" data-type="week" @click="onClick($event, 'week')">SEMAINE</button>
+        <button class="controls-button air-graph-controls--choices__week"
+          data-type="week"
+          @click="onClick($event, 'week')">
+          SEMAINE
+        </button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__month" data-type="month" @click="onClick($event, 'month')">MOIS</button>
+        <button
+          class="controls-button air-graph-controls--choices__month"
+          data-type="month"
+          @click="onClick($event, 'month')">
+          MOIS
+        </button>
       </div>
       <div class="air-graph-controls--choices__container">
-        <button class="controls-button air-graph-controls--choices__year" data-type="year" @click="onClick($event, 'year')">ANNEE</button>
+        <button
+          class="controls-button air-graph-controls--choices__year"
+          data-type="year"
+          @click="onClick($event, 'year')">
+          ANNEE
+        </button>
       </div>
     </section>
   </div>
@@ -40,7 +59,6 @@
       getConsumption (type) {
         this.fetchAndSaveConsumption(type)
           .then(_ => {
-            console.log('then');
             const checkboxes = document.querySelectorAll('.consumption-checkbox');
             checkboxes.forEach(checkbox => {
               this.$store.commit('SET_GRAPH_TO_SHOW', {graph: checkbox.dataset.graph, position: checkbox.dataset.position, toShow: checkbox.checked});
@@ -57,7 +75,6 @@
             if (averageButtonChecked) {
               this.$store.dispatch('GET_AVERAGE', {type}).then(average => {
                 this.$store.commit('SAVE_AVERAGE', {average});
-                console.log('average saved');
                 resolve();
               });
             } else {
@@ -172,10 +189,6 @@
         border: none;
         outline: none;
         width: 150px;
-
-        // &:focus {
-        //    color: $text-color;
-        // }
       }
 
       &__left-arrow, &__right-arrow{
@@ -209,7 +222,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 300px;
+      width: 100%;
       height: 50px;
     }
 

@@ -86,6 +86,10 @@
       border: 1px solid #777;
     }
 
+    &__sync-button, &__profile-button {
+      padding: 10px 25px;
+    }
+
     &__profile-inputs {
       display: flex;
       align-items: center;
@@ -96,4 +100,3 @@
     }
   }
 </style>
-
