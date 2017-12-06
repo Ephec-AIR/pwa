@@ -126,6 +126,7 @@
   @media (max-width: 680px) {
     .consumption-type {
       flex-direction: row;
+      justify-content: center;
       max-width: none;
     }
 
