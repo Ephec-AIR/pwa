@@ -17,6 +17,7 @@
 
 <script>
   import Constant from '../constants';
+  import idbKeyVal from 'idb-keyval';
 
   export default {
     data () {
@@ -53,10 +54,19 @@
     mounted () {
       fetch(`${Constant.API_URL}/tip`)
         .then(response => response.json())
-        .then(response => {
+        .then(async response => {
           this.tip = response.tip;
+          await idbKeyVal.set('tip', response.tip);
         })
-        .catch(err => console.error(err));
+        .catch(async err => {
+          try {
+            const tip = await idbKeyVal.get('tip');
+            this.tip = tip;
+          } catch (e) {
+            console.log(e);
+          }
+          console.error(err);
+        });
     }
   }
 </script>
