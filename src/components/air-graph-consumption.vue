@@ -123,7 +123,7 @@
     }
   }
 
-  @media (max-width: 680px) {
+  @media (max-width: 800px) {
     .consumption-type {
       flex-direction: row;
       justify-content: center;

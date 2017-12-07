@@ -2,7 +2,7 @@
   <div class="air-tips">
     <div class="air-tips--logo__container" @click="toggleTips">
       <picture class="air-tips--logo">
-        <source class="air-tips--logo" srcset="/public/images/bulb_resized.webp" type="image/webp">
+        <source class="air-tips--logo" srcset="public/images/bulb_resized.webp 1X" type="image/webp">
         <img class="air-tips--logo" src="/public/images/bulb_resized.png" alt="bulb">
       </picture>
       <div ></div>

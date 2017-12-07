@@ -55,7 +55,11 @@
           }
         },
         responsiveOptions: [
+          ['screen and (max-width: 1200px)', {
+              stackBars: true
+          }],
           ['screen and (max-width: 1100px)', {
+            stackBars: true,
             showPoint: false,
             axisX: {
               labelInterpolationFnc: (value, index) => {
@@ -64,11 +68,7 @@
                 }
               }
             }
-          }, [
-            'screen and (max-width: 1200px)', {
-              seriesBarDistance: 0
-            }
-          ]]
+          }]
         ],
         eventHandlers: [{
           event: 'draw',
@@ -235,13 +235,7 @@
     transform: rotate(-75deg);
   }
 
-  @media (max-width: 1200px) {
-    .ct-series-a .ct-bar, .ct-series-b .ct-bar, .ct-series-c .ct-bar {
-      stroke-width: 3px;
-    }
-  }
-
-  @media (max-width: 680px) {
+  @media (max-width: 800px) {
     .home {
       display: flex;
       flex-direction: column;
@@ -259,9 +253,11 @@
     .air-graph-controls__container__title {
       display: none;
     }
+  }
 
+  @media (max-width: 400px) {
     .ct-series-a .ct-bar, .ct-series-b .ct-bar, .ct-series-c .ct-bar {
-      stroke-width: 3px;
+      stroke-width: 5px;
     }
   }
 </style>
