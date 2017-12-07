@@ -66,7 +66,7 @@
             }
           }, [
             'screen and (max-width: 1200px)', {
-              seriesBarDistance: 5
+              seriesBarDistance: 0
             }
           ]]
         ],
