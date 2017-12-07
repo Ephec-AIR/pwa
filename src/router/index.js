@@ -16,17 +16,17 @@ const router = new VueRouter({
     {
       path: '/',
       component: Welcome,
-      //beforeEnter: redirectUserIfNeeded
+      beforeEnter: redirectUserIfNeeded
     },
     {
       path: '/home',
       component: Home,
-      //beforeEnter: protectRoute
+      beforeEnter: protectRoute
     },
     {
       path: '/parameters',
       component: Parameter,
-      //beforeEnter: protectRoute
+      beforeEnter: protectRoute
     },
     {
       path: '*',

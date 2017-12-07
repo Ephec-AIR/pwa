@@ -3,7 +3,12 @@
     <div class="air-nav__nav-wrapper">
       <header class="air-nav__header">
         <div class="air-nav__logo-container">
-          <router-link to="home" class="air-nav__logo-container-logo" href="/" aria-label="home"></router-link>
+          <router-link to="home" class="air-nav__logo-container-logo" href="/" aria-label="home">
+            <picture class="air-nav__logo-container-logo__picture">
+              <source class="air-nav__logo-container-logo__picture" srcset="/public/icons/air@128x128.webp" type="image/webp">
+              <img class="air-nav__logo-container-logo__picture" src="/public/icons/air@128x128.png" alt="bulb">
+            </picture>
+          </router-link>
         </div>
         <nav class="air-nav__nav-container" role="navigation" ref="nav">
           <ul class="air-nav__nav-content">
@@ -103,10 +108,10 @@ export default {
       &-logo {
         display: flex;
         align-items: center;
-        background: url(/public/icons/air@128x128.webp) left center no-repeat;
-        background-size: 48px 48px;
+        //background: url(/public/icons/air@128x128.webp) left center no-repeat;
+        //background-size: 48px 48px;
         height: 48px;
-        padding-left: 56px;
+        //padding-left: 56px;
         color: $nav-text-color;
         font-size: 32px;
         font-weight: bold;
@@ -115,6 +120,10 @@ export default {
         &::after {
           content: 'Air';
         }
+      }
+
+      &-logo__picture {
+        height: 100%;
       }
     }
 
@@ -210,6 +219,8 @@ export default {
 
   @media (max-width: 680px) {
     .air-nav {
+      height: 120px; // fix
+
       &__show {
         display: block;
       }

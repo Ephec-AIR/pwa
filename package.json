@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/Ephec-AIR/pwa#readme",
   "dependencies": {
+    "chart.js": "^2.7.1",
     "chartist-plugin-threshold": "0.0.2",
     "date-fns": "^1.29.0",
     "idb": "^2.0.4",
@@ -36,6 +37,7 @@
     "vee-validate": "^2.0.0-rc.19",
     "vue": "^2.5.2",
     "vue-chartist": "^2.1.2",
+    "vue-chartjs": "^3.0.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.0"
   },
