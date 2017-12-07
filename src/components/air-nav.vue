@@ -5,8 +5,8 @@
         <div class="air-nav__logo-container">
           <router-link to="home" class="air-nav__logo-container-logo" href="/" aria-label="home">
             <picture class="air-nav__logo-container-logo__picture">
-              <source class="air-nav__logo-container-logo__picture" srcset="/public/icons/air@128x128.webp" type="image/webp">
-              <img class="air-nav__logo-container-logo__picture" src="/public/icons/air@128x128.png" alt="bulb">
+              <source srcset="/public/icons/air@128x128.webp 1X" type="image/webp" class="air-nav__logo-container-logo__picture">
+              <img src="/public/icons/air@128x128.png" alt="bulb" class="air-nav__logo-container-logo__picture">
             </picture>
           </router-link>
         </div>
@@ -219,7 +219,7 @@ export default {
 
   @media (max-width: 680px) {
     .air-nav {
-      height: 120px; // fix
+      //height: 120px;
 
       &__show {
         display: block;
