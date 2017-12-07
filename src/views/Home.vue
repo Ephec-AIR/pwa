@@ -241,16 +241,6 @@
     }
   }
 
-  @media (max-width: 880px) {
-    .ct-series-a .ct-point, .ct-series-b .ct-point, .ct-series-c .ct-point {
-      stroke-width: 5px;
-    }
-
-    .ct-series-a .ct-line, .ct-series-b .ct-line, .ct-series-c .ct-line {
-      stroke-width: 2px;
-    }
-  }
-
   @media (max-width: 680px) {
     .home {
       display: flex;
