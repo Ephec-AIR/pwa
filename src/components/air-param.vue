@@ -52,7 +52,6 @@
         this.$store.dispatch('SYNC', this.user);
       },
       update () {
-        console.log(this.user.supplier)
         this.$store.dispatch('UPDATE_PROFILE', {postalCode: this.user.postalCode, supplier: this.user.supplier})
       }
     }

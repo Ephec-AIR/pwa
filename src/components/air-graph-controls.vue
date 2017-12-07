@@ -42,6 +42,7 @@
   export default {
     data () {
       return {
+        RESPONSIVE_WIDTH: 800,
         DELTAY: 41,
         viewportWidth: 0,
         lastIndex: 0,
@@ -55,6 +56,25 @@
     methods: {
       onResize () {
         this.viewportWidth = window.innerWidth;
+        if (this.viewportWidth <= this.RESPONSIVE_WIDTH) {
+          this.buttons.forEach((b, index) => {
+            b.classList.add('air-graph-controls--choices__focus');
+            if (index === this.index) {
+              b.style.opacity = 1;
+              return;
+            }
+            b.style.opacity = 0;
+          });
+        } else {
+          this.buttons.forEach((b, index) => {
+            b.style.opacity = 1;
+            if (index === this.index) {
+              b.classList.add('air-graph-controls--choices__focus');
+              return;
+            }
+            b.classList.remove('air-graph-controls--choices__focus');
+          });
+        }
       },
       getConsumption (type) {
         this.fetchAndSaveConsumption(type)
@@ -102,13 +122,18 @@
         this.buttons[this.index].focus();
       },
       selectChoice (evt, increment) {
-        if (this.viewportWidth > 530) return;
+        if (this.viewportWidth > this.RESPONSIVE_WIDTH) return;
         this.moveIndex(evt, increment);
         this.moveChoicesWhenResponsive();
       },
       moveChoicesWhenResponsive () {
-        this.buttons[this.lastIndex].style.opacity = 0;
-        this.buttons[this.index].style.opacity = 1;
+        this.buttons.forEach((b, index) => {
+          if (index === this.index) {
+            this.buttons[index].style.opacity = 1;
+            return;
+          }
+          this.buttons[index].style.opacity = 0;
+        });
       },
       moveArrows () {
         this.buttons.forEach((b, index) => {
@@ -138,7 +163,7 @@
             break;
         }
 
-        if (this.viewportWidth > 530) {
+        if (this.viewportWidth > this.RESPONSIVE_WIDTH) {
           this.moveArrows();
         } else {
           this.moveChoicesWhenResponsive();
@@ -156,6 +181,7 @@
       document.querySelector('.air-graph-controls--choices__month').style.opacity = 1;
       document.addEventListener('keydown', this.onKeyDown);
       this.moveArrows();
+      this.getConsumption('month');
       this.onResize();
     }
   }
