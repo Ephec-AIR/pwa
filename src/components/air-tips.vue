@@ -1,7 +1,11 @@
 <template>
   <div class="air-tips">
     <div class="air-tips--logo__container" @click="toggleTips">
-      <div class="air-tips--logo"></div>
+      <picture class="air-tips--logo">
+        <source class="air-tips--logo" srcset="/public/images/bulb_resized.webp" type="image/webp">
+        <img class="air-tips--logo" src="/public/images/bulb_resized.png" alt="bulb">
+      </picture>
+      <div ></div>
     </div>
     <div class="air-tips-box-container">
       <div class="air-tips-box-ripple air-tips-box-ripple--hide"></div>
@@ -61,6 +65,7 @@
         .catch(async err => {
           try {
             const tip = await idbKeyVal.get('tip');
+            console.log(tip);
             this.tip = tip;
           } catch (e) {
             console.log(e);
@@ -101,10 +106,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: url(/public/images/bulb.webp) center center no-repeat;
-      background-size: contain;
-      height: 70%;
-      width: 100%;
+      height: 90%;
     }
 
     &-box {
