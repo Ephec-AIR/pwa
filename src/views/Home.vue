@@ -144,7 +144,7 @@
   }
 
   .air-graph {
-    background: #FFF;
+    background: rgba(255, 255, 255, 0.5);
     border-radius: 3px;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
     padding-top: 10px;
