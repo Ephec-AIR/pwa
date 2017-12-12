@@ -73,6 +73,7 @@
 
 <script>
   import Constant from '../constants';
+  import decode from 'jwt-decode';
 
   export default {
     data () {
@@ -80,7 +81,11 @@
         username: '',
         password: '',
         user: {},
-        ocr: {},
+        ocr: {
+          serial: '',
+          ocr_secret: '',
+          user_secret: ''
+        },
         admin: {
           username: '',
           isAdmin: false
@@ -89,22 +94,20 @@
     },
     methods: {
       login () {
-        const data = JSON.stringify({
-          username: this.username,
-          password: this.password
-        });
-
         fetch(`${Constant.API_URL}/login`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json"
+            'content-type': 'application/json'
           },
-          data
+          body: JSON.stringify({
+            username: this.username,
+            password: this.password
+          })
         })
-        .then(res => res.json())
-        .then(json => {
-          this.user.token = json.token;
-          this.user = {...this.user, ...jwt_decode(user["token"])}
+        .then(response => response.json())
+        .then(response => {
+          this.user.token = response.token;
+          this.user = {...this.user, ...decode(this.user.token)}
         })
         .catch(err => console.error(err));
       },
@@ -116,10 +119,18 @@
           method: 'POST',
           headers: {
             'content-type': 'application/json',
-            'authorization': `Bearer ${user.token}`
+            'authorization': `Bearer ${this.user.token}`
           }
         })
-        .then(response => response.json())
+        .then(response => {
+          if (response.status === 403) {
+            this.$store.commit('TOAST_MESSAGE', {
+              messages: [`Cette opération est seulement réservée aux admins !`]
+            });
+            return;
+          }
+          return response.json()
+        })
         .then(response => this.ocr = response)
         .catch(err => console.error(err));
       },
@@ -128,13 +139,20 @@
           method: 'PUT',
           headers: {
             'content-type': 'application/json',
-            'authorization': `Bearer ${user.token}`
+            'authorization': `Bearer ${this.user.token}`
           },
-          data: JSON.stringify({
+          body: JSON.stringify({
             username: this.admin.username,
             admin: this.admin.isAdmin
           })
         }).then(response => {
+          if (response.status === 403) {
+            this.$store.commit('TOAST_MESSAGE', {
+              messages: [`Cette opération est seulement réservée aux admins !`]
+            });
+            return;
+          }
+
           if (response.status === 200) {
             const isAdminMsg = this.admin.isAdmin ? 'admin' : 'non-admin';
             this.$store.commit('TOAST_MESSAGE', {
