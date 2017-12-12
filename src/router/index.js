@@ -8,6 +8,7 @@ Vue.use(VueRouter);
 const Welcome = () => import('views/Welcome');
 const Home = () => import('views/Home');
 const Parameter = () => import('views/Parameter');
+const Admin = () => import('views/Admin');
 const NotFound = () => import('views/404');
 
 const router = new VueRouter({
@@ -26,6 +27,11 @@ const router = new VueRouter({
     {
       path: '/parameters',
       component: Parameter,
+      beforeEnter: protectRoute
+    },
+    {
+      path: '/admin',
+      component: Admin,
       beforeEnter: protectRoute
     },
     {
