@@ -50,11 +50,11 @@
           axisY: {
             offset: 70,
             labelInterpolationFnc: value => `${value} kwh`
-          }
+          },
         },
         responsiveOptions: [
           ['screen and (max-width: 1200px)', {
-              stackBars: true
+            stackBars: true
           }],
           ['screen and (max-width: 1100px)', {
             stackBars: true,
