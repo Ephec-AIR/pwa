@@ -8,7 +8,6 @@
 
 <script>
   import 'regenerator-runtime/runtime';
-  import idb from 'idb';
   import AirNav from './air-nav';
   import AirToast from './air-toast';
 
@@ -40,7 +39,7 @@
 
   .router-view {
     flex-grow: 1;
-    background: $background-gradient;
+    background: $background-demo;
     transition: transform .5s cubic-bezier(0, 0, 0.3, 1);
   }
 
