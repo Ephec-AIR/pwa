@@ -144,6 +144,10 @@ if (production) {
           urlPattern: '/parameters',
           handler: 'networkFirst'
         },
+        {
+          urlPattern: '/admin',
+          handler: 'networkFirst'
+        }
       ],
       "globIgnores": [
         "../workbox-cli-config.js"
