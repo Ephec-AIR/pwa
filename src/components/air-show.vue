@@ -1,10 +1,10 @@
 <template>
   <div class="air-show">
-    <h1 class="air-show--title">Bienvenue sur AIR !</h1>
+    <h1 class="air-show--title">Bienvenue parmis nous ! </h1>
     <p class="air-show--subtitle">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Ut et orci vestibulum, aliquet nunc vitae, tincidunt enim.
-      Duis tincidunt justo eget lectus ornare, id euismod sem lacinia.
+      Laissez derrière vous vos veilles factures<br> de consommation électrique
+      et devenez un consommacteur.
+      Ensemble, influençons les habitudes de demain !
     </p>
   </div>
 </template>
@@ -27,6 +27,7 @@
     padding: 10px 20px;
 
     &--title {
+      margin: 0;
       font-size: 36px;
       color: #FFF;
     }
@@ -41,6 +42,10 @@
   @media (max-width: 680px) {
     .air-show {
       width: 100%;
+
+      &--title {
+        font-size: 28px;
+      }
     }
   }
 </style>

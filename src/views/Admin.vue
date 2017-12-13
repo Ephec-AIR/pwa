@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="air-admin">
     <form id=flogin @submit.prevent="login">
       <fieldset>
         <legend>Login</legend>
@@ -166,6 +166,17 @@
 </script>
 
 <style lang="scss" scoped>
+  .air-admin {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form, fieldset {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
   input[type=checkbox] {
     position: relative;
     top: 2px;

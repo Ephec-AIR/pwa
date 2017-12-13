@@ -69,6 +69,7 @@ export default {
   $header-height: 60px;
 
   .air-nav {
+    flex-shrink: 0;
     height: $header-height;
 
     &__header {

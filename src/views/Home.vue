@@ -11,13 +11,11 @@
         :data="chartData"
         :options="chartOptions"
         :responsive-options="responsiveOptions"
-        :event-handlers="eventHandlers"
       >
       </chartist>
     </section>
     <section class="air-graph-controls__container">
       <h1 class="air-graph-controls__container__title">Controles</h1>
-      <!--<air-graph-legend></air-graph-legend>-->
       <air-graph-consumption></air-graph-consumption>
       <air-graph-controls></air-graph-controls>
     </section>
@@ -69,13 +67,7 @@
               }
             }
           }]
-        ],
-        eventHandlers: [{
-          event: 'draw',
-          fn: (data) => {
-
-          }
-        }]
+        ]
       }
     },
     computed: {
@@ -98,8 +90,7 @@
     position: relative;
     display: grid;
     grid-template-columns: 200px 1fr 248px;
-    grid-template-areas:
-      "tips graph controls";
+    grid-template-areas: "tips graph controls";
     grid-column-gap: 10px;
     align-items: center;
     justify-content: space-between;
