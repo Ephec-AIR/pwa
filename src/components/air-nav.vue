@@ -13,16 +13,16 @@
         <nav class="air-nav__nav-container" role="navigation" ref="nav">
           <ul class="air-nav__nav-content">
             <li>
-              <router-link to="home" class="air-nav__nav-link" aria-label="home">Home</router-link>
+              <router-link to="home" class="air-nav__nav-link" aria-label="home">Accueil</router-link>
             </li>
             <li>
-              <a href="https://air.ephec-ti.org/forum/" class="air-nav__nav-link" aria-label="forum">Forum</a>
+              <a href="https://air.ephec-ti.org/forum/" class="air-nav__nav-link" aria-label="forum">Communauté</a>
             </li>
             <li>
-              <router-link to="parameters" class="air-nav__nav-link" aria-label="parameter">Parametres</router-link>
+              <router-link to="parameters" class="air-nav__nav-link" aria-label="parameter">Paramètres</router-link>
             </li>
             <li v-if="isLoggedIn" >
-              <a href="#" class="air-nav__nav-link" aria-label="logout" @click.prevent="logout">Deconnection</a>
+              <a href="#" class="air-nav__nav-link" aria-label="logout" @click.prevent="logout">Deconnexion</a>
             </li>
           </ul>
         </nav>
