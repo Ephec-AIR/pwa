@@ -5,6 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "patch": "npm version bump",
+    "test": "node test/integrations.js",
     "watch": "webpack-dev-server --config build/webpack.config.js",
     "build --report": "npm run build && webpack-bundle-analyzer",
     "build": "rm -rf ./dist && npm run build:client",
@@ -33,6 +34,7 @@
     "idb": "^2.0.4",
     "idb-keyval": "^2.3.0",
     "jwt-decode": "^2.2.0",
+    "puppeteer": "^0.13.0",
     "regenerator-runtime": "^0.11.0",
     "vee-validate": "^2.0.0-rc.25",
     "vue": "^2.5.9",
