@@ -11,15 +11,10 @@ const puppeteer = require('puppeteer');
     await page.type('input[name=password]', 'test123');
     await page.click('.air-login-form--button-login');
 
+    // vérifie si le panneau de contrôle est présent
+    // dans ce cas on a été redirigé vers la page home
+    // et on est connecté
     await page.waitForSelector('.air-graph-controls__container');
-    //await page.screenshot({path: 'test/connectedToHomePage.png'});
-
-    await page.click('a[href="/parameters"]');
-    //await page.screenshot({path: 'test/parameters.png'});
-
-    await page.click('a[href="https://air.ephec-ti.org/forum/"]');
-    //await page.screenshot({path: 'test/forum.png'});
-
     await browser.close();
     console.log('SUCCESS !');
   } catch (err) {
