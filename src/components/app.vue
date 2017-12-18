@@ -31,8 +31,9 @@
   $button-color: rgb(255, 23, 68);
 
   .main {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 60px 1fr;
+    //flex-direction: column;
     min-height: 100vh;
     width: 100%;
   }
