@@ -3,12 +3,12 @@
     <div class="air-nav__nav-wrapper">
       <header class="air-nav__header">
         <div class="air-nav__logo-container">
-          <router-link to="home" class="air-nav__logo-container-logo" href="/" aria-label="home">
+          <div to="home" class="air-nav__logo-container-logo" aria-label="logo">
             <picture class="air-nav__logo-container-logo__picture">
-              <source srcset="/public/icons/air@128x128.webp 1X" type="image/webp" class="air-nav__logo-container-logo__picture">
+              <source srcset="/public/icons/air@128x128.webp" type="image/webp" class="air-nav__logo-container-logo__picture">
               <img src="/public/icons/air@128x128.png" alt="bulb" class="air-nav__logo-container-logo__picture">
             </picture>
-          </router-link>
+          </div>
         </div>
         <nav class="air-nav__nav-container" role="navigation" ref="nav">
           <ul class="air-nav__nav-content">
